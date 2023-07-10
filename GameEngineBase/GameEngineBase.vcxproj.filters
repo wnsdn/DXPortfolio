@@ -2,8 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="GameEngineMath.h" />
+    <ClInclude Include="GameEngineDebug.h" />
+    <ClInclude Include="GameEnginePath.h" />
+    <ClInclude Include="GameEngineRandom.h" />
+    <ClInclude Include="GameEngineString.h" />
+    <ClInclude Include="GameEngineTime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineMath.cpp" />
+    <ClCompile Include="GameEngineDebug.cpp" />
+    <ClCompile Include="GameEnginePath.cpp" />
+    <ClCompile Include="GameEngineRandom.cpp" />
+    <ClCompile Include="GameEngineString.cpp" />
+    <ClCompile Include="GameEngineTime.cpp" />
   </ItemGroup>
 </Project>
