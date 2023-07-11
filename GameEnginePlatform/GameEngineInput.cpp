@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "GameEngineInput.h"
 
 GameEngineInput::GameEngineKey GameEngineInput::AllKey[255] = {};

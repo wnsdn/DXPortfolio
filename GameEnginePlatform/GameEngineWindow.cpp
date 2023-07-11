@@ -1,7 +1,6 @@
+#include "PreCompile.h"
 #include "GameEngineWindow.h"
 #include <GameEngineBase/GameEngineDebug.h>
-
-#pragma comment(lib, "GameEngineBase.lib")
 
 GameEngineWindow GameEngineWindow::Instance;
 

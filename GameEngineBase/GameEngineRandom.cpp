@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "GameEngineRandom.h"
 
 std::random_device GameEngineRandom::Seed;

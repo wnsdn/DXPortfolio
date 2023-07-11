@@ -7,6 +7,9 @@
     <ClInclude Include="GameEngineRandom.h" />
     <ClInclude Include="GameEngineString.h" />
     <ClInclude Include="GameEngineTime.h" />
+    <ClInclude Include="PreCompile.h">
+      <Filter>PreCompile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineMath.cpp" />
@@ -15,5 +18,13 @@
     <ClCompile Include="GameEngineRandom.cpp" />
     <ClCompile Include="GameEngineString.cpp" />
     <ClCompile Include="GameEngineTime.cpp" />
+    <ClCompile Include="PreCompile.cpp">
+      <Filter>PreCompile</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{9eae4354-2b76-4c50-bfc0-71fec9376b7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

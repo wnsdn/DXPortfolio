@@ -4,11 +4,17 @@
     <ClCompile Include="GameEngineWindow.cpp" />
     <ClCompile Include="GameEngineInput.cpp" />
     <ClCompile Include="GameEngineSound.cpp" />
+    <ClCompile Include="PreCompile.cpp">
+      <Filter>PreCompile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineWindow.h" />
     <ClInclude Include="GameEngineInput.h" />
     <ClInclude Include="GameEngineSound.h" />
+    <ClInclude Include="PreCompile.h">
+      <Filter>PreCompile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FMOD">
@@ -19,6 +25,9 @@
     </Filter>
     <Filter Include="FMOD\Debug">
       <UniqueIdentifier>{9da9a5ce-c00f-4a4b-8e12-ec072b578be9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{94715e95-bcb8-4838-9b80-b68a38e373f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

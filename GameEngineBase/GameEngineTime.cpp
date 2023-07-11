@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "GameEngineTime.h"
 
 LARGE_INTEGER GameEngineTime::Freq = {};
