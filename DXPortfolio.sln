@@ -6,8 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineBase", "GameEngineBase\GameEngineBase.vcxproj", "{61A369E1-AD1C-4EEF-85EC-BCE20633F083}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEnginePlatform", "GameEnginePlatform\GameEnginePlatform.vcxproj", "{D438C18B-BFEB-4BE2-B97E-51CAA4D32FDC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61A369E1-AD1C-4EEF-85EC-BCE20633F083} = {61A369E1-AD1C-4EEF-85EC-BCE20633F083}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "App", "App\App.vcxproj", "{5D58AB67-1519-40C7-870D-8BBB53C19733}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D438C18B-BFEB-4BE2-B97E-51CAA4D32FDC} = {D438C18B-BFEB-4BE2-B97E-51CAA4D32FDC}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level0", "Level0", "{26988854-7E09-4AAE-9F77-F31F98648BCF}"
 EndProject
