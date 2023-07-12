@@ -1,0 +1,3 @@
+GetDc() -> Delete?
+Format Textout Class
+SharedPtr Study

@@ -5,7 +5,7 @@ class GameEngineRandom
 {
 private:
 	static std::random_device Seed;
-	static std::mt19937 Gen;
+	static std::mt19937_64 Gen;
 
 	GameEngineRandom() {}
 	~GameEngineRandom() {}
@@ -15,4 +15,5 @@ private:
 	GameEngineRandom& operator=(GameEngineRandom&& _Other) noexcept = delete;
 public:
 	static int RandomInt(int _Max, int _Min);
+	static float RandomFloat(float _Max, float _Min);
 };

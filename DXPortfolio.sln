@@ -16,10 +16,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "App", "App\App.vcxproj", "{
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level0", "Level0", "{26988854-7E09-4AAE-9F77-F31F98648BCF}"
+	ProjectSection(SolutionItems) = preProject
+		ToDo.txt = ToDo.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level1", "Level1", "{DD3988D6-9938-4C91-B9E3-87858EA3F8C8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level4", "Level4", "{51480C4E-87FB-44E4-A384-2BA87F2B451C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level9", "Level9", "{51480C4E-87FB-44E4-A384-2BA87F2B451C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

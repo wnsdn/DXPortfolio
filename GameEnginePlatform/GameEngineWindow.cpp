@@ -1,10 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineWindow.h"
 
-//#include <GameEngineBase/GameEngineDebug.h>
-//#include <GameEngineBase/GameEngineMath.h>
-#include <format>
-
 GameEngineWindow GameEngineWindow::Instance;
 
 void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string& _Name)
@@ -30,7 +26,7 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string& _Name)
 	RegisterClassExA(&Wc);
 
 	Hwnd = CreateWindowA(Name.c_str(), Name.c_str(), WS_OVERLAPPEDWINDOW,
-		100, 100, 600, 400, nullptr, nullptr, Hinst, nullptr);
+		0, 0, 0, 0, nullptr, nullptr, Hinst, nullptr);
 
 	if (!Hwnd)
 	{
@@ -38,14 +34,22 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string& _Name)
 		return;
 	}
 
-	Hdc = GetDC(Hwnd);
-
 	ShowWindow(Hwnd, SW_SHOW);
 	UpdateWindow(Hwnd);
 }
 
 void GameEngineWindow::MessageLoop()
 {
+	RECT Rect{ 0, 0, 600, 400 };
+	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false);
+	SetWindowPos(Hwnd, nullptr, 100, 100,
+		Rect.right - Rect.left, Rect.bottom - Rect.top, SWP_NOZORDER);
+
+	Hdc = GetDC(Hwnd);
+	MemDc = CreateCompatibleDC(Hdc);
+	HBITMAP Hbmp = CreateCompatibleBitmap(Hdc, 600, 400);
+	SelectObject(MemDc, Hbmp);
+
 	MSG Msg = {};
 	while (IsUpdate)
 	{
@@ -55,12 +59,12 @@ void GameEngineWindow::MessageLoop()
 			DispatchMessageA(&Msg);
 		}
 
-		std::string Buffer{};
-		short KeyState = GetAsyncKeyState(VK_SPACE);
+		Rectangle(MemDc, -1, -1, 601, 401);
 
-		Buffer.clear();
-		std::format_to(std::back_inserter(Buffer), "{}", KeyState);
-		TextOut(Hdc, 10, 30, Buffer.c_str(), static_cast<int>(Buffer.size()));
+
+
+		BitBlt(Hdc, 0, 0, 600, 400,
+			MemDc, 0, 0, SRCCOPY);
 	}
 }
 
