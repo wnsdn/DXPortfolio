@@ -9,6 +9,7 @@ private:
 
 	HINSTANCE Hinst = nullptr;
 	HWND Hwnd = nullptr;
+	HDC Hdc = nullptr;
 	std::string Name{};
 	bool IsUpdate = true;
 

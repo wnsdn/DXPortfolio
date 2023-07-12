@@ -1,17 +1,22 @@
 #include "PreCompile.h"
 #include "GameEngineWindow.h"
-#include <GameEngineBase/GameEngineDebug.h>
+
+//#include <GameEngineBase/GameEngineDebug.h>
+//#include <GameEngineBase/GameEngineMath.h>
+#include <format>
 
 GameEngineWindow GameEngineWindow::Instance;
 
 void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string& _Name)
 {
+	GameEngineDebug::LeakCheck();
+
 	Hinst = _Hinst;
 	Name = _Name;
 
 	if (!Hinst)
 	{
-		MsgBoxAssert("GameEngineWindow::Init(1)");
+		GameEngineDebug::MsgBoxAssert("GameEngineWindow::Init(1)");
 		return;
 	}
 
@@ -29,9 +34,11 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string& _Name)
 
 	if (!Hwnd)
 	{
-		MsgBoxAssert("GameEngineWindow::Init(2)");
+		GameEngineDebug::MsgBoxAssert("GameEngineWindow::Init(2)");
 		return;
 	}
+
+	Hdc = GetDC(Hwnd);
 
 	ShowWindow(Hwnd, SW_SHOW);
 	UpdateWindow(Hwnd);
@@ -47,10 +54,13 @@ void GameEngineWindow::MessageLoop()
 			TranslateMessage(&Msg);
 			DispatchMessageA(&Msg);
 		}
-		else
-		{
 
-		}
+		std::string Buffer{};
+		short KeyState = GetAsyncKeyState(VK_SPACE);
+
+		Buffer.clear();
+		std::format_to(std::back_inserter(Buffer), "{}", KeyState);
+		TextOut(Hdc, 10, 30, Buffer.c_str(), static_cast<int>(Buffer.size()));
 	}
 }
 

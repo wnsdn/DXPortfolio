@@ -1,14 +1,5 @@
 #include "PreCompile.h"
 #include "GameEnginePath.h"
-#include "GameEngineDebug.h"
-
-GameEnginePath::GameEnginePath()
-{
-}
-
-GameEnginePath::~GameEnginePath()
-{
-}
 
 std::string GameEnginePath::FilenameToPath(const std::string& _Filename)
 {
@@ -38,7 +29,7 @@ std::string GameEnginePath::FilenameToPath(const std::string& _Filename)
 
 		if (ResPath == ResPath.root_path())
 		{
-			MsgBoxAssert("FilenameToPath() ResPath " + _Filename);
+			GameEngineDebug::MsgBoxAssert("GameEnginePath::FilenameToPath(1) " + _Filename);
 			return std::string();
 		}
 	}
@@ -52,6 +43,6 @@ std::string GameEnginePath::FilenameToPath(const std::string& _Filename)
 		}
 	}
 
-	MsgBoxAssert("FilenameToPath() Path " + _Filename);
+	GameEngineDebug::MsgBoxAssert("GameEnginePath::FilenameToPath(2) " + _Filename);
 	return std::string();
 }

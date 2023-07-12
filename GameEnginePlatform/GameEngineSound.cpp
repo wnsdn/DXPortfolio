@@ -30,13 +30,13 @@ void GameEngineSound::Init()
 {
 	if (FMOD::System_Create(&System) != FMOD_OK)
 	{
-		MsgBoxAssert("사운드 시스템 생성에 실패했습니다.");
+		GameEngineDebug::MsgBoxAssert("사운드 시스템 생성에 실패했습니다.");
 		return;
 	}
 
 	if (System->init(32, FMOD_INIT_NORMAL, nullptr) != FMOD_OK)
 	{
-		MsgBoxAssert("사운드 시스템 이니셜라이즈에 실패했습니다.");
+		GameEngineDebug::MsgBoxAssert("사운드 시스템 이니셜라이즈에 실패했습니다.");
 		return;
 	}
 }
@@ -45,7 +45,7 @@ void GameEngineSound::Update()
 {
 	if (System->update() != FMOD_OK)
 	{
-		MsgBoxAssert("System->update()");
+		GameEngineDebug::MsgBoxAssert("System->update()");
 		return;
 	}
 }
@@ -97,7 +97,7 @@ void GameEngineSound::CreateSound(const std::string& _Filename, bool _Loop)
 
 	if (Result != FMOD_OK)
 	{
-		MsgBoxAssert(_Filename + "System->createSound()");
+		GameEngineDebug::MsgBoxAssert(_Filename + "System->createSound()");
 		return;
 	}
 

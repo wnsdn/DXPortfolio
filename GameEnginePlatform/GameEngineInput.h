@@ -7,33 +7,15 @@ class GameEngineInput
 private:
 	class GameEngineKey
 	{
-		friend class GameEngineInput;
-	private:
+	public:
 		int Key = -1;
 		bool Down = false;
 		bool Press = false;
 		bool Up = false;
 		bool Free = true;
-
-		void Reset()
-		{
-			if (Press)
-			{
-				Down = false;
-				Press = false;
-				Up = true;
-				Free = true;
-			}
-			else if (Up)
-			{
-				Down = false;
-				Press = false;
-				Up = false;
-				Free = true;
-			}
-		}
-
-		void Update(float _Delta);
+	public:
+		void Reset();
+		void Update();
 	public:
 		GameEngineKey()
 			: Key(-1)
@@ -44,22 +26,34 @@ private:
 		{
 		}
 	};
-public:
-	GameEngineInput();
-	~GameEngineInput();
+
+	static GameEngineKey AllKey[255];
+
+	GameEngineInput() {}
+	~GameEngineInput() {}
 	GameEngineInput(const GameEngineInput& _Other) = delete;
 	GameEngineInput(GameEngineInput&& _Other) noexcept = delete;
 	GameEngineInput& operator=(const GameEngineInput& _Other) = delete;
 	GameEngineInput& operator=(GameEngineInput&& _Other) noexcept = delete;
-
+public:
 	static void Init();
 	static void Reset();
-	static void Update(float _Delta);
+	static void Update();
 
-	static bool IsDown(int _Key);
-	static bool IsUp(int _Key);
-	static bool IsPress(int _Key);
-	static bool IsFree(int _Key);
-private:
-	static GameEngineKey AllKey[255];
+	static bool IsDown(int _Key)
+	{
+		return AllKey[_Key].Down;
+	}
+	static bool IsUp(int _Key)
+	{
+		return AllKey[_Key].Up;
+	}
+	static bool IsPress(int _Key)
+	{
+		return AllKey[_Key].Press;
+	}
+	static bool IsFree(int _Key)
+	{
+		return AllKey[_Key].Free;
+	}
 };

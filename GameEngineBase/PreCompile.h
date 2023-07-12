@@ -4,4 +4,6 @@
 #include <map>
 #include <list>
 #include <string>
-//#include <GameEngineBase/GameEngineMath.h>
+
+#include <GameEngineBase/GameEngineDebug.h>
+#include <GameEngineBase/GameEngineMath.h>

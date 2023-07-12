@@ -7,14 +7,6 @@ LARGE_INTEGER GameEngineTime::Cur = {};
 double GameEngineTime::DoubleDelta = 0.f;
 float GameEngineTime::FloatDelta = 0.f;
 
-GameEngineTime::GameEngineTime()
-{
-}
-
-GameEngineTime::~GameEngineTime()
-{
-}
-
 void GameEngineTime::Init()
 {
 	QueryPerformanceFrequency(&Freq);
