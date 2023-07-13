@@ -173,6 +173,10 @@
   <ItemGroup>
     <ClCompile Include="GameEngineInput.cpp" />
     <ClCompile Include="GameEngineSound.cpp" />
+    <ClCompile Include="GameEngineText.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameEngineWindow.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -184,6 +188,10 @@
   <ItemGroup>
     <ClInclude Include="GameEngineInput.h" />
     <ClInclude Include="GameEngineSound.h" />
+    <ClInclude Include="GameEngineText.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameEngineWindow.h" />
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>

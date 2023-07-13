@@ -39,9 +39,9 @@ public:
 		X = _Ref.X;
 		Y = _Ref.Y;
 	}
-	void operator=(Point4<DataType>&& _Ref) noexcept
-	{
+	void operator=(Point4<DataType>&& _Ref) noexcept = delete;
+	/*{
 		X = _Ref.X;
 		Y = _Ref.Y;
-	}
+	}*/
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+#include <GameEngineBase/GameEngineForm.h>
 
 class GameEngineWindow
 {
@@ -10,8 +11,12 @@ private:
 	HINSTANCE Hinst = nullptr;
 	HWND Hwnd = nullptr;
 	HDC Hdc = nullptr;
+
 	HDC MemDc = nullptr;
+	HBITMAP Hbmp = nullptr;
+
 	std::string Name{};
+	GameEngineForm Form{};
 	bool IsUpdate = true;
 
 	static LRESULT CALLBACK WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp);
@@ -28,6 +33,11 @@ public:
 		return Instance;
 	}
 
-	void Init(HINSTANCE _Hinst, const std::string& _Name);
+	void Init(HINSTANCE _Hinst, const std::string& _Name, const GameEngineForm& _Form);
 	void MessageLoop();
+
+	HDC GetMemDc() const
+	{
+		return MemDc;
+	}
 };

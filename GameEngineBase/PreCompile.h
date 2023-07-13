@@ -5,5 +5,5 @@
 #include <list>
 #include <string>
 
-#include <GameEngineBase/GameEngineDebug.h>
-#include <GameEngineBase/GameEngineMath.h>
+#include "GameEngineDebug.h"
+#include "GameEngineMath.h"

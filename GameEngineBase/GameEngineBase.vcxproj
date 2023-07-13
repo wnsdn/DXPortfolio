@@ -168,6 +168,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineDebug.h" />
+    <ClInclude Include="GameEngineForm.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameEngineMath.h" />
     <ClInclude Include="GameEnginePath.h" />
     <ClInclude Include="GameEngineRandom.h" />
@@ -177,6 +181,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineDebug.cpp" />
+    <ClCompile Include="GameEngineForm.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameEngineMath.cpp" />
     <ClCompile Include="GameEnginePath.cpp" />
     <ClCompile Include="GameEngineRandom.cpp" />

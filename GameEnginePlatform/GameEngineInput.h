@@ -1,5 +1,4 @@
 #pragma once
-
 #include <Windows.h>
 
 class GameEngineInput
@@ -13,9 +12,6 @@ private:
 		bool Press = false;
 		bool Up = false;
 		bool Free = true;
-	public:
-		void Reset();
-		void Update();
 	public:
 		GameEngineKey()
 			: Key(-1)

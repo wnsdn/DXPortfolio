@@ -1,3 +1,4 @@
-GetDc() -> Delete?
-Format Textout Class
-SharedPtr Study
+SharedPtr
+string_view
+
+SafeDelete

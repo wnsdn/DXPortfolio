@@ -15,7 +15,20 @@ void GameEngineInput::Reset()
 {
 	for (int i = 0; i < 255; ++i)
 	{
-		AllKey[i].Reset();
+		if (AllKey[i].Press)
+		{
+			AllKey[i].Down = false;
+			AllKey[i].Press = false;
+			AllKey[i].Up = true;
+			AllKey[i].Free = true;
+		}
+		else if (AllKey[i].Up)
+		{
+			AllKey[i].Down = false;
+			AllKey[i].Press = false;
+			AllKey[i].Up = false;
+			AllKey[i].Free = true;
+		}
 	}
 }
 
@@ -23,62 +36,39 @@ void GameEngineInput::Update()
 {
 	for (int i = 0; i < 255; ++i)
 	{
-		AllKey[i].Update();
-	}
-}
-
-void GameEngineInput::GameEngineKey::Reset()
-{
-	if (Press)
-	{
-		Down = false;
-		Press = false;
-		Up = true;
-		Free = true;
-	}
-	else if (Up)
-	{
-		Down = false;
-		Press = false;
-		Up = false;
-		Free = true;
-	}
-}
-
-void GameEngineInput::GameEngineKey::Update()
-{
-	if (GetAsyncKeyState(Key))
-	{
-		if (Free)
+		if (GetAsyncKeyState(AllKey[i].Key))
 		{
-			Down = true;
-			Press = true;
-			Up = false;
-			Free = false;
+			if (AllKey[i].Free)
+			{
+				AllKey[i].Down = true;
+				AllKey[i].Press = true;
+				AllKey[i].Up = false;
+				AllKey[i].Free = false;
+			}
+			else if (AllKey[i].Down)
+			{
+				AllKey[i].Down = false;
+				AllKey[i].Press = true;
+				AllKey[i].Up = false;
+				AllKey[i].Free = false;
+			}
 		}
-		else if (Down)
+		else
 		{
-			Down = false;
-			Press = true;
-			Up = false;
-			Free = false;
-		}
-	}
-	else
-	{
-		if (Press)
-		{
-			Down = false;
-			Press = false;
-			Up = true;
-			Free = true;
-		}
-		else if (Up)
-		{
-			Down = false;
-			Press = false;
-			Up = false;
-			Free = true;
+			if (AllKey[i].Press)
+			{
+				AllKey[i].Down = false;
+				AllKey[i].Press = false;
+				AllKey[i].Up = true;
+				AllKey[i].Free = true;
+			}
+			else if (AllKey[i].Up)
+			{
+				AllKey[i].Down = false;
+				AllKey[i].Press = false;
+				AllKey[i].Up = false;
+				AllKey[i].Free = true;
+			}
 		}
 	}
 }
