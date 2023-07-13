@@ -5,12 +5,11 @@
 
 GameEngineWindow GameEngineWindow::Instance;
 
-void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string& _Name, const GameEngineForm& _Form)
+void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string_view& _Name, const GameEngineForm& _Form)
 {
 	GameEngineDebug::LeakCheck();
 
 	Hinst = _Hinst;
-	Name = _Name;
 	Form = _Form;
 
 	if (!Hinst)
@@ -22,13 +21,13 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string& _Name, const Ga
 	WNDCLASSEXA Wc = {};
 	Wc.cbSize = sizeof(WNDCLASSEXA);
 	Wc.lpfnWndProc = WndProc;
-	Wc.lpszClassName = Name.c_str();
+	Wc.lpszClassName = _Name.data();
 	Wc.hInstance = Hinst;
 	Wc.style = CS_VREDRAW | CS_HREDRAW;
 	Wc.hCursor = LoadCursorA(nullptr, IDC_ARROW);
 	RegisterClassExA(&Wc);
 
-	Hwnd = CreateWindowA(Name.c_str(), Name.c_str(), WS_OVERLAPPEDWINDOW,
+	Hwnd = CreateWindowA(_Name.data(), _Name.data(), WS_OVERLAPPEDWINDOW,
 		0, 0, 0, 0, nullptr, nullptr, Hinst, nullptr);
 
 	if (!Hwnd)

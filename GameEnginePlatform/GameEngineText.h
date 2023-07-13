@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include <format>
 #include <GameEngineBase/GameEngineMath.h>
 #include "GameEngineWindow.h"
@@ -15,7 +14,7 @@ private:
 	GameEngineText& operator=(GameEngineText&& _Other) noexcept = delete;
 public:
 	template <typename ArgType>
-	static void FormatTextOut(const std::string& _Text, const ArgType& _Ptr, const Point4<int>& _Pos)
+	static void FormatTextOut(const std::string_view& _Text, const ArgType& _Ptr, const Point4<int>& _Pos)
 	{
 		std::string Buffer(_Text);
 		std::format_to(std::back_inserter(Buffer), "{}", _Ptr);

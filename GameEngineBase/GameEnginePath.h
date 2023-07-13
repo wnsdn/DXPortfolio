@@ -11,5 +11,5 @@ private:
 	GameEnginePath& operator=(const GameEnginePath& _Other) = delete;
 	GameEnginePath& operator=(GameEnginePath&& _Other) noexcept = delete;
 public:
-	static std::string FilenameToPath(const std::string& _Filename);
+	static std::string_view FilenameToPath(const std::string_view& _Filename);
 };

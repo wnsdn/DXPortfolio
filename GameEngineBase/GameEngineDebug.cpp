@@ -9,8 +9,8 @@ void GameEngineDebug::LeakCheck()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 }
 
-void GameEngineDebug::MsgBoxAssert(const std::string& _Text)
+void GameEngineDebug::MsgBoxAssert(const std::string_view& _Text)
 {
-	MessageBoxA(nullptr, _Text.c_str(), "Error", MB_OK);
+	MessageBoxA(nullptr, _Text.data(), "Error", MB_OK);
 	assert(false);
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <string>
+#include <string_view>
 #include <GameEngineBase/GameEngineForm.h>
 
 class GameEngineWindow
@@ -15,7 +15,6 @@ private:
 	HDC MemDc = nullptr;
 	HBITMAP Hbmp = nullptr;
 
-	std::string Name{};
 	GameEngineForm Form{};
 	bool IsUpdate = true;
 
@@ -33,7 +32,7 @@ public:
 		return Instance;
 	}
 
-	void Init(HINSTANCE _Hinst, const std::string& _Name, const GameEngineForm& _Form);
+	void Init(HINSTANCE _Hinst, const std::string_view& _Name, const GameEngineForm& _Form);
 	void MessageLoop();
 
 	HDC GetMemDc() const

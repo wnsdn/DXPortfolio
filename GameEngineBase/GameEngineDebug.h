@@ -11,5 +11,5 @@ private:
 	GameEngineDebug& operator=(GameEngineDebug&& _Other) noexcept = delete;
 public:
 	static void LeakCheck();
-	static void MsgBoxAssert(const std::string& _Text);
+	static void MsgBoxAssert(const std::string_view& _Text);
 };
