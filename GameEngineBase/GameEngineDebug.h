@@ -1,4 +1,5 @@
 #pragma once
+#include <string_view>
 
 class GameEngineDebug
 {
@@ -11,5 +12,5 @@ private:
 	GameEngineDebug& operator=(GameEngineDebug&& _Other) noexcept = delete;
 public:
 	static void LeakCheck();
-	static void MsgBoxAssert(const std::string_view& _Text);
+	static void MsgBoxAssert(std::string_view _Text);
 };

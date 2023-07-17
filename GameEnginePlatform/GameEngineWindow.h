@@ -32,7 +32,7 @@ public:
 		return Instance;
 	}
 
-	void Init(HINSTANCE _Hinst, const std::string_view& _Name, const GameEngineForm& _Form);
+	void Init(HINSTANCE _Hinst, std::string_view _Name, const GameEngineForm& _Form);
 	void MessageLoop();
 
 	HDC GetMemDc() const

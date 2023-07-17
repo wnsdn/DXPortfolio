@@ -5,7 +5,7 @@
 
 GameEngineWindow GameEngineWindow::Instance;
 
-void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string_view& _Name, const GameEngineForm& _Form)
+void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const GameEngineForm& _Form)
 {
 	GameEngineDebug::LeakCheck();
 
@@ -51,6 +51,8 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, const std::string_view& _Name, con
 
 void GameEngineWindow::MessageLoop()
 {
+	GameEngineText::Init();
+
 	MSG Msg = {};
 	while (IsUpdate)
 	{
@@ -62,6 +64,10 @@ void GameEngineWindow::MessageLoop()
 
 		Rectangle(MemDc, -1, -1, Form.GetSize<int>().X + 1, Form.GetSize<int>().Y + 1);
 
+		int x = 10;
+		int y = 20;
+		int z = 30;
+		TextOutA(MemDc, 10, 10, GameEngineText::FormatTextOut(x, y).c_str(), ))
 
 		BitBlt(Hdc, 0, 0, Form.GetSize<int>().X, Form.GetSize<int>().Y,
 			MemDc, 0, 0, SRCCOPY);

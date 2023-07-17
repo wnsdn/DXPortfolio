@@ -1,14 +1,16 @@
 #include "PreCompile.h"
 #include "GameEngineString.h"
 
-std::string_view GameEngineString::ToUpperReturn(const std::string_view& _Str)
+std::string GameEngineString::ToUpperReturn(std::string_view _Str)
 {
-	/*for (auto& Ch : _Str)
+	std::string Upper(_Str);
+
+	for (auto& Ch : Upper)
 	{
 		Ch = toupper(Ch);
-	}*/
+	}
 
-	return _Str;
+	return Upper;
 }
 
 //std::wstring_view GameEngineString::AnsiToUnicode(const std::string_view& _Text)

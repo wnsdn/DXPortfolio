@@ -1,6 +1,4 @@
 smart pointer
-string_view
-	- GameEngineString
 functional
 
 window bitmap

@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include <string_view>
 
 class GameEngineString
 {
@@ -10,7 +12,7 @@ private:
 	GameEngineString& operator=(const GameEngineString& _Other) = delete;
 	GameEngineString& operator=(GameEngineString&& _Other) noexcept = delete;
 public:
-	static std::string_view ToUpperReturn(const std::string_view& _Str);
+	static std::string ToUpperReturn(std::string_view _Str);
 	//static std::wstring_view AnsiToUnicode(const std::string_view& _Text);
 	//static std::string_view UnicodeToAnsi(const std::wstring_view& _Text);
 	//static std::string_view UnicodeToUTF8(const std::wstring_view& _Text);

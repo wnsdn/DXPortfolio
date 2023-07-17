@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "GameEnginePath.h"
 
-std::string_view GameEnginePath::FilenameToPath(const std::string_view& _Filename)
+std::string GameEnginePath::FilenameToPath(std::string_view _Filename)
 {
 	std::filesystem::path ResPath = std::filesystem::current_path();
 

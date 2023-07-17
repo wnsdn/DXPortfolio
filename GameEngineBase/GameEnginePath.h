@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <string_view>
 
 class GameEnginePath
 {
@@ -11,5 +12,5 @@ private:
 	GameEnginePath& operator=(const GameEnginePath& _Other) = delete;
 	GameEnginePath& operator=(GameEnginePath&& _Other) noexcept = delete;
 public:
-	static std::string_view FilenameToPath(const std::string_view& _Filename);
+	static std::string FilenameToPath(std::string_view _Filename);
 };
