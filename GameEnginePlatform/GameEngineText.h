@@ -20,18 +20,18 @@ public:
 	static void Init();
 
 	template <typename... Args>
-	static std::string FormatTextOut(const Args&... _Args)
+	static void FormatTextOut(int _X, int _Y, const Args&... _Args)
 	{
 		if (Buffer.capacity() < 32)
 		{
-			GameEngineDebug::MsgBoxAssert("GameEngineText()::FormatTextOut");
-			return std::string();
+			GameEngineDebug::MsgBoxAssert("GameEngineText::FormatTextOut()");
+			return;
 		}
 
 		Buffer.clear();
 
 		(std::format_to(std::back_inserter(Buffer), "{} ", _Args), ...);
 
-		return Buffer;
+		TextOutA(GameEngineWindow::GetInst().GetMemDc(), _X, _Y, Buffer.c_str(), static_cast<int>(Buffer.size()));
 	}
 };

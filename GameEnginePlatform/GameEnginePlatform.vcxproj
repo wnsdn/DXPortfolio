@@ -171,6 +171,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameEngineDC.cpp" />
     <ClCompile Include="GameEngineInput.cpp" />
     <ClCompile Include="GameEngineSound.cpp" />
     <ClCompile Include="GameEngineText.cpp">
@@ -186,6 +187,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameEngineDC.h" />
     <ClInclude Include="GameEngineInput.h" />
     <ClInclude Include="GameEngineSound.h" />
     <ClInclude Include="GameEngineText.h">
