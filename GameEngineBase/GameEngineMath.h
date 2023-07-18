@@ -1,47 +1,78 @@
 #pragma once
 
-template <typename DataType>
-class Point4
+class int4;
+class float4
 {
 public:
-	static const Point4<DataType> Left;
-	static const Point4<DataType> Right;
-	static const Point4<DataType> Up;
-	static const Point4<DataType> Down;
+	static const float4 Left;
+	static const float4 Right;
+	static const float4 Up;
+	static const float4 Down;
 
-	DataType X = 0;
-	DataType Y = 0;
+	float X = 0.0f;
+	float Y = 0.0f;
 public:
-	Point4<DataType> Half() const
+	float4 Half() const
 	{
-		return Point4<DataType>(X / 2, Y / 2);
+		return { X / 2.0f, Y / 2.0f };
 	}
-	template <typename ToType>
-	Point4<ToType> To() const
-	{
-		return Point4<ToType>(static_cast<ToType>(X), static_cast<ToType>(Y));
-	}
+	int4 ToInt4() const;
 public:
-	Point4()
-		: X(0), Y(0)
-	{}
-	Point4(const DataType _X, const DataType _Y)
+	float4()
+		: X(0.0f), Y(0.0f)
+	{
+	}
+	float4(const float _X, const float _Y)
 		: X(_X), Y(_Y)
-	{}
-	Point4(const Point4<DataType>& _Ref)
+	{
+	}
+	float4(const float4& _Ref)
 		: X(_Ref.X), Y(_Ref.Y)
-	{}
-	/*Point4(Point4<DataType>&& _Ref) noexcept
-		: X(_Ref.X), Y(_Ref.Y)
-	{}*/
-	void operator=(const Point4<DataType>& _Ref)
+	{
+	}
+	void operator=(const float4& _Ref)
 	{
 		X = _Ref.X;
 		Y = _Ref.Y;
 	}
-	/*void operator=(Point4<DataType>&& _Ref) noexcept;
+	float4(float4&& _Rvalue) noexcept = delete;
+	void operator=(float4&& _Rvalue) noexcept = delete;
+};
+
+class int4
+{
+public:
+	static const int4 Left;
+	static const int4 Right;
+	static const int4 Up;
+	static const int4 Down;
+
+	int X = 0;
+	int Y = 0;
+public:
+	int4 Half() const
+	{
+		return { X / 2, Y / 2 };
+	}
+	float4 ToFloat4() const;
+public:
+	int4()
+		: X(0), Y(0)
+	{
+	}
+	int4(const int _X, const int _Y)
+		: X(_X), Y(_Y)
+	{
+	}
+	int4(const int4& _Ref)
+		: X(_Ref.X), Y(_Ref.Y)
+	{
+	}
+	void operator=(const int4& _Ref)
 	{
 		X = _Ref.X;
 		Y = _Ref.Y;
-	}*/
+	}
+	int4(int4&& _Rvalue) noexcept = delete;
+	void operator=(int4&& _Rvalue) noexcept = delete;
 };

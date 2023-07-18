@@ -8,7 +8,7 @@
     <ClInclude Include="GameEngineString.h" />
     <ClInclude Include="GameEngineTime.h" />
     <ClInclude Include="PreCompile.h">
-      <Filter>PreCompile</Filter>
+      <Filter>01. PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineForm.h" />
   </ItemGroup>
@@ -20,12 +20,12 @@
     <ClCompile Include="GameEngineString.cpp" />
     <ClCompile Include="GameEngineTime.cpp" />
     <ClCompile Include="PreCompile.cpp">
-      <Filter>PreCompile</Filter>
+      <Filter>01. PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineForm.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="PreCompile">
+    <Filter Include="01. PreCompile">
       <UniqueIdentifier>{9eae4354-2b76-4c50-bfc0-71fec9376b7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

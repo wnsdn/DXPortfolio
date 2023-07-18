@@ -3,7 +3,7 @@
   <ItemGroup>
     <ClCompile Include="GameEngineCore.cpp" />
     <ClCompile Include="PreCompile.cpp">
-      <Filter>PreCompile</Filter>
+      <Filter>01. PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineActor.cpp">
       <Filter>Object</Filter>
@@ -18,7 +18,7 @@
   <ItemGroup>
     <ClInclude Include="GameEngineCore.h" />
     <ClInclude Include="PreCompile.h">
-      <Filter>PreCompile</Filter>
+      <Filter>01. PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineActor.h">
       <Filter>Object</Filter>
@@ -31,11 +31,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="PreCompile">
-      <UniqueIdentifier>{703fa0a3-5867-488d-bd2c-116edb005df7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object">
       <UniqueIdentifier>{b5aef38d-9ceb-425d-8db7-b8ef375c72b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. PreCompile">
+      <UniqueIdentifier>{703fa0a3-5867-488d-bd2c-116edb005df7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

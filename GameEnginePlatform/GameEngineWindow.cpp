@@ -76,7 +76,8 @@ void GameEngineWindow::MessageLoop()
 
 		Rectangle(MemDc->GetHdc(), -1, -1, Width + 1, Height + 1);
 
-		GameEngineText::FormatTextOut("String", 10, 10, "Hello");
+		int StrSize = sizeof(std::string);
+		GameEngineText::FormatTextOut("String", 10, 10, StrSize);
 
 		BitBlt(Hdc, 0, 0, Width, Height,
 			MemDc->GetHdc(), 0, 0, SRCCOPY);

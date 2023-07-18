@@ -1,6 +1,10 @@
 smart pointer
 functional
+noexcept
+완벽한 추론
 
 SafeDelete
 
 input 손봐야함
+
+이동함수 어떻게 구현되는지 확인

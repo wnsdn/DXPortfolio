@@ -17,7 +17,7 @@ private:
 			: Key(-1)
 		{
 		}
-		GameEngineKey(int _Key)
+		GameEngineKey(const int _Key)
 			: Key(_Key)
 		{
 		}
@@ -36,19 +36,19 @@ public:
 	static void Reset();
 	static void Update();
 
-	static bool IsDown(int _Key)
+	static bool IsDown(const int _Key)
 	{
 		return AllKey[_Key].Down;
 	}
-	static bool IsUp(int _Key)
+	static bool IsUp(const int _Key)
 	{
 		return AllKey[_Key].Up;
 	}
-	static bool IsPress(int _Key)
+	static bool IsPress(const int _Key)
 	{
 		return AllKey[_Key].Press;
 	}
-	static bool IsFree(int _Key)
+	static bool IsFree(const int _Key)
 	{
 		return AllKey[_Key].Free;
 	}

@@ -1,12 +1,22 @@
 #include "PreCompile.h"
 #include "GameEngineMath.h"
 
-const Point4<float> Point4<float>::Left = { -1.0f, 0.0f };
-const Point4<float> Point4<float>::Right = { 1.0f, 0.0f };
-const Point4<float> Point4<float>::Up = { 0.0f, -1.0f };
-const Point4<float> Point4<float>::Down = { 0.0f, 1.0f };
+const int4 int4::Left = { -1, 0 };
+const int4 int4::Right = { 1, 0 };
+const int4 int4::Up = { 0, -1 };
+const int4 int4::Down = { 0, 1 };
 
-const Point4<int> Point4<int>::Left = { -1, 0 };
-const Point4<int> Point4<int>::Right = { 1, 0 };
-const Point4<int> Point4<int>::Up = { 0, -1 };
-const Point4<int> Point4<int>::Down = { 0, 1 };
+const float4 float4::Left = { -1.0f, 0.0f };
+const float4 float4::Right = { 1.0f, 0.0f };
+const float4 float4::Up = { 0.0f, -1.0f };
+const float4 float4::Down = { 0.0f, 1.0f };
+
+int4 float4::ToInt4() const
+{
+	return { static_cast<int>(X), static_cast<int>(Y) };
+}
+
+float4 int4::ToFloat4() const
+{
+	return { static_cast<float>(X), static_cast<float>(Y) };
+}

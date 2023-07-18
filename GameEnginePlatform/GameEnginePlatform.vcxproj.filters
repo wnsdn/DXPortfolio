@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
-      <Filter>PreCompile</Filter>
+      <Filter>01. PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineSound.cpp">
       <Filter>FMOD</Filter>
@@ -22,7 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
-      <Filter>PreCompile</Filter>
+      <Filter>01. PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineSound.h">
       <Filter>FMOD</Filter>
@@ -50,11 +50,11 @@
     <Filter Include="FMOD\Debug">
       <UniqueIdentifier>{9da9a5ce-c00f-4a4b-8e12-ec072b578be9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PreCompile">
-      <UniqueIdentifier>{94715e95-bcb8-4838-9b80-b68a38e373f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Window">
       <UniqueIdentifier>{eb919dc6-c426-47e1-b5c4-8a203865834e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. PreCompile">
+      <UniqueIdentifier>{94715e95-bcb8-4838-9b80-b68a38e373f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
