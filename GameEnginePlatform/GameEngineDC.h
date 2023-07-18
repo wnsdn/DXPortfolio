@@ -7,17 +7,22 @@ private:
 	HDC Hdc = nullptr;
 	HBITMAP Hbmp = nullptr;
 	BITMAP Info{};
-
-	bool IsMainDc = false;
 public:
 	HDC GetHdc() const
 	{
 		return Hdc;
 	}
+	int GetWidth() const
+	{
+		return Info.bmWidth;
+	}
+	int GetHeight() const
+	{
+		return Info.bmHeight;
+	}
 public:
-	GameEngineDC(HDC _Hdc);
-	GameEngineDC(GameEngineDC* const _Dc);
-	~GameEngineDC() {}
+	GameEngineDC(const int _X, const int _Y);
+	~GameEngineDC();
 	GameEngineDC(const GameEngineDC& _Ref) = delete;
 	GameEngineDC(GameEngineDC&& _Rvalue) noexcept = delete;
 	GameEngineDC& operator=(const GameEngineDC& _Ref) = delete;

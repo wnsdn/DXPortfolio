@@ -3,22 +3,24 @@
 
 #include <GameEngineBase/GameEngineDebug.h>
 
-GameEngineDC::GameEngineDC(HDC _Hdc)
-	: Hdc(_Hdc)
-	, Hbmp(static_cast<HBITMAP>(GetCurrentObject(Hdc, OBJ_BITMAP)))
-	, IsMainDc(true)
+GameEngineDC::GameEngineDC(const int _X, const int _Y)
 {
+	Hdc = CreateCompatibleDC(nullptr);
+	Hbmp = CreateCompatibleBitmap(Hdc, _X, _Y);
+	SelectObject(Hdc, Hbmp);
 	GetObjectA(Hbmp, sizeof(BITMAP), &Info);
 }
 
-GameEngineDC::GameEngineDC(GameEngineDC* const _Dc)
+GameEngineDC::~GameEngineDC()
 {
-	if (!_Dc->GetHdc())
+	if (Hdc)
 	{
-		GameEngineDebug::MsgBoxAssert("GameEngineDC::No MainDc");
-		return;
+		DeleteDC(Hdc);
+		Hdc = nullptr;
 	}
-
-	Hdc = CreateCompatibleDC(_Dc->GetHdc());
-	Hbmp = CreateCompatibleBitmap()
+	if (Hbmp)
+	{
+		DeleteObject(Hbmp);
+		Hbmp = nullptr;
+	}
 }

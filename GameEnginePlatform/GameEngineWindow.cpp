@@ -8,10 +8,15 @@ GameEngineWindow GameEngineWindow::Instance;
 
 GameEngineWindow::~GameEngineWindow()
 {
-	if (MainDc)
+	if (Hdc)
 	{
-		delete MainDc;
-		MainDc = nullptr;
+		ReleaseDC(Hwnd, Hdc);
+		Hdc = nullptr;
+	}
+	if (MemDc)
+	{
+		delete MemDc;
+		MemDc = nullptr;
 	}
 }
 
@@ -52,16 +57,14 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, int _Left,
 	SetWindowPos(Hwnd, nullptr, _Left, _Top,
 		Rect.right - Rect.left, Rect.bottom - Rect.top, SWP_NOZORDER);
 
-	MainDc = new GameEngineDC(GetDC(Hwnd));
-	MemDc = new GameEngineDC(MainDc);
+	Hdc = GetDC(Hwnd);
+	MemDc = new GameEngineDC(Width, Height);
 
 	ShowWindow(Hwnd, SW_SHOW);
 }
 
 void GameEngineWindow::MessageLoop()
 {
-	GameEngineText::Init();
-
 	MSG Msg = {};
 	while (IsUpdate)
 	{
@@ -71,12 +74,12 @@ void GameEngineWindow::MessageLoop()
 			DispatchMessageA(&Msg);
 		}
 
-		Rectangle(MainDc->GetHdc(), -1, -1, Width + 1, Height + 1);
+		Rectangle(MemDc->GetHdc(), -1, -1, Width + 1, Height + 1);
 
+		GameEngineText::FormatTextOut("String", 10, 10, "Hello");
 
-
-		/*BitBlt(MainDc->GetHdc(), 0, 0, Width, Height,
-			MemDc, 0, 0, SRCCOPY);*/
+		BitBlt(Hdc, 0, 0, Width, Height,
+			MemDc->GetHdc(), 0, 0, SRCCOPY);
 	}
 }
 
@@ -90,4 +93,9 @@ LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
 	}
 
 	return DefWindowProcA(_Hwnd, _Msg, _Wp, _Lp);
+}
+
+HDC GameEngineWindow::GetMemDc() const
+{
+	return MemDc->GetHdc();
 }

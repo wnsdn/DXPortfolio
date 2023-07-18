@@ -10,14 +10,13 @@ private:
 
 	HINSTANCE Hinst = nullptr;
 	HWND Hwnd = nullptr;
-	
-	GameEngineDC* MainDc = nullptr;
+	HDC Hdc = nullptr;
 	GameEngineDC* MemDc = nullptr;
-
-	bool IsUpdate = true;
 
 	int Width = 0;
 	int Height = 0;
+
+	bool IsUpdate = true;
 
 	static LRESULT CALLBACK WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp);
 
@@ -36,8 +35,13 @@ public:
 	void Init(HINSTANCE _Hinst, std::string_view _Name, int _Left, int _Top, int _Width, int _Height);
 	void MessageLoop();
 
-	HDC GetMemDc() const
+	HDC GetMemDc() const;
+	int GetWidth() const
 	{
-		//return MemDc;
+		return Width;
+	}
+	int GetHeight() const
+	{
+		return Height;
 	}
 };

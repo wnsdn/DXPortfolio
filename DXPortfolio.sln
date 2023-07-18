@@ -12,7 +12,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEnginePlatform", "GameE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "App", "App\App.vcxproj", "{5D58AB67-1519-40C7-870D-8BBB53C19733}"
 	ProjectSection(ProjectDependencies) = postProject
-		{D438C18B-BFEB-4BE2-B97E-51CAA4D32FDC} = {D438C18B-BFEB-4BE2-B97E-51CAA4D32FDC}
+		{9BF56938-78CB-45AA-AF60-DDB919FA491D} = {9BF56938-78CB-45AA-AF60-DDB919FA491D}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level0", "Level0", "{26988854-7E09-4AAE-9F77-F31F98648BCF}"
@@ -29,8 +29,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Level3", "Level3", "{E68F0D9F-A658-45A2-BF52-576B9308A964}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineCore", "GameEngineCore\GameEngineCore.vcxproj", "{187BD446-DD64-47FC-9B7F-407379F128B3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D438C18B-BFEB-4BE2-B97E-51CAA4D32FDC} = {D438C18B-BFEB-4BE2-B97E-51CAA4D32FDC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Contents", "Contents\Contents.vcxproj", "{9BF56938-78CB-45AA-AF60-DDB919FA491D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{187BD446-DD64-47FC-9B7F-407379F128B3} = {187BD446-DD64-47FC-9B7F-407379F128B3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

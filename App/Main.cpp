@@ -1,11 +1,14 @@
-#include <GameEnginePlatform/GameEngineWindow.h>
+#include <Windows.h>
+#include <GameEngineCore/GameEngineCore.h>
 
+#pragma comment(lib, "GameEngineBase.lib")
 #pragma comment(lib, "GameEnginePlatform.lib")
+#pragma comment(lib, "GameEngineCore.lib")
+#pragma comment(lib, "Contents.lib")
 
 int WINAPI WinMain(_In_ HINSTANCE _Hinst, _In_opt_ HINSTANCE, _In_ char*, _In_ int)
 {
-	GameEngineWindow::GetInst().Init(_Hinst, "MyWindow", 100, 100, 1080, 720);
-	GameEngineWindow::GetInst().MessageLoop();
+	GameEngineCore::EngineStart(_Hinst);
 
 	return 0;
 }

@@ -31,16 +31,16 @@ public:
 	Point4(const Point4<DataType>& _Ref)
 		: X(_Ref.X), Y(_Ref.Y)
 	{}
-	Point4(Point4<DataType>&& _Ref) noexcept
+	/*Point4(Point4<DataType>&& _Ref) noexcept
 		: X(_Ref.X), Y(_Ref.Y)
-	{}
+	{}*/
 	void operator=(const Point4<DataType>& _Ref)
 	{
 		X = _Ref.X;
 		Y = _Ref.Y;
 	}
-	void operator=(Point4<DataType>&& _Ref) noexcept = delete;
-	/*{
+	/*void operator=(Point4<DataType>&& _Ref) noexcept;
+	{
 		X = _Ref.X;
 		Y = _Ref.Y;
 	}*/
