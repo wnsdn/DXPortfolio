@@ -31,18 +31,29 @@ public:
 		return { static_cast<int>(X), static_cast<int>(Y) };
 	}
 
-	void Rotate(const float _Angle)
+	void RotateX(const float _Angle)
+	{
+		float Radian = _Angle * GameEngineMath::D2R;
+		float4 Tmp{ *this };
+
+		Z = -(Tmp.Z * cosf(Radian) - Tmp.Y * sinf(Radian));
+		Y = Tmp.Z * sinf(Radian) + Tmp.Y * cosf(Radian);
+	}
+	void RotateY(const float _Angle)
+	{
+		float Radian = _Angle * GameEngineMath::D2R;
+		float4 Tmp{ *this };
+
+		X = Tmp.X * cosf(Radian) - Tmp.Z * sinf(Radian);
+		Z = -(Tmp.X * sinf(Radian) + Tmp.Z * cosf(Radian));
+	}
+	void RotateZ(const float _Angle)
 	{
 		float Radian = _Angle * GameEngineMath::D2R;
 		float4 Tmp{ *this };
 
 		X = Tmp.X * cosf(Radian) - Tmp.Y * sinf(Radian);
 		Y = Tmp.X * sinf(Radian) + Tmp.Y * cosf(Radian);
-	}
-	float4 GetRotation(const float _Angle) const
-	{
-		float Radian = _Angle * GameEngineMath::D2R;
-		return { X * cosf(Radian) - Y * sinf(Radian), X * sinf(Radian) + Y * cosf(Radian) }; //2차원 회전 공식 (x cos - y sin, x sin + y cos)
 	}
 public:
 	float4()
