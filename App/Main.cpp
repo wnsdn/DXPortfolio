@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <GameEngineCore/GameEngineCore.h>
+#include <Contents/ContentsCore.h>
 
 #pragma comment(lib, "GameEngineBase.lib")
 #pragma comment(lib, "GameEnginePlatform.lib")
@@ -8,7 +9,7 @@
 
 int WINAPI WinMain(_In_ HINSTANCE _Hinst, _In_opt_ HINSTANCE, _In_ char*, _In_ int)
 {
-	GameEngineCore::EngineStart(_Hinst);
+	GameEngineCore::EngineStart<ContentsCore>(_Hinst);
 
 	return 0;
 }

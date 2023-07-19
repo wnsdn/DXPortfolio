@@ -10,6 +10,7 @@ float GameEngineTime::FloatDelta = 0.f;
 void GameEngineTime::Init()
 {
 	QueryPerformanceFrequency(&Freq);
+	QueryPerformanceCounter(&Prev);
 }
 
 void GameEngineTime::Reset()

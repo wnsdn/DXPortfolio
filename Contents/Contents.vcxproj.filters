@@ -9,10 +9,12 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>01. PreCompile</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsCore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
       <Filter>01. PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsCore.h" />
   </ItemGroup>
 </Project>

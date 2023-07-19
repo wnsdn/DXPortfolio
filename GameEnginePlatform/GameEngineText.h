@@ -1,6 +1,7 @@
 #pragma once
 #include <format>
 #include <string>
+#include <string_view>
 #include "GameEngineWindow.h"
 
 class GameEngineText

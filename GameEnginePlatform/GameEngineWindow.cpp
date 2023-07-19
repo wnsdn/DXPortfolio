@@ -2,9 +2,7 @@
 #include "GameEngineWindow.h"
 #include "GameEngineDC.h"
 
-#include "GameEngineText.h"
-
-GameEngineWindow GameEngineWindow::Instance;
+bool GameEngineWindow::IsUpdate = true;
 
 GameEngineWindow::~GameEngineWindow()
 {
@@ -20,13 +18,10 @@ GameEngineWindow::~GameEngineWindow()
 	}
 }
 
-void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, int _Left, int _Top, int _Width, int _Height)
+void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POINT& _Pos, const POINT& _Scale)
 {
-	GameEngineDebug::LeakCheck();
-
 	Hinst = _Hinst;
-	Width = _Width;
-	Height = _Height;
+	Scale = _Scale;
 
 	if (!Hinst)
 	{
@@ -52,19 +47,26 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, int _Left,
 		return;
 	}
 
-	RECT Rect{ 0, 0, Width, Height };
+	RECT Rect{ 0, 0, Scale.x, Scale.y };
 	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false);
-	SetWindowPos(Hwnd, nullptr, _Left, _Top,
+	SetWindowPos(Hwnd, nullptr, _Pos.x, _Pos.y,
 		Rect.right - Rect.left, Rect.bottom - Rect.top, SWP_NOZORDER);
 
 	Hdc = GetDC(Hwnd);
-	MemDc = new GameEngineDC(Width, Height);
+	MemDc = new GameEngineDC(Scale.x, Scale.y);
 
 	ShowWindow(Hwnd, SW_SHOW);
 }
 
-void GameEngineWindow::MessageLoop()
+void GameEngineWindow::MessageLoop(std::function<void()> _Start,
+	std::function<void()> _Update,
+	std::function<void()> _Release)
 {
+	if (_Start)
+	{
+		_Start();
+	}
+
 	MSG Msg = {};
 	while (IsUpdate)
 	{
@@ -72,16 +74,30 @@ void GameEngineWindow::MessageLoop()
 		{
 			TranslateMessage(&Msg);
 			DispatchMessageA(&Msg);
+			continue;
 		}
 
-		Rectangle(MemDc->GetHdc(), -1, -1, Width + 1, Height + 1);
-
-		int StrSize = sizeof(std::string);
-		GameEngineText::FormatTextOut("String", 10, 10, StrSize);
-
-		BitBlt(Hdc, 0, 0, Width, Height,
-			MemDc->GetHdc(), 0, 0, SRCCOPY);
+		if (_Update)
+		{
+			_Update();
+		}
 	}
+
+	if (_Release)
+	{
+		_Release();
+	}
+}
+
+void GameEngineWindow::ClearBackBuffer()
+{
+	Rectangle(MemDc->GetHdc(), -1, -1, Scale.x + 1, Scale.y + 1);
+}
+
+void GameEngineWindow::DoubleBuffering()
+{
+	BitBlt(Hdc, 0, 0, Scale.x, Scale.y,
+		MemDc->GetHdc(), 0, 0, SRCCOPY);
 }
 
 LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
@@ -89,7 +105,7 @@ LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
 	switch (_Msg)
 	{
 	case WM_DESTROY:
-		Instance.IsUpdate = false;
+		IsUpdate = false;
 		return 0;
 	}
 

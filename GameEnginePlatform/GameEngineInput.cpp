@@ -1,11 +1,11 @@
 #include "PreCompile.h"
 #include "GameEngineInput.h"
 
-GameEngineInput::GameEngineKey GameEngineInput::AllKey[255] = {};
+GameEngineInput::GameEngineKey GameEngineInput::AllKey[255]{};
 
 void GameEngineInput::Init()
 {
-	for (int i = 0; i < 255; ++i)
+	for (unsigned char i = 0; i < 255; ++i)
 	{
 		AllKey[i] = GameEngineKey(i);
 	}
@@ -13,7 +13,7 @@ void GameEngineInput::Init()
 
 void GameEngineInput::Reset()
 {
-	for (int i = 0; i < 255; ++i)
+	for (unsigned char i = 0; i < 255; ++i)
 	{
 		if (AllKey[i].Press)
 		{
@@ -34,7 +34,7 @@ void GameEngineInput::Reset()
 
 void GameEngineInput::Update()
 {
-	for (int i = 0; i < 255; ++i)
+	for (unsigned char i = 0; i < 255; ++i)
 	{
 		if (GetAsyncKeyState(AllKey[i].Key))
 		{

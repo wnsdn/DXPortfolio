@@ -1,5 +1,4 @@
 #pragma once
-#include <Windows.h>
 
 class GameEngineInput
 {
@@ -7,17 +6,17 @@ private:
 	class GameEngineKey
 	{
 	public:
-		int Key = -1;
+		unsigned char Key = 0;
 		bool Down = false;
 		bool Press = false;
 		bool Up = false;
 		bool Free = true;
 	public:
 		GameEngineKey()
-			: Key(-1)
+			: Key(0)
 		{
 		}
-		GameEngineKey(const int _Key)
+		GameEngineKey(const unsigned char _Key)
 			: Key(_Key)
 		{
 		}
@@ -36,19 +35,19 @@ public:
 	static void Reset();
 	static void Update();
 
-	static bool IsDown(const int _Key)
+	static bool IsDown(const unsigned char _Key)
 	{
 		return AllKey[_Key].Down;
 	}
-	static bool IsUp(const int _Key)
+	static bool IsUp(const unsigned char _Key)
 	{
 		return AllKey[_Key].Up;
 	}
-	static bool IsPress(const int _Key)
+	static bool IsPress(const unsigned char _Key)
 	{
 		return AllKey[_Key].Press;
 	}
-	static bool IsFree(const int _Key)
+	static bool IsFree(const unsigned char _Key)
 	{
 		return AllKey[_Key].Free;
 	}

@@ -1,10 +1,38 @@
 #include "PreCompile.h"
 #include "GameEngineCore.h"
 
-#include <GameEnginePlatform/GameEngineWindow.h>
+#include <GameEngineBase/GameEngineTime.h>
 
-void GameEngineCore::EngineStart(HINSTANCE _Hinst)
+GameEngineWindow GameEngineCore::MainWindow;
+std::unique_ptr<GameEngineObject> GameEngineCore::CoreObject;
+
+void GameEngineCore::EngineStart(HINSTANCE _Hinst, std::string_view _Name,
+	const POINT& _Pos, const POINT& _Scale)
 {
-	GameEngineWindow::GetInst().Init(_Hinst, "MyWindow", 100, 100, 1080, 720);
-	GameEngineWindow::GetInst().MessageLoop();
+	GameEngineDebug::LeakCheck();
+
+	MainWindow.Init(_Hinst, _Name, _Pos, _Scale);
+	MainWindow.MessageLoop(Start, Update, Release);
+}
+
+void GameEngineCore::Start()
+{
+	GameEngineTime::Init();
+	GameEngineInput::Init();
+
+	CoreObject->Start();
+}
+
+void GameEngineCore::Update()
+{
+	GameEngineTime::Update();
+	const float DeltaTime = GameEngineTime::GetFloatDelta();
+	GameEngineInput::Update();
+
+	CoreObject->Update(DeltaTime);
+}
+
+void GameEngineCore::Release()
+{
+	CoreObject->Release();
 }

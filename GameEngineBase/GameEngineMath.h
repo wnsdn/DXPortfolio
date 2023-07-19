@@ -1,6 +1,14 @@
 #pragma once
 
-class int4;
+class GameEngineMath
+{
+public:
+	static const float PI;
+	static const float PI2;
+	static const float D2R;
+	static const float R2D;
+};
+
 class float4
 {
 public:
@@ -11,68 +19,82 @@ public:
 
 	float X = 0.0f;
 	float Y = 0.0f;
+	float Z = 0.0f;
+	float W = 1.0f;
 public:
 	float4 Half() const
 	{
 		return { X / 2.0f, Y / 2.0f };
 	}
-	int4 ToInt4() const;
+	POINT ToPoint()
+	{
+		return { static_cast<int>(X), static_cast<int>(Y) };
+	}
+
+	void Rotate(const float _Angle)
+	{
+		float Radian = _Angle * GameEngineMath::D2R;
+		float4 Tmp{ *this };
+
+		X = Tmp.X * cosf(Radian) - Tmp.Y * sinf(Radian);
+		Y = Tmp.X * sinf(Radian) + Tmp.Y * cosf(Radian);
+	}
+	float4 GetRotation(const float _Angle) const
+	{
+		float Radian = _Angle * GameEngineMath::D2R;
+		return { X * cosf(Radian) - Y * sinf(Radian), X * sinf(Radian) + Y * cosf(Radian) }; //2차원 회전 공식 (x cos - y sin, x sin + y cos)
+	}
 public:
 	float4()
-		: X(0.0f), Y(0.0f)
+		: X(0.0f), Y(0.0f), Z(0.0f), W(1.0f)
+	{
+	}
+	float4(const float _X)
+		: X(_X), Y(0.0f), Z(0.0f), W(1.0f)
 	{
 	}
 	float4(const float _X, const float _Y)
-		: X(_X), Y(_Y)
+		: X(_X), Y(_Y), Z(0.0f), W(1.0f)
+	{
+	}
+	float4(const float _X, const float _Y, const float _Z)
+		: X(_X), Y(_Y), Z(_Z), W(1.0f)
+	{
+	}
+	float4(const float _X, const float _Y, const float _Z, const float _W)
+		: X(_X), Y(_Y), Z(_Z), W(_W)
 	{
 	}
 	float4(const float4& _Ref)
-		: X(_Ref.X), Y(_Ref.Y)
+		: X(_Ref.X), Y(_Ref.Y), Z(_Ref.Z), W(_Ref.W)
 	{
 	}
 	void operator=(const float4& _Ref)
 	{
 		X = _Ref.X;
 		Y = _Ref.Y;
+		Z = _Ref.Z;
+		W = _Ref.W;
 	}
-	float4(float4&& _Rvalue) noexcept = delete;
-	void operator=(float4&& _Rvalue) noexcept = delete;
-};
-
-class int4
-{
 public:
-	static const int4 Left;
-	static const int4 Right;
-	static const int4 Up;
-	static const int4 Down;
-
-	int X = 0;
-	int Y = 0;
-public:
-	int4 Half() const
+	void operator+=(const float4& _Ref)
 	{
-		return { X / 2, Y / 2 };
+		X += _Ref.X;
+		Y += _Ref.Y;
+		Z += _Ref.Z;
 	}
-	float4 ToFloat4() const;
-public:
-	int4()
-		: X(0), Y(0)
+	void operator-=(const float4& _Ref)
 	{
+		X -= _Ref.X;
+		Y -= _Ref.Y;
+		Z -= _Ref.Z;
 	}
-	int4(const int _X, const int _Y)
-		: X(_X), Y(_Y)
+	void operator*=(const float4& _Ref)
 	{
+		X *= _Ref.X;
+		Y *= _Ref.Y;
+		Z *= _Ref.Z;
 	}
-	int4(const int4& _Ref)
-		: X(_Ref.X), Y(_Ref.Y)
-	{
-	}
-	void operator=(const int4& _Ref)
-	{
-		X = _Ref.X;
-		Y = _Ref.Y;
-	}
-	int4(int4&& _Rvalue) noexcept = delete;
-	void operator=(int4&& _Rvalue) noexcept = delete;
+	//float4(float4&& _Rvalue) noexcept = delete;
+	//void operator=(float4&& _Rvalue) noexcept = delete;
 };

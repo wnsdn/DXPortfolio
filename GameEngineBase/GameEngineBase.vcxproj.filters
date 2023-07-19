@@ -10,7 +10,6 @@
     <ClInclude Include="PreCompile.h">
       <Filter>01. PreCompile</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineForm.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineMath.cpp" />
@@ -22,7 +21,6 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>01. PreCompile</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngineForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. PreCompile">
