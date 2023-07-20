@@ -24,14 +24,14 @@ public:
 public:
 	float4 Half() const
 	{
-		return { X / 2.0f, Y / 2.0f };
+		return { X * 0.5f, Y * 0.5f };
 	}
 	POINT ToPoint()
 	{
 		return { static_cast<int>(X), static_cast<int>(Y) };
 	}
 
-	void RotateX(const float _Angle)
+	void RotateX(const float _Angle)//Rotate 한번 손봐야함
 	{
 		float Radian = _Angle * GameEngineMath::D2R;
 		float4 Tmp{ *this };
@@ -58,27 +58,29 @@ public:
 public:
 	float4()
 		: X(0.0f), Y(0.0f), Z(0.0f), W(1.0f)
-	{
-	}
+	{}
 	float4(const float _X)
 		: X(_X), Y(0.0f), Z(0.0f), W(1.0f)
-	{
-	}
+	{}
 	float4(const float _X, const float _Y)
 		: X(_X), Y(_Y), Z(0.0f), W(1.0f)
-	{
-	}
+	{}
 	float4(const float _X, const float _Y, const float _Z)
 		: X(_X), Y(_Y), Z(_Z), W(1.0f)
-	{
-	}
+	{}
 	float4(const float _X, const float _Y, const float _Z, const float _W)
 		: X(_X), Y(_Y), Z(_Z), W(_W)
-	{
-	}
+	{}
 	float4(const float4& _Ref)
 		: X(_Ref.X), Y(_Ref.Y), Z(_Ref.Z), W(_Ref.W)
+	{}
+	float4(float4&& _Rvalue) noexcept
+		: X(_Rvalue.X), Y(_Rvalue.Y), Z(_Rvalue.Z), W(_Rvalue.W)
 	{
+		_Rvalue.X = 0.0f;
+		_Rvalue.Y = 0.0f;
+		_Rvalue.Z = 0.0f;
+		_Rvalue.W = 1.0f;
 	}
 	void operator=(const float4& _Ref)
 	{
@@ -86,6 +88,17 @@ public:
 		Y = _Ref.Y;
 		Z = _Ref.Z;
 		W = _Ref.W;
+	}
+	void operator=(float4&& _Rvalue) noexcept
+	{
+		X = _Rvalue.X;
+		Y = _Rvalue.Y;
+		Z = _Rvalue.Z;
+		W = _Rvalue.W;
+		_Rvalue.X = 0.0f;
+		_Rvalue.Y = 0.0f;
+		_Rvalue.Z = 0.0f;
+		_Rvalue.W = 1.0f;
 	}
 public:
 	void operator+=(const float4& _Ref)
@@ -106,6 +119,4 @@ public:
 		Y *= _Ref.Y;
 		Z *= _Ref.Z;
 	}
-	//float4(float4&& _Rvalue) noexcept = delete;
-	//void operator=(float4&& _Rvalue) noexcept = delete;
 };

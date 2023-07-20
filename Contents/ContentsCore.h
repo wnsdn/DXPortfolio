@@ -24,7 +24,7 @@ public:
 	}
 
 	ContentsCore() {}
-	~ContentsCore() {}
+	~ContentsCore() override {}
 	ContentsCore(const ContentsCore& _Other) = delete;
 	ContentsCore(ContentsCore&& _Other) noexcept = delete;
 	ContentsCore& operator=(const ContentsCore& _Other) = delete;

@@ -1,6 +1,4 @@
 functional
-비트셋의 필요성
-이동생성 복사생성 이동대입연산 복사대입연산
 
-input short 하나로 구현해보기
 템플릿으로 인자 넘기면 완벽전달 std::forward 사용, GameEngineText
+

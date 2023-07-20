@@ -17,7 +17,7 @@ private:
 	GameEngineText& operator=(GameEngineText&& _Other) noexcept = delete;
 public:
 	template <typename Arg>
-	static void FormatTextOut(std::string_view _Sv, int _X, int _Y, const Arg& _Arg)
+	static void FormatTextOut(std::string_view _Sv, const int _X, const int _Y, const Arg& _Arg)
 	{
 		std::string Buffer{_Sv};
 

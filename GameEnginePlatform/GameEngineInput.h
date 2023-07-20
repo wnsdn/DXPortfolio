@@ -7,22 +7,15 @@ private:
 	{
 	public:
 		unsigned char Key = 0;
-		bool Down = false;
-		bool Press = false;
-		bool Up = false;
-		bool Free = true;
+		unsigned char State = 1;
 	public:
 		GameEngineKey()
-			: Key(0)
-		{
-		}
-		GameEngineKey(const unsigned char _Key)
-			: Key(_Key)
-		{
-		}
+			: Key(0), State(1)
+		{}
 	};
 
-	static GameEngineKey AllKey[255];
+	static const unsigned char KeyMax = 255;
+	static GameEngineKey AllKey[KeyMax];
 
 	GameEngineInput() {}
 	~GameEngineInput() {}
@@ -37,18 +30,18 @@ public:
 
 	static bool IsDown(const unsigned char _Key)
 	{
-		return AllKey[_Key].Down;
-	}
-	static bool IsUp(const unsigned char _Key)
-	{
-		return AllKey[_Key].Up;
+		return AllKey[_Key].State & 8 ? true : false;
 	}
 	static bool IsPress(const unsigned char _Key)
 	{
-		return AllKey[_Key].Press;
+		return AllKey[_Key].State & 4 ? true : false;
+	}
+	static bool IsUp(const unsigned char _Key)
+	{
+		return AllKey[_Key].State & 2 ? true : false;
 	}
 	static bool IsFree(const unsigned char _Key)
 	{
-		return AllKey[_Key].Free;
+		return AllKey[_Key].State & 1 ? true : false;
 	}
 };

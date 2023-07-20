@@ -1,73 +1,56 @@
 #include "PreCompile.h"
 #include "GameEngineInput.h"
 
-GameEngineInput::GameEngineKey GameEngineInput::AllKey[255]{};
+GameEngineInput::GameEngineKey GameEngineInput::AllKey[KeyMax]{};
 
 void GameEngineInput::Init()
 {
-	for (unsigned char i = 0; i < 255; ++i)
+	for (unsigned char i = 0; i < KeyMax; ++i)
 	{
-		AllKey[i] = GameEngineKey(i);
+		AllKey[i].Key = i;
 	}
 }
 
 void GameEngineInput::Reset()
 {
-	for (unsigned char i = 0; i < 255; ++i)
+	for (unsigned char i = 0; i < KeyMax; ++i)
 	{
-		if (AllKey[i].Press)
+		if (AllKey[i].State & 4)//Press
 		{
-			AllKey[i].Down = false;
-			AllKey[i].Press = false;
-			AllKey[i].Up = true;
-			AllKey[i].Free = true;
+			AllKey[i].State = 3;//Up Free
 		}
-		else if (AllKey[i].Up)
+		else if (AllKey[i].State & 2)//Up
 		{
-			AllKey[i].Down = false;
-			AllKey[i].Press = false;
-			AllKey[i].Up = false;
-			AllKey[i].Free = true;
+			AllKey[i].State = 1;//Free
 		}
 	}
 }
 
 void GameEngineInput::Update()
 {
-	for (unsigned char i = 0; i < 255; ++i)
+	//8.Down  4.Press  2.Up  1.Free
+	for (unsigned char i = 0; i < KeyMax; ++i)
 	{
-		if (GetAsyncKeyState(AllKey[i].Key))
+		if (GetAsyncKeyState(static_cast<int>(AllKey[i].Key)))
 		{
-			if (AllKey[i].Free)
+			if (AllKey[i].State & 1)//Free
 			{
-				AllKey[i].Down = true;
-				AllKey[i].Press = true;
-				AllKey[i].Up = false;
-				AllKey[i].Free = false;
+				AllKey[i].State = 12;//Down Press
 			}
-			else if (AllKey[i].Down)
+			else if (AllKey[i].State & 8)//Down
 			{
-				AllKey[i].Down = false;
-				AllKey[i].Press = true;
-				AllKey[i].Up = false;
-				AllKey[i].Free = false;
+				AllKey[i].State = 4;//Press
 			}
 		}
 		else
 		{
-			if (AllKey[i].Press)
+			if (AllKey[i].State & 4)//Press
 			{
-				AllKey[i].Down = false;
-				AllKey[i].Press = false;
-				AllKey[i].Up = true;
-				AllKey[i].Free = true;
+				AllKey[i].State = 3;//Up Free
 			}
-			else if (AllKey[i].Up)
+			else if (AllKey[i].State & 2)//Up
 			{
-				AllKey[i].Down = false;
-				AllKey[i].Press = false;
-				AllKey[i].Up = false;
-				AllKey[i].Free = true;
+				AllKey[i].State = 1;//Free
 			}
 		}
 	}
