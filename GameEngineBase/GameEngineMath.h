@@ -36,7 +36,7 @@ public:
 		float Radian = _Angle * GameEngineMath::D2R;
 		float4 Tmp{ *this };
 
-		Z = -(Tmp.Z * cosf(Radian) - Tmp.Y * sinf(Radian));
+		Z = Tmp.Z * cosf(Radian) - Tmp.Y * sinf(Radian);
 		Y = Tmp.Z * sinf(Radian) + Tmp.Y * cosf(Radian);
 	}
 	void RotateY(const float _Angle)
@@ -45,7 +45,7 @@ public:
 		float4 Tmp{ *this };
 
 		X = Tmp.X * cosf(Radian) - Tmp.Z * sinf(Radian);
-		Z = -(Tmp.X * sinf(Radian) + Tmp.Z * cosf(Radian));
+		Z = Tmp.X * sinf(Radian) + Tmp.Z * cosf(Radian);
 	}
 	void RotateZ(const float _Angle)
 	{
@@ -53,7 +53,95 @@ public:
 		float4 Tmp{ *this };
 
 		X = Tmp.X * cosf(Radian) - Tmp.Y * sinf(Radian);
-		Y = Tmp.X * sinf(Radian) + Tmp.Y * cosf(Radian);
+		Y = -(Tmp.X * sinf(Radian) + Tmp.Y * cosf(Radian));
+	}
+
+	float4 GetRotateX(const float _Angle) const
+	{
+		float Radian = _Angle * GameEngineMath::D2R;
+		float4 Tmp{ *this };
+
+		Tmp.Z = Z * cosf(Radian) - Y * sinf(Radian);
+		Tmp.Y = Z * sinf(Radian) + Y * cosf(Radian);
+
+		return Tmp;
+	}
+	float4 GetRotateY(const float _Angle) const
+	{
+		float Radian = _Angle * GameEngineMath::D2R;
+		float4 Tmp{ *this };
+
+		Tmp.X = X * cosf(Radian) - Z * sinf(Radian);
+		Tmp.Z = X * sinf(Radian) + Z * cosf(Radian);
+
+		return Tmp;
+	}
+	float4 GetRotateZ(const float _Angle) const
+	{
+		float Radian = _Angle * GameEngineMath::D2R;
+		float4 Tmp{ *this };
+
+		Tmp.X = X * cosf(Radian) - Y * sinf(Radian);
+		Tmp.Y = -(X * sinf(Radian) + Y * cosf(Radian));
+
+		return Tmp;
+	}
+
+	void Cross3D(const float4& _Left, const float4& _Right)
+	{
+		X = _Left.Y * _Right.Z - _Left.Z * _Right.Y;
+		Y = _Left.Z * _Right.X - _Left.X * _Right.Z;
+		Z = _Left.X * _Right.Y - _Left.Y * _Right.X;
+	}
+public:
+	void operator+=(const float4& _Ref)
+	{
+		X += _Ref.X;
+		Y += _Ref.Y;
+		Z += _Ref.Z;
+	}
+	void operator-=(const float4& _Ref)
+	{
+		X -= _Ref.X;
+		Y -= _Ref.Y;
+		Z -= _Ref.Z;
+	}
+	void operator*=(const float4& _Ref)
+	{
+		X *= _Ref.X;
+		Y *= _Ref.Y;
+		Z *= _Ref.Z;
+	}
+
+	float4 operator+(const float4& _Ref) const
+	{
+		float4 Tmp{ *this };
+
+		Tmp.X += _Ref.X;
+		Tmp.Y += _Ref.Y;
+		Tmp.Z += _Ref.Z;
+
+		return Tmp;
+	}
+	float4 operator-(const float4& _Ref) const
+	{
+		float4 Tmp{ *this };
+
+		Tmp.X -= _Ref.X;
+		Tmp.Y -= _Ref.Y;
+		Tmp.Z -= _Ref.Z;
+
+		return Tmp;
+	}
+	float4 operator*(const float4& _Ref) const
+	{
+		float4 Tmp{ *this };
+
+		Tmp.X *= _Ref.X;
+		Tmp.Y *= _Ref.Y;
+		Tmp.Z *= _Ref.Z;
+
+		return Tmp;
 	}
 public:
 	float4()
@@ -99,24 +187,5 @@ public:
 		_Rvalue.Y = 0.0f;
 		_Rvalue.Z = 0.0f;
 		_Rvalue.W = 1.0f;
-	}
-public:
-	void operator+=(const float4& _Ref)
-	{
-		X += _Ref.X;
-		Y += _Ref.Y;
-		Z += _Ref.Z;
-	}
-	void operator-=(const float4& _Ref)
-	{
-		X -= _Ref.X;
-		Y -= _Ref.Y;
-		Z -= _Ref.Z;
-	}
-	void operator*=(const float4& _Ref)
-	{
-		X *= _Ref.X;
-		Y *= _Ref.Y;
-		Z *= _Ref.Z;
 	}
 };

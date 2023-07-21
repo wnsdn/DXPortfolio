@@ -18,65 +18,88 @@ void ContentsCore::Update(const float _Delta)
 	{
 		Rotation.X += 360.0f * _Delta / 4.0f;
 	}
-	//else if (GameEngineInput::IsPress('W'))
+	else if (GameEngineInput::IsPress('W'))
 	{
-		Rotation.X += -360.0f * _Delta / 4.0f;
+		Rotation.X -= 360.0f * _Delta / 4.0f;
 	}
-
 	if (GameEngineInput::IsPress('A'))
 	{
 		Rotation.Y += 360.0f * _Delta / 4.0f;
 	}
-	//else if (GameEngineInput::IsPress('S'))
+	else if (GameEngineInput::IsPress('S'))
 	{
-		Rotation.Y += -360.0f * _Delta / 4.0f;
+		Rotation.Y -= 360.0f * _Delta / 4.0f;
 	}
-
 	if (GameEngineInput::IsPress('Z'))
-	{
-		Rotation.Z += -360.0f * _Delta / 4.0f;
-	}
-	//else if (GameEngineInput::IsPress('X'))
 	{
 		Rotation.Z += 360.0f * _Delta / 4.0f;
 	}
-
-	std::vector<float4> Vertex;
-	Vertex.resize(8);
-	Vertex[0] = { -0.5f, -0.5f, -0.5f };
-	Vertex[1] = { 0.5f, -0.5f, -0.5f };
-	Vertex[2] = { 0.5f, 0.5f, -0.5f };
-	Vertex[3] = { -0.5f, 0.5f, -0.5f };
-
-	Vertex[4] = { -0.5f, -0.5f, 0.5f };
-	Vertex[5] = { 0.5f, -0.5f, 0.5f };
-	Vertex[6] = { 0.5f, 0.5f, 0.5f };
-	Vertex[7] = { -0.5f, 0.5f, 0.5f };
-
-	const int TriNum = 12;
-	int Idx[TriNum][3] =
+	else if (GameEngineInput::IsPress('X'))
 	{
-		{0, 1, 2},
-		{0, 2, 3},
-		{4, 5, 7},
-		{5, 6, 7},
-		{4, 0, 3},
-		{4, 3, 7},
-		{1, 5, 6},
-		{1, 6, 2},
-		{0, 1, 4},
-		{1, 4, 5},
-		{2, 3, 6},
-		{3, 6, 7}
+		Rotation.Z -= 360.0f * _Delta / 4.0f;
+	}
+
+	std::vector<float4> Vertex(4 * 6);
+
+	float4 BaseVertex[4]{};
+	BaseVertex[0] = { -0.5f, -0.5f, -0.5f };
+	BaseVertex[1] = { 0.5f, -0.5f, -0.5f };
+	BaseVertex[2] = { 0.5f, 0.5f, -0.5f };
+	BaseVertex[3] = { -0.5f, 0.5f, -0.5f };
+
+	//Front
+	Vertex[0] = BaseVertex[0];
+	Vertex[1] = BaseVertex[1];
+	Vertex[2] = BaseVertex[2];
+	Vertex[3] = BaseVertex[3];
+	//Back
+	Vertex[0 + 4] = BaseVertex[0].GetRotateX(180.0f);
+	Vertex[1 + 4] = BaseVertex[1].GetRotateX(180.0f);
+	Vertex[2 + 4] = BaseVertex[2].GetRotateX(180.0f);
+	Vertex[3 + 4] = BaseVertex[3].GetRotateX(180.0f);
+	//Left Right
+	Vertex[0 + 8] = BaseVertex[0].GetRotateY(-90.0f);
+	Vertex[1 + 8] = BaseVertex[1].GetRotateY(-90.0f);
+	Vertex[2 + 8] = BaseVertex[2].GetRotateY(-90.0f);
+	Vertex[3 + 8] = BaseVertex[3].GetRotateY(-90.0f);
+	Vertex[0 + 12] = BaseVertex[0].GetRotateY(90.0f);
+	Vertex[1 + 12] = BaseVertex[1].GetRotateY(90.0f);
+	Vertex[2 + 12] = BaseVertex[2].GetRotateY(90.0f);
+	Vertex[3 + 12] = BaseVertex[3].GetRotateY(90.0f);
+	//Top Bottom
+	Vertex[0 + 16] = BaseVertex[0].GetRotateX(90.0f);
+	Vertex[1 + 16] = BaseVertex[1].GetRotateX(90.0f);
+	Vertex[2 + 16] = BaseVertex[2].GetRotateX(90.0f);
+	Vertex[3 + 16] = BaseVertex[3].GetRotateX(90.0f);
+	Vertex[0 + 20] = BaseVertex[0].GetRotateX(-90.0f);
+	Vertex[1 + 20] = BaseVertex[1].GetRotateX(-90.0f);
+	Vertex[2 + 20] = BaseVertex[2].GetRotateX(-90.0f);
+	Vertex[3 + 20] = BaseVertex[3].GetRotateX(-90.0f);
+
+	std::vector<int> Idx =
+	{
+		0, 1, 2,
+		0, 2, 3,
+		0 + 4, 1 + 4, 2 + 4,
+		0 + 4, 2 + 4, 3 + 4,
+		0 + 8, 1 + 8, 2 + 8,
+		0 + 8, 2 + 8, 3 + 8,
+		0 + 12, 1 + 12, 2 + 12,
+		0 + 12, 2 + 12, 3 + 12,
+		0 + 16, 1 + 16, 2 + 16,
+		0 + 16, 2 + 16, 3 + 16,
+		0 + 20, 1 + 20, 2 + 20,
+		0 + 20, 2 + 20, 3 + 20
 	};
 
-	std::vector<POINT> Tri;
-	Tri.resize(3);
-	for (int i = 0; i < TriNum; ++i)
+	for (size_t IdxCnt = 0; IdxCnt < Idx.size() / 3; ++IdxCnt)
 	{
-		for (int j = 0; j < 3; ++j)
+		float4 fTri[3]{};
+		POINT iTri[3]{};
+
+		for (int i = 0; i < 3; ++i)
 		{
-			float4 WorldPoint = Vertex[Idx[i][j]];
+			float4 WorldPoint = Vertex[Idx[IdxCnt * 3 + i]];
 
 			WorldPoint *= Scale;
 			WorldPoint.RotateX(Rotation.X);
@@ -84,58 +107,22 @@ void ContentsCore::Update(const float _Delta)
 			WorldPoint.RotateZ(Rotation.Z);
 			WorldPoint += Position;
 
-			Tri[j] = WorldPoint.ToPoint();
+			fTri[i] = WorldPoint;
+			iTri[i] = WorldPoint.ToPoint();
 		}
 
-		HBRUSH Hbr = static_cast<HBRUSH>(GetStockObject(NULL_BRUSH));
-		HBRUSH Obr = static_cast<HBRUSH>(SelectObject(MemDc, Hbr));
+		float4 Dir0 = fTri[0] - fTri[1];
+		float4 Dir1 = fTri[1] - fTri[2];
+		float4 Check{};
+		Check.Cross3D(Dir0, Dir1);
 
-		Polygon(MemDc, &Tri[0], 3);
-
-		SelectObject(MemDc, Obr);
-
-		if (Hbr)
+		if (Check.Z > -1.0f)
 		{
-			DeleteObject(Hbr);
-			Hbr = nullptr;
+			continue;
 		}
-		if (Obr)
-		{
-			DeleteObject(Obr);
-			Obr = nullptr;
-		}
+
+		Polygon(MemDc, &iTri[0], 3);
 	}
-
-	static float4 Pos{ 200, 200 };
-
-	if (GameEngineInput::IsDown(VK_RIGHT))
-	{
-		Pos.X += 10.0f;
-	}
-	if (GameEngineInput::IsUp(VK_UP))
-	{
-		Pos.Y += 10.0f;
-	}
-	if (GameEngineInput::IsPress(VK_LEFT))
-	{
-		Pos.X -= 100.0f * _Delta;
-	}
-
-	float4 A[3]{};
-	A[0] = { 0, -0.5 };
-	A[1] = { -0.25, 0.25 };
-	A[2] = { 0.25, 0.25 };
-
-	for (int i = 0; i < 3; ++i)
-	{
-		float4 WorldPoint{ std::move(A[i]) };
-
-		WorldPoint *= Scale;
-		WorldPoint += Pos;
-		Tri[i] = WorldPoint.ToPoint();
-	}
-
-	Polygon(MemDc, &Tri[0], 3);
 
 	GameEngineCore::GetWindow().DoubleBuffering();
 }
