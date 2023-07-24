@@ -9,7 +9,7 @@
 #include <string>
 #include <string_view>
 #include <memory>
-#include <functional>
 #include <chrono>
+#include <functional>
 
 #include "GameEngineDebug.h"

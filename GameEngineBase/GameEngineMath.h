@@ -189,3 +189,37 @@ public:
 		_Rvalue.W = 1.0f;
 	}
 };
+
+class float4x4
+{
+public:
+	union
+	{
+		float Arr1D[16]{};
+		float Arr2D[4][4];
+	};
+public:
+	void Identity();
+	void Scale(const float4& _Value)
+	{
+		Identity();
+		Arr2D[0][0] = _Value.X;
+		Arr2D[1][1] = _Value.Y;
+		Arr2D[2][2] = _Value.Z;
+	}
+	void Position(const float4& _Value)
+	{
+		Identity();
+		Arr2D[3][0] = _Value.X;
+		Arr2D[3][1] = _Value.Y;
+		Arr2D[3][2] = _Value.Z;
+	}
+public:
+	float4x4 operator*(const float4x4& _Ref);
+public:
+	float4x4();
+	float4x4(const float4x4& _Ref) = delete;
+	float4x4(float4x4&& _Rvalue) noexcept;
+	void operator=(const float4x4& _Ref) = delete;
+	void operator=(float4x4&& _Rvalue) = delete;
+};
