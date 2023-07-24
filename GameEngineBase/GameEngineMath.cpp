@@ -44,8 +44,7 @@ float4x4 float4x4::operator*(const float4x4& _Ref)
 
 float4x4::float4x4()
 {
-	std::fill_n(Arr1D, 16, 0.0f);
-	//memset(&Arr1D, 0, sizeof(Arr1D));
+	Identity();
 }
 
 float4x4::float4x4(float4x4&& _Rvalue) noexcept
