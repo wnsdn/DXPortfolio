@@ -17,13 +17,13 @@ private:
 	GameEngineText& operator=(GameEngineText&& _Other) noexcept = delete;
 public:
 	template <typename Arg>
-	static void FormatTextOut(std::string_view _Sv, const int _X, const int _Y, const Arg& _Arg)
+	static void FormatTextOut(HDC _Hdc, std::string_view _Sv, const int _X, const int _Y, const Arg& _Arg)
 	{
 		std::string Buffer{_Sv};
 
 		std::format_to(std::back_inserter(Buffer), " : {}", _Arg);
 
-		TextOutA(GameEngineWindow::GetInst().GetMemDc(), _X, _Y, Buffer.c_str(), static_cast<int>(Buffer.size()));
+		TextOutA(_Hdc, _X, _Y, Buffer.c_str(), static_cast<int>(Buffer.size()));
 	}
 
 	/*template <typename... Args>

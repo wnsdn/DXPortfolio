@@ -11,5 +11,6 @@
 #include <memory>
 #include <chrono>
 #include <functional>
+#include <algorithm>
 
 #include "GameEngineDebug.h"

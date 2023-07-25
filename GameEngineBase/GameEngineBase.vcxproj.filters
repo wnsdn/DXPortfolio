@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="GameEngineMath.h" />
     <ClInclude Include="GameEngineDebug.h" />
     <ClInclude Include="GameEnginePath.h" />
     <ClInclude Include="GameEngineRandom.h" />
@@ -10,9 +9,11 @@
     <ClInclude Include="PreCompile.h">
       <Filter>01. PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineMath.h">
+      <Filter>GameEngineMath</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameEngineMath.cpp" />
     <ClCompile Include="GameEngineDebug.cpp" />
     <ClCompile Include="GameEnginePath.cpp" />
     <ClCompile Include="GameEngineRandom.cpp" />
@@ -21,10 +22,22 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>01. PreCompile</Filter>
     </ClCompile>
+    <ClCompile Include="float4.cpp">
+      <Filter>GameEngineMath</Filter>
+    </ClCompile>
+    <ClCompile Include="float4x4.cpp">
+      <Filter>GameEngineMath</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineMath.cpp">
+      <Filter>GameEngineMath</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. PreCompile">
       <UniqueIdentifier>{9eae4354-2b76-4c50-bfc0-71fec9376b7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngineMath">
+      <UniqueIdentifier>{c09024f7-dba2-4cfd-b68f-5fe159f2140e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

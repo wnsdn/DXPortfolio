@@ -4,6 +4,9 @@
 #include <DirectXPackedVector.h>
 #include <DirectXCollision.h>
 
+class float4;
+class float4x4;
+
 class GameEngineMath
 {
 public:
@@ -21,10 +24,18 @@ public:
 	static const float4 Up;
 	static const float4 Down;
 
-	float X = 0.0f;
-	float Y = 0.0f;
-	float Z = 0.0f;
-	float W = 1.0f;
+	union
+	{
+		struct
+		{
+			float X;
+			float Y;
+			float Z;
+			float W;
+		};
+
+		float Arr1D[4];
+	};
 public:
 	float4 Half() const
 	{
@@ -116,6 +127,7 @@ public:
 		Y *= _Ref.Y;
 		Z *= _Ref.Z;
 	}
+	void operator*=(const float4x4& _Ref);
 
 	float4 operator+(const float4& _Ref) const
 	{
@@ -203,6 +215,7 @@ public:
 		float Arr2D[4][4];
 	};
 public:
+	void Reset();
 	void Identity();
 	void Scale(const float4& _Value)
 	{
@@ -218,6 +231,43 @@ public:
 		Arr2D[3][1] = _Value.Y;
 		Arr2D[3][2] = _Value.Z;
 	}
+
+	void RotateX(const float _Angle)
+	{
+		Identity();
+
+		float Radian = _Angle * GameEngineMath::D2R;
+		float CosValue = cosf(Radian);
+		float SinValue = sinf(Radian);
+		Arr2D[1][1] = CosValue;
+		Arr2D[1][2] = SinValue;
+		Arr2D[2][1] = -SinValue;
+		Arr2D[2][2] = CosValue;
+	}
+	void RotateY(const float _Angle)
+	{
+		Identity();
+
+		float Radian = _Angle * GameEngineMath::D2R;
+		float CosValue = cosf(Radian);
+		float SinValue = sinf(Radian);
+		Arr2D[0][0] = CosValue;
+		Arr2D[0][2] = -SinValue;
+		Arr2D[2][0] = SinValue;
+		Arr2D[2][2] = CosValue;
+	}
+	void RotateZ(const float _Angle)
+	{
+		Identity();
+
+		float Radian = _Angle * GameEngineMath::D2R;
+		float CosValue = cosf(Radian);
+		float SinValue = sinf(Radian);
+		Arr2D[0][0] = CosValue;
+		Arr2D[0][1] = SinValue;
+		Arr2D[1][0] = -SinValue;
+		Arr2D[1][1] = CosValue;
+	}
 public:
 	float4x4 operator*(const float4x4& _Ref);
 public:
@@ -225,5 +275,5 @@ public:
 	float4x4(const float4x4& _Ref) = delete;
 	float4x4(float4x4&& _Rvalue) noexcept;
 	void operator=(const float4x4& _Ref) = delete;
-	void operator=(float4x4&& _Rvalue) = delete;
+	void operator=(float4x4&& _Rvalue) noexcept;
 };
