@@ -252,9 +252,11 @@ public:
 		float CosValue = cosf(Radian);
 		float SinValue = sinf(Radian);
 		Arr2D[0][0] = CosValue;
-		Arr2D[0][2] = -SinValue;
-		Arr2D[2][0] = SinValue;
+		Arr2D[0][2] = SinValue;
+		Arr2D[2][0] = -SinValue;
 		Arr2D[2][2] = CosValue;
+		//zcos - xsin, zsin + xcos
+		//x00 z20, x02 z22
 	}
 	void RotateZ(const float _Angle)
 	{
@@ -267,6 +269,7 @@ public:
 		Arr2D[0][1] = SinValue;
 		Arr2D[1][0] = -SinValue;
 		Arr2D[1][1] = CosValue;
+		//xcos - ysin, xsin + ycos
 	}
 public:
 	float4x4 operator*(const float4x4& _Ref);

@@ -58,19 +58,33 @@ void ContentsCore::Update(const float _Delta)
 
 	float4x4 World4x4 = Scale4x4 * Rotation4x4 * Position4x4;
 
-	float4 Vertex[4]
+	float4 Vertex[8]
 	{
 		{-0.5f, -0.5f, -0.5f},
 		{0.5f, -0.5f, -0.5f},
 		{0.5f, 0.5f, -0.5f},
 		{-0.5f, 0.5f, -0.5f},
+
+		{-0.5f, -0.5f, -0.5f},
+		{0.5f, -0.5f, -0.5f},
+		{0.5f, 0.5f, -0.5f},
+		{-0.5f, 0.5f, -0.5f}
 	};
 
-	int Idx[2][3] = { {0, 1, 2}, {2, 3, 0} };
+	Vertex[4].RotateY(180.0f);
+	Vertex[5].RotateY(180.0f);
+	Vertex[6].RotateY(180.0f);
+	Vertex[7].RotateY(180.0f);
+
+	int Idx[4][3] =
+	{
+		{0, 1, 2}, {2, 3, 0},
+		{0 + 4, 1 + 4, 2 + 4}, {2 + 4, 3 + 4, 0 + 4}
+	};
 
 	POINT Tri[3]{};
 	float4 fTri[3]{};
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		for (int j = 0; j < 3; ++j)
 		{
