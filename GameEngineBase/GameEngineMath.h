@@ -181,10 +181,10 @@ public:
 	float4(float4&& _Rvalue) noexcept
 		: X(_Rvalue.X), Y(_Rvalue.Y), Z(_Rvalue.Z), W(_Rvalue.W)
 	{
-		_Rvalue.X = 0.0f;
+		/*_Rvalue.X = 0.0f;
 		_Rvalue.Y = 0.0f;
 		_Rvalue.Z = 0.0f;
-		_Rvalue.W = 1.0f;
+		_Rvalue.W = 1.0f;*/
 	}
 	void operator=(const float4& _Ref)
 	{
@@ -199,10 +199,10 @@ public:
 		Y = _Rvalue.Y;
 		Z = _Rvalue.Z;
 		W = _Rvalue.W;
-		_Rvalue.X = 0.0f;
+		/*_Rvalue.X = 0.0f;
 		_Rvalue.Y = 0.0f;
 		_Rvalue.Z = 0.0f;
-		_Rvalue.W = 1.0f;
+		_Rvalue.W = 1.0f;*/
 	}
 };
 
@@ -255,8 +255,7 @@ public:
 		Arr2D[0][2] = SinValue;
 		Arr2D[2][0] = -SinValue;
 		Arr2D[2][2] = CosValue;
-		//zcos - xsin, zsin + xcos
-		//x00 z20, x02 z22
+
 	}
 	void RotateZ(const float _Angle)
 	{

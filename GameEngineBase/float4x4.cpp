@@ -46,7 +46,7 @@ float4x4::float4x4(float4x4&& _Rvalue) noexcept
 	{
 		Arr1D[i] = _Rvalue.Arr1D[i];
 	}
-	_Rvalue.Identity();
+	//_Rvalue.Identity();
 }
 
 void float4x4::operator=(float4x4&& _Rvalue) noexcept
@@ -55,5 +55,5 @@ void float4x4::operator=(float4x4&& _Rvalue) noexcept
 	{
 		Arr1D[i] = _Rvalue.Arr1D[i];
 	}
-	_Rvalue.Identity();
+	//_Rvalue.Identity();
 }
