@@ -23,6 +23,8 @@ public:
 	static const float4 Right;
 	static const float4 Up;
 	static const float4 Down;
+	static const float4 Front;
+	static const float4 Back;
 
 	union
 	{
@@ -39,7 +41,7 @@ public:
 public:
 	float4 Half() const
 	{
-		return { X * 0.5f, Y * 0.5f };
+		return { X * 0.5f, Y * 0.5f, Z * 0.5f, 1.0f };
 	}
 	POINT ToPoint()
 	{

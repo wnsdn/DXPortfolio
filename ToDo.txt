@@ -2,3 +2,4 @@ functional
 
 템플릿으로 인자 넘기면 완벽전달 std::forward 사용, GameEngineText
 
+for문 int
