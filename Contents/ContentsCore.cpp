@@ -12,12 +12,6 @@ void ContentsCore::Update(const float _Delta)
 	GameEngineCore::GetWindow().ClearBackBuffer();
 	HDC MemDc = GameEngineCore::GetWindow().GetMemDc();
 
-	float4 Forward{ 0.0f, 0.0f, 1.0f };
-	float4 Up{ 0.0f, 1.0f };
-
-	float4 Right{ float4::Cross3D(Forward, Up) };
-	float4 RealUp{ float4::Cross3D(Right, Forward) };
-
 	float4 Front[4]
 	{
 		{ -0.5f, 0.5f, -0.5f, 1.0f },
@@ -122,6 +116,14 @@ void ContentsCore::Update(const float _Delta)
 	{
 		EyePos += float4::Back * _Delta * MoveSpeed;
 	}
+	if (GameEngineInput::IsPress('I'))
+	{
+		EyeFront.RotateY(360.0f * _Delta);
+	}
+	else if (GameEngineInput::IsPress('O'))
+	{
+		EyeFront.RotateY(-360.0f * _Delta);
+	}
 
 	float4x4 View4x4{};
 	View4x4.LookAtLH(EyePos, EyeFront, EyeUp);//ºä Çà·Ä
@@ -145,12 +147,12 @@ void ContentsCore::Update(const float _Delta)
 			{
 				float4 WorldPoint{ Vertex[4 * i + Idx[j * 3 + k]] };
 
-				WorldPoint *= World4x4 * View4x4;// *Projection4x4;
+				WorldPoint *= World4x4 * View4x4 *Projection4x4;
 
-				/*WorldPoint /= WorldPoint.W;
+				WorldPoint /= WorldPoint.W;
 				WorldPoint.W = 1.0f;
 
-				WorldPoint *= ViewPort4x4;*/
+				WorldPoint *= ViewPort4x4;
 
 				fTri[k] = WorldPoint;
 				Tri[k] = WorldPoint.ToPoint();
