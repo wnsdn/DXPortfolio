@@ -5,7 +5,7 @@ GameEngineInput::GameEngineKey GameEngineInput::AllKey[KeyMax]{};
 
 void GameEngineInput::Init()
 {
-	for (unsigned char i = 0; i < KeyMax; ++i)
+	for (int i = 0; i < KeyMax; ++i)
 	{
 		AllKey[i].Key = i;
 	}
@@ -13,7 +13,7 @@ void GameEngineInput::Init()
 
 void GameEngineInput::Reset()
 {
-	for (unsigned char i = 0; i < KeyMax; ++i)
+	for (int i = 0; i < KeyMax; ++i)
 	{
 		if (AllKey[i].State & 4)//Press
 		{
@@ -29,7 +29,7 @@ void GameEngineInput::Reset()
 void GameEngineInput::Update()
 {
 	//8.Down  4.Press  2.Up  1.Free
-	for (unsigned char i = 0; i < KeyMax; ++i)
+	for (int i = 0; i < KeyMax; ++i)
 	{
 		if (GetAsyncKeyState(static_cast<int>(AllKey[i].Key)))
 		{

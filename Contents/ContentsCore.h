@@ -22,6 +22,14 @@ public:
 	{
 		return { 1080, 720 };
 	}
+	static float4 GetWndPosf()
+	{
+		return { 100, 100 };
+	}
+	static float4 GetWndScalef()
+	{
+		return { 1080, 720 };
+	}
 
 	ContentsCore() {}
 	~ContentsCore() override {}

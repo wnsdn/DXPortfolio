@@ -167,6 +167,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="float4.h" />
+    <ClInclude Include="float4x4.h" />
     <ClInclude Include="GameEngineDebug.h" />
     <ClInclude Include="GameEngineMath.h" />
     <ClInclude Include="GameEnginePath.h" />
