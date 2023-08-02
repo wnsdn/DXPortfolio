@@ -12,7 +12,48 @@ void ContentsCore::Update(const float _Delta)
 	GameEngineCore::GetWindow().ClearBackBuffer();
 	HDC MemDc = GameEngineCore::GetWindow().GetMemDc();
 
-	float4 Front[4]
+	int VecSize = sizeof(float4);
+	int MatSize = sizeof(float4x4);
+
+	float4 Vertex[4]
+	{
+		{-0.5f, 0.5f},
+		{0.5f, 0.5f},
+		{0.5f, -0.5f},
+		{-0.5f, -0.5f}
+	};
+
+	int Idx[2][3]{ {0, 1, 2}, {0, 2, 3} };
+
+	float4x4 Scale4x4{};
+	Scale4x4.Scale({ 100.0f, 100.0f });
+	float4x4 Roll4x4{};
+	Roll4x4.Roll(30.0f);
+	float4x4 Yaw4x4{};
+	Yaw4x4.Yaw(0.0f);
+	float4x4 Pitch4x4{};
+	Pitch4x4.Pitch(0.0f);
+	float4x4 Translation4x4{};
+	Translation4x4.Translation({ 100.0f, 100.0f });
+
+	float4 CamDir{ float4::Front };
+
+	for (int i = 0; i < 2; ++i)
+	{
+		POINT Tri[3]{};
+		for (int j = 0; j < 3; ++j)
+		{
+			float4 Temp = Vertex[Idx[i][j]];
+
+			Temp *= Scale4x4 * Roll4x4 * Yaw4x4 * Pitch4x4 * Translation4x4;
+
+			Tri[j] = Temp.ToPoint();
+		}
+
+		Polygon(MemDc, Tri, 3);
+	}
+
+	/*float4 Front[4]
 	{
 		{ -0.5f, 0.5f, -0.5f, 1.0f },
 		{ 0.5f, 0.5f, -0.5f, 1.0f },
@@ -164,7 +205,7 @@ void ContentsCore::Update(const float _Delta)
 			}
 			Polygon(MemDc, Tri, 3);
 		}
-	}
+	}*/
 
 	GameEngineCore::GetWindow().DoubleBuffering();
 }

@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "GameEngineMath.h"
 
-void float4x4::Reset()
+/*void float4x4::Reset()
 {
 	std::fill_n(Arr1D, 16, 0.0f);
 }
@@ -158,4 +158,4 @@ void float4x4::operator=(float4x4&& _Rvalue) noexcept
 	{
 		Arr1D[i] = _Rvalue.Arr1D[i];
 	}
-}
+}*/
