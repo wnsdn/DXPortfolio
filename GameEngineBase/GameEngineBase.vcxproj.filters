@@ -22,12 +22,6 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>01. PreCompile</Filter>
     </ClCompile>
-    <ClCompile Include="float4.cpp">
-      <Filter>GameEngineMath</Filter>
-    </ClCompile>
-    <ClCompile Include="float4x4.cpp">
-      <Filter>GameEngineMath</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngineMath.cpp">
       <Filter>GameEngineMath</Filter>
     </ClCompile>
