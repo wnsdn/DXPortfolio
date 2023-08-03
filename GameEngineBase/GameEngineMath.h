@@ -222,7 +222,7 @@ struct float4x4//행렬: 행 벡터 x Size
 
 		*this *= Rotation4x4 * Translation4x4;
 	}
-	void Normalize(float _Width, float _Height, float _Far, float _Near)
+	void Orthograhpic(float _Width, float _Height, float _Far, float _Near)
 	{
 		Identity();
 		float Depth = _Far - _Near;
@@ -236,16 +236,55 @@ struct float4x4//행렬: 행 벡터 x Size
 	{
 		Identity();
 
-		float FOV = _Degree * GameEngineMath::D2R;
-		float Distance = 1.0f / tanf(FOV / 2.0f);
+		float FovY = _Degree * GameEngineMath::D2R;
 		float AspectRatio = _Width / _Height;
+		float Distance = 1.0f / tanf(FovY * 0.5f);
+		float Depth = _Far - _Near;
 
-		Arr2D[0][0] *= Distance / AspectRatio;
-		Arr2D[1][1] *= Distance;
-		Arr2D[2][2] = _Far / (_Far - _Near);
+		Arr2D[0][0] = Distance / AspectRatio;
+		Arr2D[1][1] = Distance;
+		Arr2D[2][2] = 1.0f / Depth;
+		Arr2D[3][2] = -_Near / Depth;
 		Arr2D[2][3] = 1.0f;
-		Arr2D[3][2] = -_Near * _Far / (_Far - _Near);
 		Arr2D[3][3] = 0.0f;
+
+		/*
+		// y : y' = z : D
+		// y'z = yD
+		// y' = y * (D / z)
+		// Y = D / z
+
+		// x : x' = z : D
+		// x'z = xD
+		// x' = x * (D / (z * AR))
+		// X = D / (z * AR)
+
+		// N <= z <= F
+		// 0 <= z - N <= F - N
+		// 0 <= (z - N) / (F - N) <= 1
+		// 0 <= z / (F - N) - N / (F - N) <= 1
+
+		// X = D / AR
+		// Y = D
+		// Z = 1.0f / (F - N)
+		// Z = -N / (F - N)
+
+		// X 0 0 0
+		// 0 Y 0 0
+		// 0 0 Z 1
+		// 0 0 Z 0
+		*/
+	}
+	void ViewPort(float _Width, float _Height)
+	{
+		Identity();
+
+		Arr2D[0][0] = _Width * 0.5f;
+		Arr2D[1][1] = -_Height * 0.5f;
+		Arr2D[3][0] = ;
+		Arr2D[3][1] = -;
+
+
 	}
 
 	float4 GetColVec(int _Idx) const
@@ -260,7 +299,7 @@ struct float4x4//행렬: 행 벡터 x Size
 		return ColVec;
 	}
 
-	float4x4 operator*(const float4x4& _Mat) const
+	float4x4 operator*(const float4x4& _Mat) const//내적 x 내적
 	{
 		float4x4 Result{};
 		for (int i = 0; i < GameEngineMath::Size; ++i)
@@ -273,7 +312,7 @@ struct float4x4//행렬: 행 벡터 x Size
 
 		return Result;
 	}
-	float4x4 operator*=(const float4x4& _Mat)
+	float4x4 operator*=(const float4x4& _Mat)//내적 x 내적
 	{
 		float4x4 Result{ *this };
 		for (int i = 0; i < GameEngineMath::Size; ++i)

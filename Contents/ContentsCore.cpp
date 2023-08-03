@@ -25,11 +25,11 @@ void ContentsCore::Update(float _Delta)
 
 	int Idx[2][3]{ {0, 1, 2}, {0, 2, 3} };
 
-	float4x4 World4x4{}, Scale4x4{}, Rotation4x4{}, Translation4x4{};
+	float4x4 Model4x4{}, Scale4x4{}, Rotation4x4{}, Translation4x4{};
 	Scale4x4.Scale({ 100.0f, 100.0f });
 	//Rotation4x4.Rotate({ 30.0f, 60.0f, 30.0f });
 	Translation4x4.Translation({ 100.0f, 100.0f });
-	World4x4 *= Scale4x4 * Rotation4x4 * Translation4x4;
+	Model4x4 *= Scale4x4 * Rotation4x4 * Translation4x4;
 
 	float4x4 View4x4{};
 	static float4 CamDeg{};
@@ -61,9 +61,10 @@ void ContentsCore::Update(float _Delta)
 		CamDeg.Y -= 360.0f * _Delta;
 	}
 
-	float4x4 Normalize4x4{}, Projection4x4{};
-	Normalize4x4.Normalize(GetWndScalef().X, GetWndScalef().Y, 1000.0f, 0.1f);
+	float4x4 Projection4x4{};
 	Projection4x4.Perspective(60.0f, GetWndScalef().X, GetWndScalef().Y, 1000.0f, 0.1f);
+
+	float4x4 MVP4x4 = Model4x4 * View4x4 * Projection4x4;
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -72,7 +73,9 @@ void ContentsCore::Update(float _Delta)
 		{
 			float4 Temp = Vertex[Idx[i][j]];
 
-			Temp *= World4x4 * View4x4 * Projection4x4;
+			Temp *= MVP4x4;
+			Temp /= Temp.W;
+			Temp.W = 1.0f;
 
 			Tri[j] = Temp.ToPoint();
 		}
