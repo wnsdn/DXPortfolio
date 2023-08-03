@@ -61,6 +61,10 @@ void ContentsCore::Update(float _Delta)
 		CamDeg.Y -= 360.0f * _Delta;
 	}
 
+	float4x4 Normalize4x4{}, Projection4x4{};
+	Normalize4x4.Normalize(GetWndScalef().X, GetWndScalef().Y, 1000.0f, 0.1f);
+	Projection4x4.Perspective(60.0f, GetWndScalef().X, GetWndScalef().Y, 1000.0f, 0.1f);
+
 	for (int i = 0; i < 2; ++i)
 	{
 		POINT Tri[3]{};
@@ -68,7 +72,7 @@ void ContentsCore::Update(float _Delta)
 		{
 			float4 Temp = Vertex[Idx[i][j]];
 
-			Temp *= World4x4 * View4x4;
+			Temp *= World4x4 * View4x4 * Projection4x4;
 
 			Tri[j] = Temp.ToPoint();
 		}

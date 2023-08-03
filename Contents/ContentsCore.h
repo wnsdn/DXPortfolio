@@ -24,11 +24,11 @@ public:
 	}
 	static float4 GetWndPosf()
 	{
-		return { 100, 100 };
+		return { 100.0f, 100.0f };
 	}
 	static float4 GetWndScalef()
 	{
-		return { 1080, 720 };
+		return { 1080.0f, 720.0f };
 	}
 
 	ContentsCore() {}

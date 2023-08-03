@@ -222,6 +222,31 @@ struct float4x4//วเทฤ: วเ บคลอ x Size
 
 		*this *= Rotation4x4 * Translation4x4;
 	}
+	void Normalize(float _Width, float _Height, float _Far, float _Near)
+	{
+		Identity();
+		float Depth = _Far - _Near;
+
+		Arr2D[0][0] = 2.0f / _Width;
+		Arr2D[1][1] = 2.0f / _Height;
+		Arr2D[2][2] = 1.0f / Depth;
+		Arr2D[3][2] = -_Near / Depth;
+	}
+	void Perspective(float _Degree, float _Width, float _Height, float _Far, float _Near)
+	{
+		Identity();
+
+		float FOV = _Degree * GameEngineMath::D2R;
+		float Distance = 1.0f / tanf(FOV / 2.0f);
+		float AspectRatio = _Width / _Height;
+
+		Arr2D[0][0] *= Distance / AspectRatio;
+		Arr2D[1][1] *= Distance;
+		Arr2D[2][2] = _Far / (_Far - _Near);
+		Arr2D[2][3] = 1.0f;
+		Arr2D[3][2] = -_Near * _Far / (_Far - _Near);
+		Arr2D[3][3] = 0.0f;
+	}
 
 	float4 GetColVec(int _Idx) const
 	{
@@ -277,31 +302,37 @@ private:
 	{
 		Identity();
 		float Radian = _Degree * GameEngineMath::D2R;
+		float CR = cosf(Radian);
+		float SR = sinf(Radian);
 
-		Arr2D[1][1] = cosf(Radian);
-		Arr2D[1][2] = sinf(Radian);
-		Arr2D[2][1] = -sinf(Radian);
-		Arr2D[2][2] = cosf(Radian);
+		Arr2D[1][1] = CR;
+		Arr2D[1][2] = SR;
+		Arr2D[2][1] = -SR;
+		Arr2D[2][2] = CR;
 	}
 	void RotateY(float _Degree)//Yaw
 	{
 		Identity();
 		float Radian = _Degree * GameEngineMath::D2R;
+		float CR = cosf(Radian);
+		float SR = sinf(Radian);
 
-		Arr2D[0][0] = cosf(Radian);
-		Arr2D[0][2] = -sinf(Radian);
-		Arr2D[2][0] = sinf(Radian);
-		Arr2D[2][2] = cosf(Radian);
+		Arr2D[0][0] = CR;
+		Arr2D[0][2] = -SR;
+		Arr2D[2][0] = SR;
+		Arr2D[2][2] = CR;
 	}
 	void RotateZ(float _Degree)//Roll
 	{
 		Identity();
 		float Radian = _Degree * GameEngineMath::D2R;
+		float CR = cosf(Radian);
+		float SR = sinf(Radian);
 
-		Arr2D[0][0] = cosf(Radian);
-		Arr2D[0][1] = sinf(Radian);
-		Arr2D[1][0] = -sinf(Radian);
-		Arr2D[1][1] = cosf(Radian);
+		Arr2D[0][0] = CR;
+		Arr2D[0][1] = SR;
+		Arr2D[1][0] = -SR;
+		Arr2D[1][1] = CR;
 	}
 #pragma endregion
 };

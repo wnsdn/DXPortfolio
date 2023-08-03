@@ -1,6 +1,7 @@
 #pragma once
+#include "GameEngineObject.h"
 
-class GameEngineLevel
+class GameEngineLevel : public GameEngineObject
 {
 private:
 public:
