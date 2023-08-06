@@ -4,16 +4,34 @@
     <Filter Include="01. PreCompile">
       <UniqueIdentifier>{1a5d5f57-9da5-44e1-81a4-ab0f755a907b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{31dd2b39-e52f-4d59-bce2-56e6ed5b06df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{c68dc0cc-ffbb-41e0-97ef-0c1e0449ac64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
       <Filter>01. PreCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayLevel.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
       <Filter>01. PreCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayLevel.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="ContentsCore.h" />
   </ItemGroup>

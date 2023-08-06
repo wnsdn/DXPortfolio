@@ -2,7 +2,8 @@
 #include "GameEngineWindow.h"
 #include "GameEngineDC.h"
 
-bool GameEngineWindow::IsUpdate = true;
+bool GameEngineWindow::bUpdate = true;
+bool GameEngineWindow::bFocus = true;
 
 GameEngineWindow::~GameEngineWindow()
 {
@@ -11,6 +12,7 @@ GameEngineWindow::~GameEngineWindow()
 		ReleaseDC(Hwnd, Hdc);
 		Hdc = nullptr;
 	}
+
 	if (MemDc)
 	{
 		delete MemDc;
@@ -25,7 +27,7 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 
 	if (!Hinst)
 	{
-		GameEngineDebug::MsgBoxAssert("GameEngineWindow::Init(1)");
+		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
@@ -43,7 +45,7 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 
 	if (!Hwnd)
 	{
-		GameEngineDebug::MsgBoxAssert("GameEngineWindow::Init(2)");
+		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
@@ -53,7 +55,7 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 		Rect.right - Rect.left, Rect.bottom - Rect.top, SWP_NOZORDER);
 
 	Hdc = GetDC(Hwnd);
-	MemDc = new GameEngineDC(Scale.x, Scale.y);
+	MemDc = new GameEngineDC(Hdc, Scale.x, Scale.y);
 
 	ShowWindow(Hwnd, SW_SHOW);
 }
@@ -68,7 +70,7 @@ void GameEngineWindow::MessageLoop(std::function<void()> _Start,
 	}
 
 	MSG Msg = {};
-	while (IsUpdate)
+	while (bUpdate)
 	{
 		if (PeekMessageA(&Msg, nullptr, 0, 0, PM_REMOVE))
 		{
@@ -104,8 +106,14 @@ LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
 {
 	switch (_Msg)
 	{
+	case WM_SETFOCUS:
+		bFocus = true;
+		return 0;
+	case WM_KILLFOCUS:
+		bFocus = false;
+		return 0;
 	case WM_DESTROY:
-		IsUpdate = false;
+		bUpdate = false;
 		return 0;
 	}
 

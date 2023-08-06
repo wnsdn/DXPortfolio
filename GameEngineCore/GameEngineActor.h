@@ -1,10 +1,26 @@
 #pragma once
-#include "GameEngineObject.h"
+#include "GameEngineCoreObject.h"
 
-class GameEngineActor : public GameEngineObject
+class GameEngineLevel;
+class GameEngineComponent;
+class GameEngineActor : public GameEngineCoreObject
 {
 private:
+protected:
 public:
+	template <typename ObjectType>
+	std::shared_ptr<ObjectType> CreateComponent(int _Order = 0)
+	{
+		std::shared_ptr<GameEngineComponent> NewChild = std::make_shared<ObjectType>();
+		NewChild->SetParent(this);
+		NewChild->Start();
+		Childs[_Order].push_back(NewChild);
+
+		return std::dynamic_pointer_cast<ObjectType>(NewChild);
+	}
+
+	GameEngineLevel* GetLevel();
+
 	GameEngineActor() {}
 	~GameEngineActor() {}
 	GameEngineActor(const GameEngineActor& _Other) = delete;

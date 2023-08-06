@@ -1,9 +1,10 @@
 #pragma once
-#include "GameEngineObject.h"
+#include "GameEngineCoreObject.h"
 
-class GameEngineComponent : public GameEngineObject
+class GameEngineComponent : public GameEngineCoreObject
 {
 private:
+protected:
 public:
 	GameEngineComponent() {}
 	~GameEngineComponent() {}

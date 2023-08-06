@@ -21,11 +21,10 @@ public:
 		return Info.bmHeight;
 	}
 public:
-	GameEngineDC(const int _X, const int _Y);
+	GameEngineDC(HDC _Hdc, int _X, int _Y);
 	~GameEngineDC();
 	GameEngineDC(const GameEngineDC& _Ref) = delete;
 	GameEngineDC(GameEngineDC&& _Rvalue) noexcept = delete;
 	GameEngineDC& operator=(const GameEngineDC& _Ref) = delete;
 	GameEngineDC& operator=(GameEngineDC&& _Rvalue) noexcept = delete;
 };
-

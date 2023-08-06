@@ -1,10 +1,18 @@
 #pragma once
-#include "GameEngineObject.h"
+#include "GameEngineComponent.h"
 
-class GameEngineRenderer : public GameEngineObject
+class GameEngineCamera;
+class GameEngineRenderer : public GameEngineComponent
 {
+	friend class GameEngineCamera;
 private:
+	std::map<GameEngineCamera*, int> ViewInfo;
+protected:
+	void Start();
+	void Render(float _Delta);
 public:
+	void SetViewCameraSelect(int _Order);
+
 	GameEngineRenderer() {}
 	~GameEngineRenderer() {}
 	GameEngineRenderer(const GameEngineRenderer& _Other) = delete;

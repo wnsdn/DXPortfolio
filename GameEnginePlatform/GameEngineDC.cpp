@@ -3,10 +3,10 @@
 
 #include <GameEngineBase/GameEngineDebug.h>
 
-GameEngineDC::GameEngineDC(const int _X, const int _Y)
+GameEngineDC::GameEngineDC(HDC _Hdc, int _X, int _Y)
 {
-	Hdc = CreateCompatibleDC(nullptr);
-	Hbmp = CreateCompatibleBitmap(Hdc, _X, _Y);
+	Hdc = CreateCompatibleDC(_Hdc);
+	Hbmp = CreateCompatibleBitmap(_Hdc, _X, _Y);
 	SelectObject(Hdc, Hbmp);
 	GetObjectA(Hbmp, sizeof(BITMAP), &Info);
 }

@@ -6,43 +6,27 @@
 #include <memory>
 #include "GameEngineTransform.h"
 
-class GameEngineObject
+class GameEngineObject : public std::enable_shared_from_this<GameEngineObject>
 {
 private:
-	GameEngineTransform Transform{};
 	std::string Name{};
 	float LiveTime = 0.0f;
-	int Order = 0;
+	int UpdateOrder = 0;
 	bool bUpdate = true;
 	bool bDeath = false;
-
-	void AddLiveTime(float _DeltaTime)
-	{
-		LiveTime += _DeltaTime;
-	}
 protected:
 	GameEngineObject* Parent = nullptr;
 	std::map<int, std::list<std::shared_ptr<GameEngineObject>>> Childs;
 public:
+	GameEngineTransform Transform{};
+
 	virtual void Start() {}
 	virtual void Update(float _Delta) {}
 	virtual void Release() {}
 
-	template <typename Object>
-	std::shared_ptr<Object> CreateChild(int _Order = 0)
-	{
-		std::shared_ptr<GameEngineObject> NewChild = std::make_shared<Object>();
-
-		NewChild->Start();
-		NewChild->Parent = this;
-		Childs[_Order].push_back(NewChild);
-
-		return std::dynamic_pointer_cast<Object>(NewChild);
-	}
-
 	virtual void AllUpdate(float _Delta);
 #pragma region GetSet
-	virtual bool GetUpdate() const
+	bool IsUpdate() const
 	{
 		if (Parent)
 		{
@@ -53,11 +37,11 @@ public:
 			return bUpdate && !bDeath;
 		}
 	}
-	virtual void SetUpdate(bool _bUpdate)
+	void SetUpdate(bool _bUpdate)
 	{
 		bUpdate = _bUpdate;
 	}
-	virtual bool GetDeath() const
+	bool IsDeath() const
 	{
 		if (Parent)
 		{
@@ -74,16 +58,16 @@ public:
 	}
 	int GetOrder() const
 	{
-		return Order;
+		return UpdateOrder;
 	}
-	template <typename Enum>
-	void SetOrder(Enum _Order)
+	template <typename EnumType>
+	void SetUpdateOrder(EnumType _Order)
 	{
-		SetOrder(static_cast<int>(_Order));
+		SetUpdateOrder(static_cast<int>(_Order));
 	}
-	virtual void SetOrder(int _Order)
+	void SetUpdateOrder(int _Order)
 	{
-		Order = _Order;
+		UpdateOrder = _Order;
 	}
 	float GetLiveTime() const
 	{
@@ -93,6 +77,10 @@ public:
 	{
 		LiveTime = 0.0f;
 	}
+	void AddLiveTime(float _DeltaTime)
+	{
+		LiveTime += _DeltaTime;
+	}
 	std::string GetName() const
 	{
 		return Name;
@@ -100,6 +88,39 @@ public:
 	void SetName(std::string_view _Name)
 	{
 		Name = _Name;
+	}
+	GameEngineObject* GetParent() const
+	{
+		return Parent;
+	}
+	template <typename ParentType>
+	ParentType* GetParent() const
+	{
+		return dynamic_cast<ParentType*>(Parent);
+	}
+	void SetParent(GameEngineObject* _Parent)
+	{
+		Parent = _Parent;
+	}
+	template <typename ParentType>
+	void SetParent(std::shared_ptr<ParentType> _Parent)
+	{
+		Parent = _Parent.get();
+		Transform.SetParent(_Parent->Transform);
+	}
+	template <typename ConvertType>
+	std::shared_ptr<ConvertType> GetDynamic_Cast_This()
+	{
+		std::shared_ptr<GameEngineObject> ObjectPtr = shared_from_this();
+		std::shared_ptr<ConvertType> CameraPtr =
+			std::dynamic_pointer_cast<ConvertType>(ObjectPtr);
+
+		if (!CameraPtr)
+		{
+			GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		}
+
+		return CameraPtr;
 	}
 #pragma endregion
 public:
