@@ -38,11 +38,11 @@ void PlayLevel::Update(float _Delta)
 	}
 	if (GameEngineInput::IsPress('Q'))
 	{
-		GetMainCamera()->Transform.GetTransformDataRef().Rotation.Y += 360.0f * _Delta / 4.0f;
+		GetMainCamera()->Transform.GetTransformDataRef().Rotation.RotateY(360.0f / 4.0f * _Delta);
 	}
 	else if (GameEngineInput::IsPress('E'))
 	{
-		GetMainCamera()->Transform.GetTransformDataRef().Rotation.Y -= 360.0f * _Delta / 4.0f;
+		GetMainCamera()->Transform.GetTransformDataRef().Rotation.RotateY(-360.0f / 4.0f * _Delta);
 	}
 
 	GetMainCamera()->Transform.TransformUpdate();

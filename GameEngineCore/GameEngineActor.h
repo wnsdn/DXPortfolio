@@ -1,8 +1,8 @@
 #pragma once
 #include "GameEngineCoreObject.h"
+#include "GameEngineComponent.h"
 
 class GameEngineLevel;
-class GameEngineComponent;
 class GameEngineActor : public GameEngineCoreObject
 {
 private:

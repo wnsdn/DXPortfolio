@@ -56,6 +56,33 @@ struct float4//Vector : RowVec
 		float Length = Size();
 		return { X / Length, Y / Length, Z / Length, 1.0f };
 	}
+	void RotateX(float _Deg)
+	{
+		float Radian = _Deg * GameEngineMath::D2R;
+		float CR = cosf(Radian);
+		float SR = sinf(Radian);
+
+		Y = Y * CR - Z * SR;
+		Z = Y * SR + Z * CR;
+	}
+	void RotateY(float _Deg)
+	{
+		float Radian = _Deg * GameEngineMath::D2R;
+		float CR = cosf(Radian);
+		float SR = sinf(Radian);
+
+		X = X * CR + Z * SR;
+		Z = -X * SR + Z * CR;
+	}
+	void RotateZ(float _Deg)
+	{
+		float Radian = _Deg * GameEngineMath::D2R;
+		float CR = cosf(Radian);
+		float SR = sinf(Radian);
+
+		X = X * CR - Y * SR;
+		Y = X * SR + Y * CR;
+	}
 	static float Dot(const float4& _V1, const float4& _V2)//Dot Product
 	{
 		float Result = 0.0f;
@@ -228,25 +255,34 @@ struct float4x4//Matrix: RowVec x Size
 		Identity();
 		RowVec[GameEngineMath::Size - 1] = _Pos;
 	}
-	void View(const float4& _CamDeg, const float4& _CamPos)
+	void ViewDeg(const float4& _CamPos, const float4& _CamDeg)
 	{
 		Identity();
-		float4x4 Rotation4x4{}, Translation4x4{};
+		float4x4 Translation4x4{}, Rotation4x4{};
 
+		Translation4x4.Translation(-_CamPos);
 		Rotation4x4.Rotate(_CamDeg);
 		Rotation4x4.Transpose();
-		Translation4x4.Translation(-_CamPos);
 
 		*this *= Translation4x4 * Rotation4x4;
 	}
-	void LookToLH(const float4& _Front)
+	void ViewDir(const float4& _CamPos, const float4& _CamDir)
 	{
 		Identity();
-		float4 Front{ _Front };
-		float4 Right{ float4::Cross(Front, float4::Up) };
-		float4 Up{ float4::Cross(Right, Front) };
+		float4 Front{ _CamDir };
+		float4 Right{ float4::Cross(float4::Up, Front) };
+		float4 Up{ float4::Cross(Front, Right) };
 
+		float4x4 Translation4x4{}, Rotation4x4{};
 
+		Translation4x4.Translation(-_CamPos);
+		Rotation4x4.RowVec[0] = Right;
+		Rotation4x4.RowVec[1] = Up;
+		Rotation4x4.RowVec[2] = Front;
+		Rotation4x4.RowVec[3] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		Rotation4x4.Transpose();
+
+		*this *= Translation4x4 * Rotation4x4;
 	}
 	void Orthograhpic(float _Width, float _Height, float _Far, float _Near)
 	{

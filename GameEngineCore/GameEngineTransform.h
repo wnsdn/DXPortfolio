@@ -46,9 +46,9 @@ private:
 	GameEngineTransform* Parent = nullptr;
 	TransformData TransData;
 public:
-	void LookToLH(const float4& _Deg, const float4& _Pos)
+	void View(const float4& _Pos, const float4& _Temp)
 	{
-		TransData.View.View(_Deg, _Pos);
+		TransData.View.ViewDir(_Pos, _Temp);
 	}
 
 	void TransformUpdate();
