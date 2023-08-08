@@ -79,6 +79,10 @@ void GameEngineRenderer::Render(float _Delta)
 	//GameEngineText::FormatTextOut(MemDc, "y:", 10, 30, GetLevel()->GetMainCamera()->Transform.GetTransformDataRef().Position.Y);
 	//GameEngineText::FormatTextOut(MemDc, "z:", 10, 50, GetLevel()->GetMainCamera()->Transform.GetTransformDataRef().Position.Z);
 
+	float4x4 Mat1{};
+	float4x4 Mat2{};
+
+	//Mat1* Mat2;
 
 	HDC MemDc = GameEngineWindow::GetInst().GetMemDc();
 
@@ -91,18 +95,19 @@ void GameEngineRenderer::Render(float _Delta)
 	};
 
 	static float Degree = 0.0f;
-	Degree += 360.0f * _Delta;
+	Degree += 30.0f * _Delta;
+
 	for (int i = 0; i < 4; ++i)
 	{
 		Vertex[i] *= 100.0f;
 
-		Vertex[i].RotateZ(Degree);
+		Vertex[i].Rotate({0.0f, 0.0f, Degree});
 
 		Vertex[i].X += 100.0f;
 		Vertex[i].Y += 100.0f;
 	}
 
-	POINT Tri[4]{Vertex[0], Vertex[1], Vertex[2], Vertex[3]};
+	POINT Tri[4]{ Vertex[0], Vertex[1], Vertex[2], Vertex[3] };
 
 	Polygon(MemDc, Tri, 4);
 }

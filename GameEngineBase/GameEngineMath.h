@@ -49,17 +49,37 @@ struct float4//Vector
 	{
 		return DirectX::XMVector3Normalize(Vector);
 	}
-	void RotateZ(float _Degree)
+	void Rotate(const float4& _Rotation)
 	{
-		//float Radian = DirectX::XMConvertToRadians(_Degree);
-		float Radian = _Degree * DirectX::XM_PI / 180.0f;
-		float SinR = 0.0f, CosR = 0.0f;
-		//DirectX::XMScalarSinCos(&SinR, &CosR, Radian);
-		SinR = sinf(Radian);
-		CosR = cosf(Radian);
+		float4 Rotation
+		{
+			DirectX::XMConvertToRadians(_Rotation.X),
+			DirectX::XMConvertToRadians(_Rotation.Y),
+			DirectX::XMConvertToRadians(_Rotation.Z)
+		};
 
-		X = X * CosR - Y * SinR;
-		Y = X * SinR + Y * CosR;
+		Vector = DirectX::XMVector3Rotate
+		(
+			Vector,
+			DirectX::XMQuaternionRotationRollPitchYawFromVector(Rotation.Vector)
+		);
+	}
+	float4 RotateReturn(const float4& _Rotation)
+	{
+		float4 Rotation
+		{
+			DirectX::XMConvertToRadians(_Rotation.X),
+			DirectX::XMConvertToRadians(_Rotation.Y),
+			DirectX::XMConvertToRadians(_Rotation.Z)
+		};
+
+		float4 Result = DirectX::XMVector3Rotate
+		(
+			Vector,
+			DirectX::XMQuaternionRotationRollPitchYawFromVector(Rotation.Vector)
+		);
+
+		return Result;
 	}
 	static float Dot(const float4& _V1, const float4& _V2)//Dot Product
 	{
@@ -189,240 +209,171 @@ struct float4//Vector
 #pragma endregion
 };
 
-struct float4x4//Matrix: RowVec x Size
+struct float4x4//Matrix
 {
-	union
-	{
-		DirectX::XMMATRIX Matrix;
-	};
+	DirectX::XMMATRIX Matrix;
 
-	//#pragma region Function
-	//	void Zero()
+#pragma region Function
+	void Zero()
+	{
+		//std::fill_n(Matrix, GameEngineMath::Size * GameEngineMath::Size, 0.0f);
+	}
+	void Identity()
+	{
+		Matrix = DirectX::XMMatrixIdentity();
+	}
+	//void Transpose()
+	//{
+	//	for (int Row = 0; Row < GameEngineMath::Size; ++Row)
 	//	{
-	//		std::fill_n(Arr1D, GameEngineMath::Size * GameEngineMath::Size, 0.0f);
-	//	}
-	//	void Identity()
-	//	{
-	//		Zero();
-	//		for (int i = 0; i < GameEngineMath::Size; ++i)
+	//		for (int Col = Row + 1; Col < GameEngineMath::Size; ++Col)
 	//		{
-	//			Arr2D[i][i] = 1.0f;
+	//			std::swap(Arr2D[Row][Col], Arr2D[Col][Row]);
 	//		}
 	//	}
-	//	void Transpose()
+	//}
+	//void Scale(const float4& _Scale)
+	//{
+	//	Zero();
+	//	for (int i = 0; i < GameEngineMath::Size; ++i)
 	//	{
-	//		for (int Row = 0; Row < GameEngineMath::Size; ++Row)
-	//		{
-	//			for (int Col = Row + 1; Col < GameEngineMath::Size; ++Col)
-	//			{
-	//				std::swap(Arr2D[Row][Col], Arr2D[Col][Row]);
-	//			}
-	//		}
+	//		//Arr2D[i][i] = _Scale.Arr1D[i];
 	//	}
-	//	void Scale(const float4& _Scale)
+	//}
+	//void Rotate(const float4& _Degree)
+	//{
+	//	Identity();
+	//	float4x4 Pitch{}, Yaw{}, Roll{};
+
+	//	Pitch.RotateX(_Degree.X);
+	//	Yaw.RotateY(_Degree.Y);
+	//	Roll.RotateZ(_Degree.Z);
+
+	//	*this *= Pitch * Yaw * Roll;
+	//}
+	//void Translation(const float4& _Pos)
+	//{
+	//	Identity();
+	//	RowVec[GameEngineMath::Size - 1] = _Pos;
+	//}
+	//void ViewDeg(const float4& _CamPos, const float4& _CamDeg)
+	//{
+	//	Identity();
+	//	float4x4 Translation4x4{}, Rotation4x4{};
+
+	//	//Translation4x4.Translation(-_CamPos);
+	//	Rotation4x4.Rotate(_CamDeg);
+	//	Rotation4x4.Transpose();
+
+	//	*this *= Translation4x4 * Rotation4x4;
+	//}
+	//void ViewDir(const float4& _CamPos, const float4& _CamDir)
+	//{
+	//	Identity();
+	//	float4 Front{ _CamDir };
+	//	float4 Right{ float4::Cross(float4::Up, Front) };
+	//	float4 Up{ float4::Cross(Front, Right) };
+
+	//	float4x4 Translation4x4{}, Rotation4x4{};
+
+	//	//Translation4x4.Translation(-_CamPos);
+	//	Rotation4x4.RowVec[0] = Right;
+	//	Rotation4x4.RowVec[1] = Up;
+	//	Rotation4x4.RowVec[2] = Front;
+	//	Rotation4x4.RowVec[3] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//	Rotation4x4.Transpose();
+
+	//	*this *= Translation4x4 * Rotation4x4;
+	//}
+	//void Orthograhpic(float _Width, float _Height, float _Far, float _Near)
+	//{
+	//	Identity();
+	//	float Depth = _Far - _Near;
+
+	//	Arr2D[0][0] = 2.0f / _Width;
+	//	Arr2D[1][1] = 2.0f / _Height;
+	//	Arr2D[2][2] = 1.0f / Depth;
+	//	Arr2D[3][2] = -_Near / Depth;
+	//}
+	//void Perspective(float _Degree, float _Width, float _Height, float _Far, float _Near)
+	//{
+	//	Identity();
+
+	//	float FovY = _Degree * GameEngineMath::D2R;
+	//	float AspectRatio = _Width / _Height;
+	//	float Distance = 1.0f / tanf(FovY * 0.5f);
+	//	float Depth = _Far - _Near;
+
+	//	Arr2D[0][0] = Distance / AspectRatio;
+	//	Arr2D[1][1] = Distance;
+	//	Arr2D[2][2] = 1.0f / Depth;
+	//	Arr2D[3][2] = -_Near / Depth;
+	//	Arr2D[2][3] = 1.0f;
+	//	Arr2D[3][3] = 0.0f;
+
+	//	/*
+	//	// y : y' = z : D
+	//	// y'z = yD
+	//	// y' = y * (D / z)
+	//	// Y = D / z
+
+	//	// x : x' = z : D
+	//	// x'z = xD
+	//	// x' = x * (D / (z * AR))
+	//	// X = D / (z * AR)
+
+	//	// N <= z <= F
+	//	// 0 <= z - N <= F - N
+	//	// 0 <= (z - N) / (F - N) <= 1
+	//	// 0 <= z / (F - N) - N / (F - N) <= 1
+
+	//	// X = D / AR
+	//	// Y = D
+	//	// Z = 1.0f / (F - N)
+	//	// Z = -N / (F - N)
+
+	//	// X 0 0 0
+	//	// 0 Y 0 0
+	//	// 0 0 Z 1
+	//	// 0 0 Z 0
+	//	*/
+	//}
+	//void ViewPort(float _Width, float _Height)
+	//{
+	//	Identity();
+
+	//	float HalfWidth = _Width * 0.5f;
+	//	float HalfHeight = _Height * 0.5f;
+
+	//	Arr2D[0][0] = HalfWidth;
+	//	Arr2D[1][1] = -HalfHeight;
+	//	Arr2D[3][0] = HalfWidth;
+	//	Arr2D[3][1] = HalfHeight;
+	//}
+
+	//float4 GetColVec(int _Idx) const
+	//{
+	//	float4 ColVec{};
+
+	//	for (int i = 0; i < GameEngineMath::Size; ++i)
 	//	{
-	//		Zero();
-	//		for (int i = 0; i < GameEngineMath::Size; ++i)
-	//		{
-	//			//Arr2D[i][i] = _Scale.Arr1D[i];
-	//		}
+	//		//ColVec.Arr1D[i] = Arr2D[i][_Idx];
 	//	}
-	//	void Rotate(const float4& _Degree)
-	//	{
-	//		Identity();
-	//		float4x4 Pitch{}, Yaw{}, Roll{};
-	//
-	//		Pitch.RotateX(_Degree.X);
-	//		Yaw.RotateY(_Degree.Y);
-	//		Roll.RotateZ(_Degree.Z);
-	//
-	//		*this *= Pitch * Yaw * Roll;
-	//	}
-	//	void Translation(const float4& _Pos)
-	//	{
-	//		Identity();
-	//		RowVec[GameEngineMath::Size - 1] = _Pos;
-	//	}
-	//	void ViewDeg(const float4& _CamPos, const float4& _CamDeg)
-	//	{
-	//		Identity();
-	//		float4x4 Translation4x4{}, Rotation4x4{};
-	//
-	//		//Translation4x4.Translation(-_CamPos);
-	//		Rotation4x4.Rotate(_CamDeg);
-	//		Rotation4x4.Transpose();
-	//
-	//		*this *= Translation4x4 * Rotation4x4;
-	//	}
-	//	void ViewDir(const float4& _CamPos, const float4& _CamDir)
-	//	{
-	//		Identity();
-	//		float4 Front{ _CamDir };
-	//		float4 Right{ float4::Cross(float4::Up, Front) };
-	//		float4 Up{ float4::Cross(Front, Right) };
-	//
-	//		float4x4 Translation4x4{}, Rotation4x4{};
-	//
-	//		//Translation4x4.Translation(-_CamPos);
-	//		Rotation4x4.RowVec[0] = Right;
-	//		Rotation4x4.RowVec[1] = Up;
-	//		Rotation4x4.RowVec[2] = Front;
-	//		Rotation4x4.RowVec[3] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	//		Rotation4x4.Transpose();
-	//
-	//		*this *= Translation4x4 * Rotation4x4;
-	//	}
-	//	void Orthograhpic(float _Width, float _Height, float _Far, float _Near)
-	//	{
-	//		Identity();
-	//		float Depth = _Far - _Near;
-	//
-	//		Arr2D[0][0] = 2.0f / _Width;
-	//		Arr2D[1][1] = 2.0f / _Height;
-	//		Arr2D[2][2] = 1.0f / Depth;
-	//		Arr2D[3][2] = -_Near / Depth;
-	//	}
-	//	void Perspective(float _Degree, float _Width, float _Height, float _Far, float _Near)
-	//	{
-	//		Identity();
-	//
-	//		float FovY = _Degree * GameEngineMath::D2R;
-	//		float AspectRatio = _Width / _Height;
-	//		float Distance = 1.0f / tanf(FovY * 0.5f);
-	//		float Depth = _Far - _Near;
-	//
-	//		Arr2D[0][0] = Distance / AspectRatio;
-	//		Arr2D[1][1] = Distance;
-	//		Arr2D[2][2] = 1.0f / Depth;
-	//		Arr2D[3][2] = -_Near / Depth;
-	//		Arr2D[2][3] = 1.0f;
-	//		Arr2D[3][3] = 0.0f;
-	//
-	//		/*
-	//		// y : y' = z : D
-	//		// y'z = yD
-	//		// y' = y * (D / z)
-	//		// Y = D / z
-	//
-	//		// x : x' = z : D
-	//		// x'z = xD
-	//		// x' = x * (D / (z * AR))
-	//		// X = D / (z * AR)
-	//
-	//		// N <= z <= F
-	//		// 0 <= z - N <= F - N
-	//		// 0 <= (z - N) / (F - N) <= 1
-	//		// 0 <= z / (F - N) - N / (F - N) <= 1
-	//
-	//		// X = D / AR
-	//		// Y = D
-	//		// Z = 1.0f / (F - N)
-	//		// Z = -N / (F - N)
-	//
-	//		// X 0 0 0
-	//		// 0 Y 0 0
-	//		// 0 0 Z 1
-	//		// 0 0 Z 0
-	//		*/
-	//	}
-	//	void ViewPort(float _Width, float _Height)
-	//	{
-	//		Identity();
-	//
-	//		float HalfWidth = _Width * 0.5f;
-	//		float HalfHeight = _Height * 0.5f;
-	//
-	//		Arr2D[0][0] = HalfWidth;
-	//		Arr2D[1][1] = -HalfHeight;
-	//		Arr2D[3][0] = HalfWidth;
-	//		Arr2D[3][1] = HalfHeight;
-	//	}
-	//
-	//	float4 GetColVec(int _Idx) const
-	//	{
-	//		float4 ColVec{};
-	//
-	//		for (int i = 0; i < GameEngineMath::Size; ++i)
-	//		{
-	//			//ColVec.Arr1D[i] = Arr2D[i][_Idx];
-	//		}
-	//
-	//		return ColVec;
-	//	}
-	//
-	//	float4x4 operator*(const float4x4& _Mat) const//Matrix x Matrix
-	//	{
-	//		float4x4 Result{};
-	//		for (int i = 0; i < GameEngineMath::Size; ++i)
-	//		{
-	//			for (int j = 0; j < GameEngineMath::Size; ++j)
-	//			{
-	//				Result.Arr2D[i][j] = RowVec[i] * _Mat.GetColVec(j);
-	//			}
-	//		}
-	//
-	//		return Result;
-	//	}
-	//	float4x4 operator*=(const float4x4& _Mat)//Matrix x Matrix
-	//	{
-	//		float4x4 Result{ *this };
-	//		for (int i = 0; i < GameEngineMath::Size; ++i)
-	//		{
-	//			for (int j = 0; j < GameEngineMath::Size; ++j)
-	//			{
-	//				Arr2D[i][j] = Result.RowVec[i] * _Mat.GetColVec(j);
-	//			}
-	//		}
-	//
-	//		return *this;
-	//	}
-	//#pragma endregion
-	//#pragma region Constructor
-	//	float4x4()
-	//	{
-	//		Identity();
-	//	}
-	//	float4x4(const float4& _Row1, const float4& _Row2 = {},
-	//		const float4& _Row3 = {}, const float4& _Row4 = {})
-	//		: RowVec{ _Row1, _Row2, _Row3, _Row4 } {}
-	//#pragma endregion
-	//#pragma region Private
-	//private:
-	//	void RotateX(float _Degree)//Pitch
-	//	{
-	//		Identity();
-	//		float Radian = _Degree * GameEngineMath::D2R;
-	//		float CR = cosf(Radian);
-	//		float SR = sinf(Radian);
-	//
-	//		Arr2D[1][1] = CR;
-	//		Arr2D[1][2] = SR;
-	//		Arr2D[2][1] = -SR;
-	//		Arr2D[2][2] = CR;
-	//	}
-	//	void RotateY(float _Degree)//Yaw
-	//	{
-	//		Identity();
-	//		float Radian = _Degree * GameEngineMath::D2R;
-	//		float CR = cosf(Radian);
-	//		float SR = sinf(Radian);
-	//
-	//		Arr2D[0][0] = CR;
-	//		Arr2D[0][2] = -SR;
-	//		Arr2D[2][0] = SR;
-	//		Arr2D[2][2] = CR;
-	//	}
-	//	void RotateZ(float _Degree)//Roll
-	//	{
-	//		Identity();
-	//		float Radian = _Degree * GameEngineMath::D2R;
-	//		float CR = cosf(Radian);
-	//		float SR = sinf(Radian);
-	//
-	//		Arr2D[0][0] = CR;
-	//		Arr2D[0][1] = SR;
-	//		Arr2D[1][0] = -SR;
-	//		Arr2D[1][1] = CR;
-	//	}
-	//#pragma endregion
+
+	//	return ColVec;
+	//}
+	//산술연산 float4x4
+	//형변환 연산
+	operator DirectX::XMMATRIX() const
+	{
+		return Matrix;
+	}
+#pragma endregion
+#pragma region Constructor
+	float4x4(const float4& _Row1 = {}, const float4& _Row2 = {},
+		const float4& _Row3 = {}, const float4& _Row4 = {})
+		: Matrix{ _Row1.Vector, _Row2.Vector, _Row3.Vector, _Row4.Vector } {}
+	float4x4(DirectX::FXMMATRIX _Matrix)
+		: Matrix(_Matrix) {}
+#pragma endregion
 };
