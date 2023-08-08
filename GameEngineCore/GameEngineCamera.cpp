@@ -15,17 +15,17 @@ void GameEngineCamera::Start()
 		return;
 	}
 
-	Transform.GetTransformDataRef().Rotation = { 0.0f, 0.0f, 1.0f, 1.0f };
+	//Transform.GetTransformDataRef().Rotation = { 0.0f, 0.0f, 1.0f, 1.0f };
 }
 
 void GameEngineCamera::Update(float _Delta)
 {
 	GameEngineActor::Update(_Delta);
 
-	float4 Position = Transform.GetWorldPosition();
+	/*float4 Position = Transform.GetWorldPosition();
 	float4 Degree = Transform.GetTransformDataRef().Rotation;
 
-	Transform.View(Position, Degree);
+	Transform.View(Position, Degree);*/
 }
 
 void GameEngineCamera::Render(float _Delta)

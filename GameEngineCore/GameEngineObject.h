@@ -18,7 +18,7 @@ protected:
 	GameEngineObject* Parent = nullptr;
 	std::map<int, std::list<std::shared_ptr<GameEngineObject>>> Childs;
 public:
-	GameEngineTransform Transform{};
+	//GameEngineTransform Transform{};
 
 	virtual void Start() {}
 	virtual void Update(float _Delta) {}
@@ -106,7 +106,7 @@ public:
 	void SetParent(std::shared_ptr<ParentType> _Parent)
 	{
 		Parent = _Parent.get();
-		Transform.SetParent(_Parent->Transform);
+		//Transform.SetParent(_Parent->Transform);
 	}
 	template <typename ConvertType>
 	std::shared_ptr<ConvertType> GetDynamic_Cast_This()

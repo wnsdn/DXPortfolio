@@ -5,13 +5,13 @@
 
 void PlayLevel::Start()
 {
-	GetMainCamera()->Transform.SetLocalPosition({ 0.0f, 0.0f, -500.0f });
+	//GetMainCamera()->Transform.SetLocalPosition({ 0.0f, 0.0f, -500.0f });
 	std::shared_ptr<Player> NewPlayer = CreateActor<Player>();
 }
 
 void PlayLevel::Update(float _Delta)
 {
-	float Speed = 300.0f;
+	/*float Speed = 300.0f;
 	if (GameEngineInput::IsPress('A'))
 	{
 		GetMainCamera()->Transform.GetTransformDataRef().Position += float4::Left * Speed * _Delta;
@@ -45,5 +45,5 @@ void PlayLevel::Update(float _Delta)
 		GetMainCamera()->Transform.GetTransformDataRef().Rotation.RotateY(-360.0f / 4.0f * _Delta);
 	}
 
-	GetMainCamera()->Transform.TransformUpdate();
+	GetMainCamera()->Transform.TransformUpdate();*/
 }

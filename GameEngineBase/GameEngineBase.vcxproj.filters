@@ -9,9 +9,7 @@
     <ClInclude Include="PreCompile.h">
       <Filter>01. PreCompile</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineMath.h">
-      <Filter>GameEngineMath</Filter>
-    </ClInclude>
+    <ClInclude Include="GameEngineMath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineDebug.cpp" />
@@ -22,16 +20,11 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>01. PreCompile</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngineMath.cpp">
-      <Filter>GameEngineMath</Filter>
-    </ClCompile>
+    <ClCompile Include="GameEngineMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. PreCompile">
       <UniqueIdentifier>{9eae4354-2b76-4c50-bfc0-71fec9376b7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameEngineMath">
-      <UniqueIdentifier>{c09024f7-dba2-4cfd-b68f-5fe159f2140e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
