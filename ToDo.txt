@@ -1,14 +1,7 @@
-functional
-
-템플릿으로 인자 넘기면 완벽전달 std::forward 사용, GameEngineText
-Smart Pointer 공부
-
-GameEngineWindow MemDC -> shared_ptr
-
-
 직교행렬의 역행렬은 그것의 전치행렬이다.
 회전(Rotation)과 관련
 대각행렬의 역행렬은 대각의 역수행렬이다.
 크기(Scale)과 관련
 밀기행렬의 역행렬은 대각을 제외한 나머지의 음수행렬이다.
 이동(Translation)과 관련
+

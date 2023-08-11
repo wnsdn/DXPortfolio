@@ -3,12 +3,7 @@
 
 #include <DirectXMath.h>
 
-struct float4;
 struct float4x4;
-
-struct GameEngineMath
-{
-};
 
 struct float4//Vector
 {
@@ -23,6 +18,10 @@ struct float4//Vector
 	static const float4 Down;
 	static const float4 Front;
 	static const float4 Back;
+
+	static const float4 RED;
+	static const float4 GREEN;
+	static const float4 BLUE;
 
 	union
 	{
@@ -90,6 +89,7 @@ struct float4//Vector
 		return DirectX::XMVector3Cross(_V1.Vector, _V2.Vector);
 	}
 #pragma endregion
+
 #pragma region Operator
 	//산술연산 float
 	float4 operator+(float _F) const
@@ -200,18 +200,29 @@ struct float4//Vector
 	{
 		return Vector;
 	}
+	operator const FLOAT* () const
+	{
+		return Vector.m128_f32;
+	}
 #pragma endregion
+
 #pragma region Constructor
 	float4(float _X = 0.0f, float _Y = 0.0f, float _Z = 0.0f, float _W = 0.0f)
 		: Vector{ _X, _Y, _Z, _W } {}
 	float4(DirectX::FXMVECTOR _Vector)
 		: Vector(_Vector) {}
+	float4(const POINT& _Point)
+		: Vector{ static_cast<float>(_Point.x), static_cast<float>(_Point.y), 0.0f, 0.0f } {}
 #pragma endregion
 };
 
 struct float4x4//Matrix
 {
-	DirectX::XMMATRIX Matrix;
+	union
+	{
+		float4 RowVec[4];
+		DirectX::XMMATRIX Matrix;
+	};
 
 #pragma region Function
 	void Zero()
@@ -222,157 +233,78 @@ struct float4x4//Matrix
 	{
 		Matrix = DirectX::XMMatrixIdentity();
 	}
-	//void Transpose()
-	//{
-	//	for (int Row = 0; Row < GameEngineMath::Size; ++Row)
-	//	{
-	//		for (int Col = Row + 1; Col < GameEngineMath::Size; ++Col)
-	//		{
-	//			std::swap(Arr2D[Row][Col], Arr2D[Col][Row]);
-	//		}
-	//	}
-	//}
-	//void Scale(const float4& _Scale)
-	//{
-	//	Zero();
-	//	for (int i = 0; i < GameEngineMath::Size; ++i)
-	//	{
-	//		//Arr2D[i][i] = _Scale.Arr1D[i];
-	//	}
-	//}
-	//void Rotate(const float4& _Degree)
-	//{
-	//	Identity();
-	//	float4x4 Pitch{}, Yaw{}, Roll{};
+	void Transpose()
+	{
+		Matrix = DirectX::XMMatrixTranspose(Matrix);
+	}
+	void Scaling(const float4& _Scale)
+	{
+		Matrix = DirectX::XMMatrixScalingFromVector(_Scale.Vector);
+	}
+	void Rotation(const float4& _Angles)
+	{
+		float4 Rotation
+		{
+			DirectX::XMConvertToRadians(_Angles.X),
+			DirectX::XMConvertToRadians(_Angles.Y),
+			DirectX::XMConvertToRadians(_Angles.Z)
+		};
 
-	//	Pitch.RotateX(_Degree.X);
-	//	Yaw.RotateY(_Degree.Y);
-	//	Roll.RotateZ(_Degree.Z);
+		Matrix = DirectX::XMMatrixRotationRollPitchYawFromVector(Rotation.Vector);
+	}
+	void Translation(const float4& _Offset)
+	{
+		Matrix = DirectX::XMMatrixTranslationFromVector(_Offset.Vector);
+	}
+	void View(const float4& _EyePos, const float4& _EyeDir, const float4& _UpDir)
+	{
+		Matrix = DirectX::XMMatrixLookToLH(_EyePos, _EyeDir, _UpDir);
+	}
+	void Orthograhpic(float _Width, float _Height, float _Far, float _Near)
+	{
+		Matrix = DirectX::XMMatrixOrthographicLH(_Width, _Height, _Near, _Far);
+	}
+	void Perspective(float _Degree, float _Width, float _Height, float _Far, float _Near)
+	{
+		Matrix = DirectX::XMMatrixPerspectiveFovLH
+		(DirectX::XMConvertToRadians(_Degree), _Width / _Height, _Near, _Far);
+	}
+	void ViewPort(float _Width, float _Height)
+	{
+		Identity();
 
-	//	*this *= Pitch * Yaw * Roll;
-	//}
-	//void Translation(const float4& _Pos)
-	//{
-	//	Identity();
-	//	RowVec[GameEngineMath::Size - 1] = _Pos;
-	//}
-	//void ViewDeg(const float4& _CamPos, const float4& _CamDeg)
-	//{
-	//	Identity();
-	//	float4x4 Translation4x4{}, Rotation4x4{};
+		float HalfWidth = _Width * 0.5f;
+		float HalfHeight = _Height * 0.5f;
 
-	//	//Translation4x4.Translation(-_CamPos);
-	//	Rotation4x4.Rotate(_CamDeg);
-	//	Rotation4x4.Transpose();
+		Matrix.r[0].m128_f32[0] = HalfWidth;
+		Matrix.r[1].m128_f32[1] = -HalfHeight;
+		Matrix.r[3].m128_f32[0] = HalfWidth;
+		Matrix.r[3].m128_f32[1] = HalfHeight;
+	}
+#pragma endregion
 
-	//	*this *= Translation4x4 * Rotation4x4;
-	//}
-	//void ViewDir(const float4& _CamPos, const float4& _CamDir)
-	//{
-	//	Identity();
-	//	float4 Front{ _CamDir };
-	//	float4 Right{ float4::Cross(float4::Up, Front) };
-	//	float4 Up{ float4::Cross(Front, Right) };
-
-	//	float4x4 Translation4x4{}, Rotation4x4{};
-
-	//	//Translation4x4.Translation(-_CamPos);
-	//	Rotation4x4.RowVec[0] = Right;
-	//	Rotation4x4.RowVec[1] = Up;
-	//	Rotation4x4.RowVec[2] = Front;
-	//	Rotation4x4.RowVec[3] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	//	Rotation4x4.Transpose();
-
-	//	*this *= Translation4x4 * Rotation4x4;
-	//}
-	//void Orthograhpic(float _Width, float _Height, float _Far, float _Near)
-	//{
-	//	Identity();
-	//	float Depth = _Far - _Near;
-
-	//	Arr2D[0][0] = 2.0f / _Width;
-	//	Arr2D[1][1] = 2.0f / _Height;
-	//	Arr2D[2][2] = 1.0f / Depth;
-	//	Arr2D[3][2] = -_Near / Depth;
-	//}
-	//void Perspective(float _Degree, float _Width, float _Height, float _Far, float _Near)
-	//{
-	//	Identity();
-
-	//	float FovY = _Degree * GameEngineMath::D2R;
-	//	float AspectRatio = _Width / _Height;
-	//	float Distance = 1.0f / tanf(FovY * 0.5f);
-	//	float Depth = _Far - _Near;
-
-	//	Arr2D[0][0] = Distance / AspectRatio;
-	//	Arr2D[1][1] = Distance;
-	//	Arr2D[2][2] = 1.0f / Depth;
-	//	Arr2D[3][2] = -_Near / Depth;
-	//	Arr2D[2][3] = 1.0f;
-	//	Arr2D[3][3] = 0.0f;
-
-	//	/*
-	//	// y : y' = z : D
-	//	// y'z = yD
-	//	// y' = y * (D / z)
-	//	// Y = D / z
-
-	//	// x : x' = z : D
-	//	// x'z = xD
-	//	// x' = x * (D / (z * AR))
-	//	// X = D / (z * AR)
-
-	//	// N <= z <= F
-	//	// 0 <= z - N <= F - N
-	//	// 0 <= (z - N) / (F - N) <= 1
-	//	// 0 <= z / (F - N) - N / (F - N) <= 1
-
-	//	// X = D / AR
-	//	// Y = D
-	//	// Z = 1.0f / (F - N)
-	//	// Z = -N / (F - N)
-
-	//	// X 0 0 0
-	//	// 0 Y 0 0
-	//	// 0 0 Z 1
-	//	// 0 0 Z 0
-	//	*/
-	//}
-	//void ViewPort(float _Width, float _Height)
-	//{
-	//	Identity();
-
-	//	float HalfWidth = _Width * 0.5f;
-	//	float HalfHeight = _Height * 0.5f;
-
-	//	Arr2D[0][0] = HalfWidth;
-	//	Arr2D[1][1] = -HalfHeight;
-	//	Arr2D[3][0] = HalfWidth;
-	//	Arr2D[3][1] = HalfHeight;
-	//}
-
-	//float4 GetColVec(int _Idx) const
-	//{
-	//	float4 ColVec{};
-
-	//	for (int i = 0; i < GameEngineMath::Size; ++i)
-	//	{
-	//		//ColVec.Arr1D[i] = Arr2D[i][_Idx];
-	//	}
-
-	//	return ColVec;
-	//}
+#pragma region Operator
 	//산술연산 float4x4
+	float4x4 operator*(const float4x4& _Other)
+	{
+		return Matrix * _Other.Matrix;
+	}
+	void operator*=(const float4x4& _Other)
+	{
+		Matrix *= _Other.Matrix;
+	}
 	//형변환 연산
 	operator DirectX::XMMATRIX() const
 	{
 		return Matrix;
 	}
 #pragma endregion
+
 #pragma region Constructor
-	float4x4(const float4& _Row1 = {}, const float4& _Row2 = {},
-		const float4& _Row3 = {}, const float4& _Row4 = {})
-		: Matrix{ _Row1.Vector, _Row2.Vector, _Row3.Vector, _Row4.Vector } {}
+	float4x4()
+	{
+		Identity();
+	}
 	float4x4(DirectX::FXMMATRIX _Matrix)
 		: Matrix(_Matrix) {}
 #pragma endregion

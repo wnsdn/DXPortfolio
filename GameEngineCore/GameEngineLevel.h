@@ -11,7 +11,7 @@ private:
 	std::map<int, std::shared_ptr<GameEngineCamera>> Cameras;
 
 	virtual void LevelStart(GameEngineLevel* _PrevLevel) {}
-	virtual void LevelEnd(GameEngineLevel* _PrevLevel) {}
+	virtual void LevelEnd(GameEngineLevel* _NextLevel) {}
 
 	void AllUpdate(float _Delta) override;
 	void Render(float _Delta);
@@ -42,10 +42,12 @@ public:
 		return Cameras[_Select];
 	}
 
+#pragma region Constructor
 	GameEngineLevel();
 	~GameEngineLevel();
 	GameEngineLevel(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel(GameEngineLevel&& _Other) noexcept = delete;
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
+#pragma endregion
 };

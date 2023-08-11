@@ -14,18 +14,31 @@ void GameEngineCamera::Start()
 		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
 	}
-
-	//Transform.GetTransformDataRef().Rotation = { 0.0f, 0.0f, 1.0f, 1.0f };
 }
 
 void GameEngineCamera::Update(float _Delta)
 {
 	GameEngineActor::Update(_Delta);
 
-	/*float4 Position = Transform.GetWorldPosition();
-	float4 Degree = Transform.GetTransformDataRef().Rotation;
+	float4 Position = Transform.GetWorldPosition();
+	float4 Forward = Transform.GetWorldFrontVector();
+	float4 Up = Transform.GetWorldUpVector();
 
-	Transform.View(Position, Degree);*/
+	Transform.View(Position, Forward, Up);
+
+	float4 WndScale = GameEngineWindow::GetInst().GetScale();
+
+	switch (ProjectionType)
+	{
+	case EPROJECTIONTYPE::Perspective:
+		Transform.Perspective(FOV, WndScale.X, WndScale.Y, Far, Near);
+		break;
+	case EPROJECTIONTYPE::Orthographic:
+		Transform.Orthographic(WndScale.X, WndScale.Y, Far, Near);
+		break;
+	default:
+		break;
+	}
 }
 
 void GameEngineCamera::Render(float _Delta)
@@ -39,6 +52,8 @@ void GameEngineCamera::Render(float _Delta)
 	{
 		for (auto Renderer : Pair.second)
 		{
+			Renderer->Transform.CalculationViewAndProjection
+			(Transform.GetConstTransformDataRef());
 			Renderer->Render(_Delta);
 		}
 	}
@@ -50,7 +65,7 @@ void GameEngineCamera::SetCameraOrder(int _Order)
 
 	if (!Level)
 	{
-		GameEngineDebug::MsgBoxAssert("Level == nullptr");
+		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 

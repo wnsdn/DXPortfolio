@@ -13,6 +13,10 @@ const float4 float4::Down	{0.0f, -1.0f, 0.0f, 1.0f};
 const float4 float4::Front	{0.0f, 0.0f, 1.0f, 1.0f};
 const float4 float4::Back	{0.0f, 0.0f, -1.0f, 1.0f};
 
+const float4 float4::RED =	 { 1.0f, 0.0f, 0.0f, 1.0f };
+const float4 float4::GREEN = { 0.0f, 1.0f, 0.0f, 1.0f };
+const float4 float4::BLUE =  { 0.0f, 0.0f, 1.0f, 1.0f };
+
 float4 float4::operator*(const float4x4& _Matrix) const
 {
 	float4 Result = DirectX::XMVector3Transform(Vector, _Matrix.Matrix);
@@ -21,5 +25,5 @@ float4 float4::operator*(const float4x4& _Matrix) const
 
 void float4::operator*=(const float4x4& _Matrix)
 {
-	*this = DirectX::XMVector3Transform(Vector, _Matrix.Matrix);
+	Vector = DirectX::XMVector3Transform(Vector, _Matrix.Matrix);
 }

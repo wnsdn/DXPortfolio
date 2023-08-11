@@ -13,10 +13,12 @@ protected:
 public:
 	void SetViewCameraSelect(int _Order);
 
+#pragma region Constructor
 	GameEngineRenderer() {}
 	~GameEngineRenderer() {}
 	GameEngineRenderer(const GameEngineRenderer& _Other) = delete;
 	GameEngineRenderer(GameEngineRenderer&& _Other) noexcept = delete;
 	GameEngineRenderer& operator=(const GameEngineRenderer& _Other) = delete;
 	GameEngineRenderer& operator=(GameEngineRenderer&& _Other) noexcept = delete;
+#pragma endregion
 };

@@ -19,9 +19,9 @@ public:
 	template <typename Arg>
 	static void FormatTextOut(HDC _Hdc, std::string_view _Sv, const int _X, const int _Y, const Arg& _Arg)
 	{
-		std::string Buffer{_Sv};
+		std::string Buffer{ _Sv };
 
-		std::format_to(std::back_inserter(Buffer), " : {}", _Arg);
+		std::format_to(std::back_inserter(Buffer), " : {}", std::forward(_Arg));
 
 		TextOutA(_Hdc, _X, _Y, Buffer.c_str(), static_cast<int>(Buffer.size()));
 	}

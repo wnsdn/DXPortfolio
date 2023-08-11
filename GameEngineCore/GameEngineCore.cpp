@@ -6,6 +6,7 @@
 #include "GameEngineObject.h"
 #include "GameEngineLevel.h"
 
+GameEngineDevice GameEngineCore::MainDevice{};
 std::shared_ptr<GameEngineObject> GameEngineCore::CoreObject;
 std::shared_ptr<GameEngineLevel> GameEngineCore::CurLevel;
 std::shared_ptr<GameEngineLevel> GameEngineCore::NextLevel;
@@ -18,6 +19,7 @@ void GameEngineCore::EngineStart(HINSTANCE _Hinst, std::string_view _Name,
 	//_CrtSetBreakAlloc(158);
 
 	GameEngineWindow::GetInst().Init(_Hinst, _Name, _Pos, _Scale);
+	MainDevice.Initialize(GameEngineWindow::GetInst());
 	GameEngineWindow::GetInst().MessageLoop(Start, Update, Release);
 }
 
@@ -59,9 +61,9 @@ void GameEngineCore::Update()
 	CurLevel->AddLiveTime(DeltaTime);
 	CurLevel->AllUpdate(DeltaTime);
 
-	GameEngineWindow::GetInst().ClearBackBuffer();
+	MainDevice.RenderStart();
 	CurLevel->Render(DeltaTime);
-	GameEngineWindow::GetInst().DoubleBuffering();
+	MainDevice.RenderEnd();
 }
 
 void GameEngineCore::Release()

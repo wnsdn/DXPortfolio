@@ -6,3 +6,5 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 //#include <GameEnginePlatform/GameEngineSound.h>
 #include <GameEnginePlatform/GameEngineText.h>
+
+#include "GameEngineCore.h"

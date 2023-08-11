@@ -20,15 +20,7 @@ public:
 	}
 	static POINT GetWndScale()
 	{
-		return { 1080, 720 };
-	}
-	static float4 GetWndPosf()
-	{
-		return { 100.0f, 100.0f };
-	}
-	static float4 GetWndScalef()
-	{
-		return { 1080.0f, 720.0f };
+		return { 1280, 720 };
 	}
 
 	ContentsCore() {}

@@ -26,11 +26,20 @@ public:
 		std::function<void()> _Release);
 	void ClearBackBuffer();
 	void DoubleBuffering();
-public:
+
+#pragma region GetSet
 	static GameEngineWindow& GetInst()
 	{
 		static GameEngineWindow Instance;
 		return Instance;
+	}
+	HWND GetHwnd() const
+	{
+		return Hwnd;
+	}
+	HDC GetHdc() const
+	{
+		return Hdc;
 	}
 	HDC GetMemDc() const;
 	bool IsFocus() const
@@ -41,11 +50,14 @@ public:
 	{
 		return Scale;
 	}
-public:
+#pragma endregion
+
+#pragma region Constructor
 	GameEngineWindow() {}
 	~GameEngineWindow();
 	GameEngineWindow(const GameEngineWindow& _Other) = delete;
 	GameEngineWindow(GameEngineWindow&& _Other) noexcept = delete;
 	GameEngineWindow& operator=(const GameEngineWindow& _Other) = delete;
 	GameEngineWindow& operator=(GameEngineWindow&& _Other) noexcept = delete;
+#pragma endregion
 };

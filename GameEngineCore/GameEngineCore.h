@@ -4,6 +4,7 @@
 #include <map>
 #include <GameEngineBase/GameEngineString.h>
 #include <GameEngineBase/GameEngineDebug.h>
+#include "GameEngineDevice.h"
 
 class GameEngineObject;
 class GameEngineLevel;
@@ -30,6 +31,8 @@ private:
 	GameEngineCore& operator=(const GameEngineCore& _Other) = delete;
 	GameEngineCore& operator=(GameEngineCore&& _Other) noexcept = delete;
 public:
+	static GameEngineDevice MainDevice;
+
 	template <typename CoreType>
 	static void EngineStart(HINSTANCE _Hinst)
 	{

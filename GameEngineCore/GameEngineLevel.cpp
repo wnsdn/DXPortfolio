@@ -49,9 +49,8 @@ void GameEngineLevel::Render(float _Delta)
 
 void GameEngineLevel::ActorInit(std::shared_ptr<GameEngineActor> _Actor, int _Order)
 {
-	_Actor->SetParent(this);
+	_Actor->SetParent(this, _Order);
 	_Actor->Start();
-	Childs[_Order].emplace_back(_Actor);
 }
 
 void GameEngineLevel::ActorRelease()

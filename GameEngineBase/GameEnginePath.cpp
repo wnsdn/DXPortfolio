@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "GameEnginePath.h"
 
-std::string GameEnginePath::FilenameToPath(std::string_view _Filename)
+void GameEnginePath::FilenameToPath(std::string_view _Filename)
 {
 	std::filesystem::path ResPath = std::filesystem::current_path();
 
@@ -30,7 +30,7 @@ std::string GameEnginePath::FilenameToPath(std::string_view _Filename)
 		if (ResPath == ResPath.root_path())
 		{
 			GameEngineDebug::MsgBoxAssert(_Filename);
-			return std::string();
+			return;
 		}
 	}
 
@@ -39,10 +39,10 @@ std::string GameEnginePath::FilenameToPath(std::string_view _Filename)
 	{
 		if (Dir.path().filename() == _Filename)
 		{
-			return Dir.path().string();
+			Path = Dir.path();
 		}
 	}
 
 	GameEngineDebug::MsgBoxAssert(_Filename);
-	return std::string();
+	return;
 }
