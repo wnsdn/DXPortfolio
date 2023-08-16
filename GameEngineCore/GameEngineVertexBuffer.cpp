@@ -6,20 +6,20 @@
 
 void GameEngineVertexBuffer::ResCreate(const void* _Data, size_t _VertexSize, size_t _VertexCount)
 {
-	size_t VertexSize = _VertexSize;
-	size_t VertexCount = _VertexCount;
+	VertexSize = static_cast<UINT>(_VertexSize);
+	VertexCount = static_cast<UINT>(_VertexCount);
 
 	D3D11_SUBRESOURCE_DATA Data{};
 	Data.pSysMem = _Data;
 
 	BufferInfo.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	BufferInfo.ByteWidth = static_cast<UINT>(VertexSize * VertexCount);
+	BufferInfo.ByteWidth = VertexSize * VertexCount;
 	BufferInfo.CPUAccessFlags = 0;
 	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
 
-	HRESULT Hr = GameEngineCore::MainDevice.GetDevice()->CreateBuffer(
-		&BufferInfo, &Data, &Buffer);
-	if (FAILED(Hr))
+	HRESULT Hresult = GameEngineCore::MainDevice.GetDevice()->
+		CreateBuffer(&BufferInfo, &Data, &Buffer);
+	if (Hresult == E_FAIL)
 	{
 		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
@@ -34,6 +34,6 @@ void GameEngineVertexBuffer::Setting()
 		return;
 	}
 
-	GameEngineCore::MainDevice.GetContext()->IASetVertexBuffers(0, 1, &Buffer,
-		&VertexSize, &Offset);
+	GameEngineCore::MainDevice.GetContext()->
+		IASetVertexBuffers(0, 1, &Buffer, &VertexSize, &Offset);
 }

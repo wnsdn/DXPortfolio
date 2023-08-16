@@ -16,6 +16,8 @@ void GameEngineRenderer::Render(float _Delta)
 	std::shared_ptr<GameEngineVertexBuffer> VertexBuffer =
 		GameEngineVertexBuffer::Find("Rect");
 	VertexBuffer->Setting();
+
+	//something
 }
 
 void GameEngineRenderer::SetViewCameraSelect(int _Order)

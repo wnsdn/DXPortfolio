@@ -14,3 +14,5 @@
 #include <algorithm>
 
 #include "GameEngineDebug.h"
+#include "GameEngineDirectory.h"
+#include "GameEnginePath.h"

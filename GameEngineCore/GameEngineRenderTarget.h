@@ -5,6 +5,7 @@
 class GameEngineRenderTarget : public GameEngineResources<GameEngineRenderTarget>
 {
 private:
+	//왜 텍스쳐 안에 RTV가 있는데 따로 또 vector<RTV>를 했는지 잘 모르겠음...
 	std::vector<std::shared_ptr<GameEngineTexture>> Textures;
 	std::vector<struct ID3D11RenderTargetView*> RTV;
 	std::vector<float4> ClearColor;

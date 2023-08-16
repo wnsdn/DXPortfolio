@@ -13,69 +13,69 @@ std::string GameEngineString::ToUpperReturn(std::string_view _Str)
 	return Upper;
 }
 
-//std::wstring_view GameEngineString::AnsiToUnicode(const std::string_view& _Text)
-//{
-//	std::wstring_view Result;
-//	int Size = MultiByteToWideChar(CP_ACP, 0, _Text.c_str(),
-//		static_cast<int>(_Text.size()), nullptr, 0);
-//
-//	Result.resize(Size);
-//	MultiByteToWideChar(CP_ACP, 0, _Text.c_str(),
-//		static_cast<int>(_Text.size()), &Result[0], Size);
-//
-//	return Result;
-//}
-//
-//std::string_view GameEngineString::UnicodeToAnsi(const std::wstring_view& _Text)
-//{
-//	int Size = WideCharToMultiByte(CP_ACP, 0, _Text.c_str(),
-//		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
-//	if (!Size)
-//	{
-//		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
-//		return std::string_view();
-//	}
-//
-//	std::string_view Result;
-//	Result.resize(Size);
-//
-//	Size = WideCharToMultiByte(CP_ACP, 0, _Text.c_str(),
-//		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
-//	if (!Size)
-//	{
-//		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
-//		return std::string_view();
-//	}
-//
-//	return Result;
-//}
-//
-//std::string_view GameEngineString::UnicodeToUTF8(const std::wstring_view& _Text)
-//{
-//	int Size = WideCharToMultiByte(CP_UTF8, 0, _Text.c_str(),
-//		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
-//	if (!Size)
-//	{
-//		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
-//		return std::string_view();
-//	}
-//
-//	std::string_view Result;
-//	Result.resize(Size);
-//
-//	Size = WideCharToMultiByte(CP_UTF8, 0, _Text.c_str(),
-//		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
-//	if (!Size)
-//	{
-//		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
-//		return std::string_view();
-//	}
-//
-//	return Result;
-//}
-//
-//std::string_view GameEngineString::AnsiToUTF8(const std::string_view& _Text)
-//{
-//	std::wstring_view Unicode = AnsiToUnicode(_Text);
-//	return UnicodeToUTF8(Unicode);
-//}
+std::wstring GameEngineString::AnsiToUnicode(std::string_view _Text)
+{
+	std::wstring Result;
+	int Size = MultiByteToWideChar(CP_ACP, 0, _Text.data(),
+		static_cast<int>(_Text.size()), nullptr, 0);
+
+	Result.resize(Size);
+	MultiByteToWideChar(CP_ACP, 0, _Text.data(),
+		static_cast<int>(_Text.size()), &Result[0], Size);
+
+	return Result;
+}
+
+std::string GameEngineString::UnicodeToAnsi(std::wstring_view _Text)
+{
+	int Size = WideCharToMultiByte(CP_ACP, 0, _Text.data(),
+		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
+	if (!Size)
+	{
+		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	std::string Result;
+	Result.resize(Size);
+
+	Size = WideCharToMultiByte(CP_ACP, 0, _Text.data(),
+		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
+	if (!Size)
+	{
+		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	return Result;
+}
+
+std::string GameEngineString::UnicodeToUTF8(std::wstring_view _Text)
+{
+	int Size = WideCharToMultiByte(CP_UTF8, 0, _Text.data(),
+		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
+	if (!Size)
+	{
+		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	std::string Result;
+	Result.resize(Size);
+
+	Size = WideCharToMultiByte(CP_UTF8, 0, _Text.data(),
+		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
+	if (!Size)
+	{
+		GameEngineDebug::MsgBoxAssert("문자열 반환 실패");
+		return std::string();
+	}
+
+	return Result;
+}
+
+std::string GameEngineString::AnsiToUTF8(std::string_view _Text)
+{
+	std::wstring_view Unicode = AnsiToUnicode(_Text);
+	return UnicodeToUTF8(Unicode);
+}

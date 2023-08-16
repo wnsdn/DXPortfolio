@@ -17,9 +17,9 @@ void GameEngineTexture::CreateRenderTargetView()
 		return;
 	}
 
-	HRESULT Result = GameEngineCore::MainDevice.GetDevice()->CreateRenderTargetView(Texture2D,
-		nullptr, &RTV);
-	if (Result != S_OK)
+	HRESULT Hresult = GameEngineCore::MainDevice.GetDevice()->
+		CreateRenderTargetView(Texture2D, nullptr, &RTV);
+	if (Hresult == E_FAIL)
 	{
 		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;

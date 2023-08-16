@@ -13,8 +13,9 @@ private:
 	GameEngineString& operator=(GameEngineString&& _Other) noexcept = delete;
 public:
 	static std::string ToUpperReturn(std::string_view _Str);
-	//static std::wstring_view AnsiToUnicode(const std::string_view& _Text);
-	//static std::string_view UnicodeToAnsi(const std::wstring_view& _Text);
-	//static std::string_view UnicodeToUTF8(const std::wstring_view& _Text);
-	//static std::string_view AnsiToUTF8(const std::string_view& _Text);
+
+	static std::wstring AnsiToUnicode(std::string_view _Text);
+	static std::string UnicodeToAnsi(std::wstring_view _Text);
+	static std::string UnicodeToUTF8(std::wstring_view _Text);
+	static std::string AnsiToUTF8(std::string_view _Text);
 };

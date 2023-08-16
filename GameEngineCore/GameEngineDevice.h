@@ -8,16 +8,13 @@ class GameEngineDevice
 {
 	friend class GameEngineCore;
 private:
+	struct IDXGISwapChain* SwapChain = nullptr;
 	struct ID3D11Device* Device = nullptr;
 	struct ID3D11DeviceContext* Context = nullptr;
-	struct IDXGISwapChain* SwapChain = nullptr;
-	struct IDXGIAdapter* GetHighPerformanceAdapter();
 
-	const GameEngineWindow* Window;
 	std::shared_ptr<GameEngineTexture> BackBufferTexture;
 	std::shared_ptr<GameEngineRenderTarget> BackBufferRenderTarget;
 
-	void CreateSwapChain();
 	void RenderStart();
 	void RenderEnd();
 	void ResourcesInit();
@@ -34,7 +31,7 @@ public:
 	}
 
 #pragma region Constructor
-	GameEngineDevice() {}
+	GameEngineDevice();
 	~GameEngineDevice();
 	GameEngineDevice(const GameEngineDevice&) = delete;
 	GameEngineDevice(GameEngineDevice&&) noexcept = delete;

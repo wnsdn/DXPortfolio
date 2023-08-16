@@ -9,7 +9,8 @@ void GameEngineRenderTarget::Clear()
 {
 	for (int i = 0; i < RTV.size(); ++i)
 	{
-		GameEngineCore::MainDevice.GetContext()->ClearRenderTargetView(RTV[i], ClearColor[i]);
+		GameEngineCore::MainDevice.GetContext()->ClearRenderTargetView(
+			RTV[i], ClearColor[i]);
 	}
 }
 
@@ -21,6 +22,6 @@ void GameEngineRenderTarget::Setting()
 		return;
 	}
 
-	GameEngineCore::MainDevice.GetContext()->OMSetRenderTargets(static_cast<UINT>(RTV.size()),
-		&RTV[0], nullptr);
+	GameEngineCore::MainDevice.GetContext()->
+		OMSetRenderTargets(static_cast<UINT>(RTV.size()), &RTV[0], nullptr);
 }

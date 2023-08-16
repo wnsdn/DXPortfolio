@@ -10,6 +10,10 @@
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "dxgi")
 
+GameEngineDevice::GameEngineDevice()
+{
+}
+
 GameEngineDevice::~GameEngineDevice()
 {
 	if (Device)
@@ -27,170 +31,67 @@ GameEngineDevice::~GameEngineDevice()
 		SwapChain->Release();
 		SwapChain = nullptr;
 	}
+
+	CoUninitialize();
 }
 
 void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 {
+	HRESULT Hresult = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	if (Hresult == E_FAIL)
+	{
+		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		return;
+	}
+
 	if (!_Window.GetHwnd())
 	{
 		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
-	int iFlag = 0;
 #ifdef _DEBUG
-	iFlag = D3D11_CREATE_DEVICE_DEBUG;
+	UINT iFlag = D3D11_CREATE_DEVICE_DEBUG;
+#else
+	UINT iFlag = 0;
 #endif
 
-	D3D_FEATURE_LEVEL Level = D3D_FEATURE_LEVEL_11_0;
-	IDXGIAdapter* Adapter = GetHighPerformanceAdapter();
-	if (!Adapter)
-	{
-		Adapter->Release();
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
-		return;
-	}
+	float4 WindowScale = _Window.GetInst().GetScale();
 
-	HRESULT Result = D3D11CreateDevice
-	(
-		Adapter,
-		D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN,
-		nullptr,
-		iFlag,
-		nullptr,
-		0,
-		D3D11_SDK_VERSION,
-		&Device,
-		&Level,
-		&Context
-	);
+	DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
+	SwapChainDesc.BufferDesc.Width = static_cast<UINT>(WindowScale.X);
+	SwapChainDesc.BufferDesc.Height = static_cast<UINT>(WindowScale.Y);
+	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	SwapChainDesc.SampleDesc.Count = 1;
+	SwapChainDesc.SampleDesc.Quality = 0;
+	SwapChainDesc.BufferCount = 2;
+	SwapChainDesc.OutputWindow = _Window.GetHwnd();
+	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
+	SwapChainDesc.Windowed = true;
+	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	if (Adapter)
-	{
-		Adapter->Release();
-		Adapter = nullptr;
-	}
-
-	if (Result != S_OK)
+	Hresult = D3D11CreateDeviceAndSwapChain(
+		nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, iFlag,
+		nullptr, 0, D3D11_SDK_VERSION, &SwapChainDesc,
+		&SwapChain, &Device, nullptr, &Context);
+	if (Hresult == E_FAIL)
 	{
 		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
 	}
-
-	if (Level != D3D_FEATURE_LEVEL_11_0)
+	if (Device->GetFeatureLevel() != D3D_FEATURE_LEVEL_11_0)
 	{
 		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
 	}
-
-	Result = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-	if (Result != S_OK)
-	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
-		return;
-	}
-
-	Window = &_Window;
-	CreateSwapChain();
-	ResourcesInit();
-}
-
-IDXGIAdapter* GameEngineDevice::GetHighPerformanceAdapter()
-{
-	IDXGIFactory* Factory = nullptr;
-	IDXGIAdapter* Adapter = nullptr;
-
-	HRESULT Hr = CreateDXGIFactory(__uuidof(IDXGIFactory),
-		reinterpret_cast<void**>(&Factory));
-	if (!Factory)
-	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
-		return nullptr;
-	}
-
-	SIZE_T VideoMemory = 0;
-	for (int i = 0;; ++i)
-	{
-		IDXGIAdapter* CurAdapter = nullptr;
-		Factory->EnumAdapters(i, &CurAdapter);
-		if (!CurAdapter)
-		{
-			break;
-		}
-
-		DXGI_ADAPTER_DESC Desc{};
-		CurAdapter->GetDesc(&Desc);
-		if (VideoMemory <= Desc.DedicatedVideoMemory)
-		{
-			VideoMemory = Desc.DedicatedVideoMemory;
-			if (Adapter)
-			{
-				Adapter->Release();
-			}
-
-			Adapter = CurAdapter;
-			continue;
-		}
-
-		CurAdapter->Release();
-	}
-
-	Factory->Release();
-	return Adapter;
-}
-
-void GameEngineDevice::CreateSwapChain()
-{
-	float4 WindowScale = Window->GetInst().GetScale();
-
-	DXGI_SWAP_CHAIN_DESC ScInfo{};
-	ScInfo.BufferCount = 2;
-	ScInfo.BufferDesc.Width = static_cast<int>(WindowScale.X);
-	ScInfo.BufferDesc.Height = static_cast<int>(WindowScale.Y);
-	ScInfo.OutputWindow = Window->GetHwnd();
-	ScInfo.BufferDesc.RefreshRate.Denominator = 1;
-	ScInfo.BufferDesc.RefreshRate.Numerator = 60;
-	ScInfo.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	ScInfo.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	ScInfo.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	ScInfo.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
-	ScInfo.SampleDesc.Quality = 0;
-	ScInfo.SampleDesc.Count = 1;
-	ScInfo.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	ScInfo.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	ScInfo.Windowed = true;
-
-	IDXGIDevice* pD = nullptr;
-	IDXGIAdapter* pA = nullptr;
-	IDXGIFactory* pF = nullptr;
-
-	Device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&pD));
-	if (!pD)
-	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
-		return;
-	}
-	pD->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&pA));
-	if (!pA)
-	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
-		return;
-	}
-	pA->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&pF));
-	if (!pF)
-	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
-		return;
-	}
-
-	pF->CreateSwapChain(Device, &ScInfo, &SwapChain);
-	pF->Release();
-	pA->Release();
-	pD->Release();
 
 	ID3D11Texture2D* DXBackBufferTexture = nullptr;
-	if (SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-		reinterpret_cast<void**>(&DXBackBufferTexture)) != S_OK)
+	Hresult = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
+		reinterpret_cast<void**>(&DXBackBufferTexture));
+	if (Hresult == E_FAIL)
 	{
 		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
 		return;
@@ -198,16 +99,27 @@ void GameEngineDevice::CreateSwapChain()
 
 	BackBufferTexture = GameEngineTexture::Create(DXBackBufferTexture);
 	BackBufferRenderTarget = GameEngineRenderTarget::Create(BackBufferTexture);
+	ResourcesInit();
 }
 
 void GameEngineDevice::RenderStart()
 {
+	if (!Device)
+	{
+		return;
+	}
+
 	BackBufferRenderTarget->Clear();
 	BackBufferRenderTarget->Setting();
 }
 
 void GameEngineDevice::RenderEnd()
 {
+	if (!Device)
+	{
+		return;
+	}
+
 	HRESULT Result = SwapChain->Present(0, 0);
 	if (Result == DXGI_ERROR_DEVICE_REMOVED || Result == DXGI_ERROR_DEVICE_RESET)
 	{

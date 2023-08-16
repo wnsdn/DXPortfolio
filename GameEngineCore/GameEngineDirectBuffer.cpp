@@ -8,7 +8,7 @@ GameEngineDirectBuffer::~GameEngineDirectBuffer()
 {
 	if (Buffer)
 	{
-		Buffer->release();
+		Buffer->Release();
 		Buffer = nullptr;
 	}
 }

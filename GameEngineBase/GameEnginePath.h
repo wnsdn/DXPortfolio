@@ -8,13 +8,22 @@ private:
 	std::filesystem::path Path{};
 public:
 	void FilenameToPath(std::string_view _Filename);
+	std::string GetFilename() const
+	{
+		return Path.filename().string();
+	}
+
 #pragma region Constructor
 	GameEnginePath() {}
+	GameEnginePath(std::string_view _Path)
+	{
+		Path = _Path;
+	}
+	GameEnginePath(std::filesystem::directory_entry _Path)
+	{
+		Path = _Path;
+	}
 	~GameEnginePath() {}
-	GameEnginePath(const GameEnginePath& _Other) = delete;
-	GameEnginePath(GameEnginePath&& _Other) noexcept = delete;
-	GameEnginePath& operator=(const GameEnginePath& _Other) = delete;
-	GameEnginePath& operator=(GameEnginePath&& _Other) noexcept = delete;
 	void operator=(std::string_view _Path)
 	{
 		Path = _Path;
