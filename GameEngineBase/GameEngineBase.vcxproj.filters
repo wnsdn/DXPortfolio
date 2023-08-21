@@ -15,6 +15,10 @@
     <ClInclude Include="GameEngineDirectory.h">
       <Filter>Filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineFile.h">
+      <Filter>Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineSerializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineDebug.cpp" />
@@ -31,6 +35,10 @@
     <ClCompile Include="GameEngineDirectory.cpp">
       <Filter>Filesystem</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngineFile.cpp">
+      <Filter>Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. PreCompile">

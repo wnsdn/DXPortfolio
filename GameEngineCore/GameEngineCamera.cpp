@@ -11,7 +11,7 @@ void GameEngineCamera::Start()
 
 	if (!Level)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 }
@@ -65,7 +65,7 @@ void GameEngineCamera::SetCameraOrder(int _Order)
 
 	if (!Level)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 

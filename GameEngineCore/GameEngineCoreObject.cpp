@@ -19,7 +19,7 @@ GameEngineLevel* GameEngineCoreObject::GetLevel()
 		ParentType = ParentType->GetParent();
 	}
 
-	GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+	MsgBoxAssert(__FUNCTION__);
 	return nullptr;
 }
 
@@ -38,6 +38,6 @@ GameEngineActor* GameEngineCoreObject::GetActor()
 		ParentType = ParentType->GetParent();
 	}
 
-	GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+	MsgBoxAssert(__FUNCTION__);
 	return nullptr;
 }

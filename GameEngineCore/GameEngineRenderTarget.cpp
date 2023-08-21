@@ -18,7 +18,7 @@ void GameEngineRenderTarget::Setting()
 {
 	if (RTV.size() <= 0)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 

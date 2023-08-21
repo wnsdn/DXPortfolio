@@ -1,8 +1,7 @@
 #pragma once
-#include <GameEngineBase/GameEnginePath.h>
 #include "GameEngineShader.h"
 #include "GameEngineResources.h"
-#include <string_view>
+#include <d3d11.h>
 #include <d3dcompiler.h>
 
 class GameEngineVertexShader
@@ -11,31 +10,30 @@ class GameEngineVertexShader
 {
 private:
 	std::string EntryName;
+	ID3D11VertexShader* pShader = nullptr;
 
 	void ShaderLoad(std::string_view _Path, std::string_view _EntryPoint,
 		UINT _VersionHigh = 5, UINT _VersionLow = 0);
-protected:
-
 public:
 	static std::shared_ptr<GameEngineVertexShader> Load(
 		std::string_view _Path, std::string_view _EntryPoint,
 		UINT _VersionHigh = 5, UINT _VersionLow = 0)
 	{
-		GameEnginePath Path = _Path;
-		std::string Name = Path.GetFilename();
-
-		auto Res = GameEngineVertexShader::CreateRes(Name);
+		auto Res = GameEngineVertexShader::CreateRes(_EntryPoint);
 		Res->ShaderLoad(_Path, _EntryPoint, _VersionHigh, _VersionLow);
 		return Res;
 	}
 
-#pragma region Constructor
-	GameEngineVertexShader();
-	~GameEngineVertexShader();
+	void Setting();
+
+	~GameEngineVertexShader()
+	{
+		pShader->Release();
+		pShader = nullptr;
+	}
 	GameEngineVertexShader(const GameEngineVertexShader&) = delete;
 	GameEngineVertexShader(GameEngineVertexShader&&) noexcept = delete;
 	void operator=(const GameEngineVertexShader&) = delete;
 	void operator=(GameEngineVertexShader&&) noexcept = delete;
-#pragma endregion
 };
 

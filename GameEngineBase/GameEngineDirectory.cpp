@@ -1,58 +1,29 @@
 #include "PreCompile.h"
 #include "GameEngineDirectory.h"
 
-GameEngineDirectory::GameEngineDirectory()
-{
-}
+#include "GameEngineFile.h"
 
-GameEngineDirectory::~GameEngineDirectory()
+std::vector<GameEngineFile> GameEngineDirectory::GetAllFile(std::vector<std::string> _Ext)
 {
-}
+	std::filesystem::directory_iterator DirIter{ Path };
 
-std::vector<GameEnginePath> GameEngineDirectory::GetAllFile(
-	std::string_view _DirName, std::string_view _ExtName)
-{
-	std::filesystem::path Path = std::filesystem::current_path();
-
-	while (true)
+	std::vector<GameEngineFile> Result;
+	for (const auto& Entry : DirIter)
 	{
-		std::filesystem::directory_iterator DirIter{ Path };
-		bool Check = false;
-		for (auto& Dir : DirIter)
+		if (Entry.is_directory())
 		{
-			if (Dir.path().filename() == _DirName)
+			continue;
+		}
+
+		for (const auto& Ext : _Ext)
+		{
+			if (Entry.path().extension().string() == Ext)
 			{
-				Check = true;
-				Path = Dir;
+				Result.push_back(Entry.path());
 				break;
 			}
 		}
-
-		if (Check)
-		{
-			break;
-		}
-		else
-		{
-			Path = Path.parent_path();
-		}
-
-		if (Path == Path.root_path())
-		{
-			GameEngineDebug::MsgBoxAssert(_DirName);
-			return std::vector<GameEnginePath>();
-		}
 	}
 
-	std::vector<GameEnginePath> VecPath;
-	std::filesystem::directory_iterator DirIter{ Path };
-	for (auto& Dir : DirIter)
-	{
-		if (Dir.path().extension() == _ExtName)
-		{
-			VecPath.emplace_back(Dir);
-		}
-	}
-
-	return VecPath;
+	return Result;
 }

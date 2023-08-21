@@ -30,13 +30,13 @@
 //{
 //	if (FMOD::System_Create(&System) != FMOD_OK)
 //	{
-//		GameEngineDebug::MsgBoxAssert("사운드 시스템 생성에 실패했습니다.");
+//		MsgBoxAssert("사운드 시스템 생성에 실패했습니다.");
 //		return;
 //	}
 //
 //	if (System->init(32, FMOD_INIT_NORMAL, nullptr) != FMOD_OK)
 //	{
-//		GameEngineDebug::MsgBoxAssert("사운드 시스템 이니셜라이즈에 실패했습니다.");
+//		MsgBoxAssert("사운드 시스템 이니셜라이즈에 실패했습니다.");
 //		return;
 //	}
 //}
@@ -45,7 +45,7 @@
 //{
 //	if (System->update() != FMOD_OK)
 //	{
-//		GameEngineDebug::MsgBoxAssert("System->update()");
+//		MsgBoxAssert("System->update()");
 //		return;
 //	}
 //}
@@ -97,7 +97,7 @@
 //
 //	if (Result != FMOD_OK)
 //	{
-//		GameEngineDebug::MsgBoxAssert(_Filename + "System->createSound()");
+//		MsgBoxAssert(_Filename + "System->createSound()");
 //		return;
 //	}
 //

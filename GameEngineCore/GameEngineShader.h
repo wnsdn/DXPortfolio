@@ -24,14 +24,13 @@ protected:
 
 	void CreateVersion(ShaderType _Type, UINT _VersionHigh, UINT _VersionLow);
 public:
+	static bool AutoCompile(GameEngineFile& _File);
 
-#pragma region Constructor
-	GameEngineShader();
-	~GameEngineShader();
+	GameEngineShader() = default;
+	~GameEngineShader() = default;
 	GameEngineShader(const GameEngineShader&) = delete;
 	GameEngineShader(GameEngineShader&&) noexcept = delete;
 	void operator=(const GameEngineShader&) = delete;
 	void operator=(GameEngineShader&&) noexcept = delete;
-#pragma endregion
 };
 

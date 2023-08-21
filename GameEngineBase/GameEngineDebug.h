@@ -1,16 +1,19 @@
 #pragma once
-#include <string_view>
+#include <Windows.h>
+#include <string>
+#include <cassert>
 
 class GameEngineDebug
 {
 private:
-	GameEngineDebug() {}
-	~GameEngineDebug() {}
-	GameEngineDebug(const GameEngineDebug& _Other) = delete;
-	GameEngineDebug(GameEngineDebug&& _Other) noexcept = delete;
-	GameEngineDebug& operator=(const GameEngineDebug& _Other) = delete;
-	GameEngineDebug& operator=(GameEngineDebug&& _Other) noexcept = delete;
+	GameEngineDebug(const GameEngineDebug&) = delete;
+	GameEngineDebug(GameEngineDebug&&) noexcept = delete;
+	void operator=(const GameEngineDebug&) = delete;
+	void operator=(GameEngineDebug&&) noexcept = delete;
 public:
 	static void LeakCheck();
-	static void MsgBoxAssert(std::string_view _Text);
 };
+
+#define MsgBoxAssert(Text)\
+std::string Value = Text;\
+MessageBoxA(nullptr, Value.c_str(), "Error", MB_OK); assert(false);

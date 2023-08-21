@@ -4,29 +4,16 @@
 
 class GameEnginePath
 {
-private:
+protected:
 	std::filesystem::path Path{};
 public:
-	void FilenameToPath(std::string_view _Filename);
-	std::string GetFilename() const
+	void SetPath(std::string_view _Name);
+
+	std::string ToString() const
 	{
-		return Path.filename().string();
+		return Path.string();
 	}
 
-#pragma region Constructor
-	GameEnginePath() {}
-	GameEnginePath(std::string_view _Path)
-	{
-		Path = _Path;
-	}
-	GameEnginePath(std::filesystem::directory_entry _Path)
-	{
-		Path = _Path;
-	}
-	~GameEnginePath() {}
-	void operator=(std::string_view _Path)
-	{
-		Path = _Path;
-	}
-#pragma endregion
+	GameEnginePath() = default;
+	GameEnginePath(const std::filesystem::path& _Path) : Path(_Path) {}
 };

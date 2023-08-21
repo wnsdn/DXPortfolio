@@ -1,20 +1,19 @@
 #include "PreCompile.h"
 #include "GameEnginePath.h"
 
-void GameEnginePath::FilenameToPath(std::string_view _Filename)
+void GameEnginePath::SetPath(std::string_view _Name)
 {
-	std::filesystem::path ResPath = std::filesystem::current_path();
+	Path = std::filesystem::current_path();
 
+	bool Find = false;
 	while (true)
 	{
-		std::filesystem::directory_iterator DirIter(ResPath);
-		bool Find = false;
-
-		for (auto& Dir : DirIter)
+		std::filesystem::directory_iterator DirIter(Path);
+		for (const auto& Entry : DirIter)
 		{
-			if (Dir.path().filename() == "Resource")
+			if (Entry.path().filename() == _Name)
 			{
-				ResPath = Dir;
+				Path = Entry.path();
 				Find = true;
 				break;
 			}
@@ -24,25 +23,15 @@ void GameEnginePath::FilenameToPath(std::string_view _Filename)
 		{
 			break;
 		}
-
-		ResPath = ResPath.parent_path();
-
-		if (ResPath == ResPath.root_path())
+		else
 		{
-			GameEngineDebug::MsgBoxAssert(_Filename);
-			return;
+			Path = Path.parent_path();
+		}
+
+		if (Path == Path.root_path())
+		{
+			MsgBoxAssert(std::string(_Name) + "찾을수없습니다");
+			break;
 		}
 	}
-
-	std::filesystem::recursive_directory_iterator RecDirIter(ResPath);
-	for (auto& Dir : RecDirIter)
-	{
-		if (Dir.path().filename() == _Filename)
-		{
-			Path = Dir.path();
-		}
-	}
-
-	GameEngineDebug::MsgBoxAssert(_Filename);
-	return;
 }

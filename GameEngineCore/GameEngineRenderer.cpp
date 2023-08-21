@@ -27,7 +27,7 @@ void GameEngineRenderer::SetViewCameraSelect(int _Order)
 
 	if (!Camera)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 

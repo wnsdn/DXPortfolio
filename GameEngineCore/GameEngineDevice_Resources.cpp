@@ -9,12 +9,13 @@
 void GameEngineDevice::ResourcesInit()
 {
 	{
-		std::vector<GameEnginePath> Files =
-			GameEngineDirectory::GetAllFile("GameEngineCoreShader", ".fx");
+		GameEngineDirectory Dir;
+		Dir.SetPath("GameEngineCoreShader");
+		std::vector<GameEngineFile> Files = Dir.GetAllFile({ ".fx" });
 
-		for (auto& File : Files)//fix
+		for (auto& File : Files)
 		{
-			GameEngineVertexShader::Load(File.GetFilename(), "ColorShader_VS");
+			GameEngineShader::AutoCompile(File);
 		}
 	}
 
@@ -79,5 +80,12 @@ void GameEngineDevice::ResourcesInit()
 		BaseVertexs[3] = { { -0.5f, 0.5f, -0.5f, 1.0f } };
 
 		GameEngineVertexBuffer::Create("Rect", Vertex);
+
+		std::vector<unsigned int> Index =
+		{
+			0, 1, 2, 0, 2, 3
+		};
+
+		GameEngineIndexBuffer::Create("Rect", Index);
 	}
 }

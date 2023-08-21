@@ -4,15 +4,8 @@
 #include <GameEnginePlatform/GameEngineWindow.h>
 #include "GameEngineTexture.h"
 #include "GameEngineRenderTarget.h"
-#include <d3d11.h>
-#include <dxgi.h>
 
 #pragma comment(lib, "d3d11")
-#pragma comment(lib, "dxgi")
-
-GameEngineDevice::GameEngineDevice()
-{
-}
 
 GameEngineDevice::~GameEngineDevice()
 {
@@ -40,13 +33,13 @@ void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 	HRESULT Hresult = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	if (Hresult == E_FAIL)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
 	if (!_Window.GetHwnd())
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
@@ -79,12 +72,12 @@ void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 		&SwapChain, &Device, nullptr, &Context);
 	if (Hresult == E_FAIL)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 	if (Device->GetFeatureLevel() != D3D_FEATURE_LEVEL_11_0)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
@@ -93,7 +86,7 @@ void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 		reinterpret_cast<void**>(&DXBackBufferTexture));
 	if (Hresult == E_FAIL)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
@@ -123,7 +116,7 @@ void GameEngineDevice::RenderEnd()
 	HRESULT Result = SwapChain->Present(0, 0);
 	if (Result == DXGI_ERROR_DEVICE_REMOVED || Result == DXGI_ERROR_DEVICE_RESET)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 }

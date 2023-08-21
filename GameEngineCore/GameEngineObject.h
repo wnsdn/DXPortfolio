@@ -35,7 +35,7 @@ public:
 
 		if (!CameraPtr)
 		{
-			GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+			MsgBoxAssert(__FUNCTION__);
 		}
 
 		return CameraPtr;

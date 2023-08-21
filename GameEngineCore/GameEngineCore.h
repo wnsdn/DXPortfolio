@@ -50,7 +50,7 @@ public:
 
 		if (AllLevel.find(Upper) != AllLevel.end())
 		{
-			GameEngineDebug::MsgBoxAssert(Upper + "Already Exist");
+			MsgBoxAssert(Upper + "Already Exist");
 			return;
 		}
 
@@ -65,7 +65,7 @@ public:
 
 		if (FindIter == AllLevel.end())
 		{
-			GameEngineDebug::MsgBoxAssert(Upper + "Not Exist");
+			MsgBoxAssert(Upper + "Not Exist");
 			return;
 		}
 

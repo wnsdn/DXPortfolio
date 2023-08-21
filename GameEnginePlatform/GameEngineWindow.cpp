@@ -27,7 +27,7 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 
 	if (!Hinst)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
@@ -45,7 +45,7 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 
 	if (!Hwnd)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 

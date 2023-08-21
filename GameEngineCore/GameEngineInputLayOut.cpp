@@ -21,7 +21,7 @@ void GameEngineInputLayout::Setting()
 {
 	if (!Layout)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 

@@ -1,19 +1,14 @@
 #include "PreCompile.h"
 #include "GameEngineVertexShader.h"
 
+#pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
-GameEngineVertexShader::GameEngineVertexShader()
-{
-}
-
-GameEngineVertexShader::~GameEngineVertexShader()
-{
-}
-
 void GameEngineVertexShader::ShaderLoad(
-	std::string_view _Path, std::string_view _EntryPoint,
-	UINT _VersionHigh, UINT _VersionLow)
+	std::string_view _Path,
+	std::string_view _EntryPoint,
+	UINT _VersionHigh,
+	UINT _VersionLow)
 {
 	std::wstring UniPath = GameEngineString::AnsiToUnicode(_Path);
 
@@ -41,13 +36,28 @@ void GameEngineVertexShader::ShaderLoad(
 		0,
 		&BinaryCode,
 		&Error);
-
 	if (Hresult == E_FAIL)
 	{
 		std::string ErrorString =
 			reinterpret_cast<char*>(Error->GetBufferPointer());
 
-		GameEngineDebug::MsgBoxAssert(ErrorString);
+		MsgBoxAssert(ErrorString);
 		return;
 	}
+
+	Hresult = GameEngineCore::MainDevice.GetDevice()->CreateVertexShader(
+		BinaryCode->GetBufferPointer(),
+		BinaryCode->GetBufferSize(),
+		nullptr,
+		&pShader);
+	if (Hresult == E_FAIL)
+	{
+		MsgBoxAssert("버텍스 쉐이더 생성에 실패했습니다.");
+		return;
+	}
+}
+
+void GameEngineVertexShader::Setting()
+{
+	GameEngineCore::MainDevice.GetContext()->VSSetShader(pShader, nullptr, 0);
 }

@@ -13,7 +13,7 @@ void GameEngineTexture::CreateRenderTargetView()
 	}
 	if (!Texture2D)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 
@@ -21,7 +21,7 @@ void GameEngineTexture::CreateRenderTargetView()
 		CreateRenderTargetView(Texture2D, nullptr, &RTV);
 	if (Hresult == E_FAIL)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 }

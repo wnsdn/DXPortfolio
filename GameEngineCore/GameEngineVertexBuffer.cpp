@@ -21,7 +21,7 @@ void GameEngineVertexBuffer::ResCreate(const void* _Data, size_t _VertexSize, si
 		CreateBuffer(&BufferInfo, &Data, &Buffer);
 	if (Hresult == E_FAIL)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 }
@@ -30,7 +30,7 @@ void GameEngineVertexBuffer::Setting()
 {
 	if (!Buffer)
 	{
-		GameEngineDebug::MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert(__FUNCTION__);
 		return;
 	}
 

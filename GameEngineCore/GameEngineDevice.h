@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <d3d11.h>
 
 class GameEngineWindow;
 class GameEngineTexture;
@@ -8,9 +9,9 @@ class GameEngineDevice
 {
 	friend class GameEngineCore;
 private:
-	struct IDXGISwapChain* SwapChain = nullptr;
-	struct ID3D11Device* Device = nullptr;
-	struct ID3D11DeviceContext* Context = nullptr;
+	IDXGISwapChain* SwapChain = nullptr;
+	ID3D11Device* Device = nullptr;
+	ID3D11DeviceContext* Context = nullptr;
 
 	std::shared_ptr<GameEngineTexture> BackBufferTexture;
 	std::shared_ptr<GameEngineRenderTarget> BackBufferRenderTarget;
@@ -18,24 +19,20 @@ private:
 	void RenderStart();
 	void RenderEnd();
 	void ResourcesInit();
-protected:
 public:
 	void Initialize(const GameEngineWindow& _Window);
-	struct ID3D11Device* GetDevice() const
+	ID3D11Device* GetDevice() const
 	{
 		return Device;
 	}
-	struct ID3D11DeviceContext* GetContext() const
+	ID3D11DeviceContext* GetContext() const
 	{
 		return Context;
 	}
 
-#pragma region Constructor
-	GameEngineDevice();
 	~GameEngineDevice();
 	GameEngineDevice(const GameEngineDevice&) = delete;
 	GameEngineDevice(GameEngineDevice&&) noexcept = delete;
-	GameEngineDevice& operator=(const GameEngineDevice&) = delete;
-	GameEngineDevice& operator=(GameEngineDevice&&) noexcept = delete;
-#pragma endregion
+	void operator=(const GameEngineDevice&) = delete;
+	void operator=(GameEngineDevice&&) noexcept = delete;
 };
