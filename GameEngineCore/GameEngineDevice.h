@@ -29,7 +29,12 @@ public:
 	{
 		return Context;
 	}
+	auto GetBackBufferRenderTarget() const
+	{
+		return BackBufferRenderTarget;
+	}
 
+	GameEngineDevice() {}
 	~GameEngineDevice();
 	GameEngineDevice(const GameEngineDevice&) = delete;
 	GameEngineDevice(GameEngineDevice&&) noexcept = delete;

@@ -118,7 +118,7 @@ public:
 	void SetParent(GameEngineObject* _Parent, int _Order)
 	{
 		Parent = _Parent;
-		Parent->Childs[_Order].emplace_back(shared_from_this());
+		Parent->Childs[_Order].push_back(shared_from_this());
 		Transform.SetParent(_Parent->Transform);
 	}
 	template <typename ParentType>

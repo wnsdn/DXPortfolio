@@ -1,24 +1,8 @@
 #include "PreCompile.h"
 #include "GameEngineWindow.h"
-#include "GameEngineDC.h"
 
 bool GameEngineWindow::bUpdate = true;
 bool GameEngineWindow::bFocus = true;
-
-GameEngineWindow::~GameEngineWindow()
-{
-	if (Hdc)
-	{
-		ReleaseDC(Hwnd, Hdc);
-		Hdc = nullptr;
-	}
-
-	if (MemDc)
-	{
-		delete MemDc;
-		MemDc = nullptr;
-	}
-}
 
 void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POINT& _Pos, const POINT& _Scale)
 {
@@ -49,13 +33,10 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 		return;
 	}
 
-	RECT Rect{ 0, 0, Scale.x, Scale.y };
+	RECT Rect{ 0, 0, _Scale.x, _Scale.y };
 	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false);
 	SetWindowPos(Hwnd, nullptr, _Pos.x, _Pos.y,
 		Rect.right - Rect.left, Rect.bottom - Rect.top, SWP_NOZORDER);
-
-	Hdc = GetDC(Hwnd);
-	MemDc = new GameEngineDC(Hdc, Scale.x, Scale.y);
 
 	ShowWindow(Hwnd, SW_SHOW);
 }
@@ -91,17 +72,6 @@ void GameEngineWindow::MessageLoop(std::function<void()> _Start,
 	}
 }
 
-void GameEngineWindow::ClearBackBuffer()
-{
-	Rectangle(MemDc->GetHdc(), -1, -1, Scale.x + 1, Scale.y + 1);
-}
-
-void GameEngineWindow::DoubleBuffering()
-{
-	BitBlt(Hdc, 0, 0, Scale.x, Scale.y,
-		MemDc->GetHdc(), 0, 0, SRCCOPY);
-}
-
 LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
 {
 	switch (_Msg)
@@ -118,9 +88,4 @@ LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
 	}
 
 	return DefWindowProcA(_Hwnd, _Msg, _Wp, _Lp);
-}
-
-HDC GameEngineWindow::GetMemDc() const
-{
-	return MemDc->GetHdc();
 }

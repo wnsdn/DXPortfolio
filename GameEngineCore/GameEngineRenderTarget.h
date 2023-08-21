@@ -15,10 +15,10 @@ public:
 		const float4& _Color = float4::BLUE)
 	{
 		std::shared_ptr<GameEngineRenderTarget> NewRes = GameEngineResources::CreateRes();
-		NewRes->ClearColor.emplace_back(_Color);
-		NewRes->Textures.emplace_back(_Texture);
+		NewRes->ClearColor.push_back(_Color);
+		NewRes->Textures.push_back(_Texture);
 		_Texture->CreateRenderTargetView();
-		NewRes->RTV.emplace_back(_Texture->GetRTV());
+		NewRes->RTV.push_back(_Texture->GetRTV());
 		return NewRes;
 	}
 

@@ -2,23 +2,23 @@
 #include "GameEngineComponent.h"
 
 class GameEngineCamera;
+class GameEngineInputLayout;
 class GameEngineRenderer : public GameEngineComponent
 {
 	friend class GameEngineCamera;
 private:
 	std::map<GameEngineCamera*, int> ViewInfo;
+	std::shared_ptr<GameEngineInputLayout> Layout = nullptr;
 protected:
 	void Start();
-	void Render(float _Delta);
+	virtual void Render(GameEngineCamera* _Camera, float _Delta);
 public:
 	void SetViewCameraSelect(int _Order);
 
-#pragma region Constructor
-	GameEngineRenderer() {}
-	~GameEngineRenderer() {}
-	GameEngineRenderer(const GameEngineRenderer& _Other) = delete;
-	GameEngineRenderer(GameEngineRenderer&& _Other) noexcept = delete;
-	GameEngineRenderer& operator=(const GameEngineRenderer& _Other) = delete;
-	GameEngineRenderer& operator=(GameEngineRenderer&& _Other) noexcept = delete;
-#pragma endregion
+	GameEngineRenderer() = default;
+	~GameEngineRenderer() = default;
+	GameEngineRenderer(const GameEngineRenderer&) = delete;
+	GameEngineRenderer(GameEngineRenderer&&) noexcept = delete;
+	void operator=(const GameEngineRenderer&) = delete;
+	void operator=(GameEngineRenderer&&) noexcept = delete;
 };

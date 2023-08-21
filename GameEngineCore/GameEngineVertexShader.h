@@ -8,9 +8,10 @@ class GameEngineVertexShader
 	: public GameEngineResources<GameEngineVertexShader>
 	, public GameEngineShader
 {
+	friend class GameEngineInputLayout;
 private:
 	std::string EntryName;
-	ID3D11VertexShader* pShader = nullptr;
+	ID3D11VertexShader* ShaderPtr = nullptr;
 
 	void ShaderLoad(std::string_view _Path, std::string_view _EntryPoint,
 		UINT _VersionHigh = 5, UINT _VersionLow = 0);
@@ -26,11 +27,8 @@ public:
 
 	void Setting();
 
-	~GameEngineVertexShader()
-	{
-		pShader->Release();
-		pShader = nullptr;
-	}
+	GameEngineVertexShader() = default;
+	~GameEngineVertexShader();
 	GameEngineVertexShader(const GameEngineVertexShader&) = delete;
 	GameEngineVertexShader(GameEngineVertexShader&&) noexcept = delete;
 	void operator=(const GameEngineVertexShader&) = delete;

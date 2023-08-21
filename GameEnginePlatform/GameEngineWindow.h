@@ -4,7 +4,6 @@
 #include <string_view>
 #include <memory>
 
-class GameEngineDC;
 class GameEngineWindow
 {
 private:
@@ -13,9 +12,7 @@ private:
 
 	HINSTANCE Hinst = nullptr;
 	HWND Hwnd = nullptr;
-	HDC Hdc = nullptr;
-	GameEngineDC* MemDc{};
-	POINT Scale{};
+	float4 Scale{};
 
 	static LRESULT CALLBACK WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp);
 public:
@@ -24,8 +21,6 @@ public:
 		std::function<void()> _Start,
 		std::function<void()> _Update,
 		std::function<void()> _Release);
-	void ClearBackBuffer();
-	void DoubleBuffering();
 
 #pragma region GetSet
 	static GameEngineWindow& GetInst()
@@ -37,27 +32,20 @@ public:
 	{
 		return Hwnd;
 	}
-	HDC GetHdc() const
-	{
-		return Hdc;
-	}
-	HDC GetMemDc() const;
 	bool IsFocus() const
 	{
 		return bFocus;
 	}
-	POINT GetScale() const
+	float4 GetScale() const
 	{
 		return Scale;
 	}
 #pragma endregion
 
-#pragma region Constructor
 	GameEngineWindow() {}
-	~GameEngineWindow();
-	GameEngineWindow(const GameEngineWindow& _Other) = delete;
-	GameEngineWindow(GameEngineWindow&& _Other) noexcept = delete;
-	GameEngineWindow& operator=(const GameEngineWindow& _Other) = delete;
-	GameEngineWindow& operator=(GameEngineWindow&& _Other) noexcept = delete;
-#pragma endregion
+	~GameEngineWindow() {}
+	GameEngineWindow(const GameEngineWindow&) = delete;
+	GameEngineWindow(GameEngineWindow&&) noexcept = delete;
+	void operator=(const GameEngineWindow&) = delete;
+	void operator=(GameEngineWindow&&) noexcept = delete;
 };

@@ -17,7 +17,7 @@ protected:
 	static std::shared_ptr<ResourcesType> CreateRes()
 	{
 		std::shared_ptr<ResourcesType> NewRes = std::make_shared<ResourcesType>();
-		UnNameRes.emplace_back(NewRes);
+		UnNameRes.push_back(NewRes);
 		return NewRes;
 	}
 	static std::shared_ptr<ResourcesType> CreateRes(std::string_view _Name)

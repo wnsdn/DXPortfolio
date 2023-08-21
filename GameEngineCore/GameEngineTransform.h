@@ -130,16 +130,14 @@ public:
 	void SetParent(GameEngineTransform& _Parent)
 	{
 		Parent = &_Parent;
-		Parent->Childs.emplace_back(this);
+		Parent->Childs.push_back(this);
 	}
 	void CalChilds();
 
-#pragma region Constructor
-	GameEngineTransform() {}
-	~GameEngineTransform() {}
-	GameEngineTransform(const GameEngineTransform& _Other) = delete;
-	GameEngineTransform(GameEngineTransform&& _Other) noexcept = delete;
-	GameEngineTransform& operator=(const GameEngineTransform& _Other) = delete;
-	GameEngineTransform& operator=(GameEngineTransform&& _Other) noexcept = delete;
-#pragma endregion
+	GameEngineTransform() = default;
+	~GameEngineTransform() = default;
+	GameEngineTransform(const GameEngineTransform&) = delete;
+	GameEngineTransform(GameEngineTransform&&) noexcept = delete;
+	void operator=(const GameEngineTransform&) = delete;
+	void operator=(GameEngineTransform&&) noexcept = delete;
 };

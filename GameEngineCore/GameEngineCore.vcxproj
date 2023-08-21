@@ -193,7 +193,11 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="GameEngineInputLayOut.cpp">
+    <ClCompile Include="GameEngineIndexBuffer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineInputLayout.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -202,6 +206,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="GameEngineObject.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEnginePixelShader.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineRasterizer.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -274,7 +286,11 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="GameEngineInputLayOut.h">
+    <ClInclude Include="GameEngineIndexBuffer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineInputLayout.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -283,6 +299,14 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="GameEngineObject.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEnginePixelShader.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineRasterizer.h">
       <SubType>
       </SubType>
     </ClInclude>

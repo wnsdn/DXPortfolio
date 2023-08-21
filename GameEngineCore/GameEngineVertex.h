@@ -1,15 +1,19 @@
 #pragma once
 #include <GameEngineBase/GameEngineMath.h>
+#include "GameEngineInputLayout.h"
 
 struct GameEngineVertex2D
 {
+	static GameEngineInputLayoutInfo VertexInfo;
+
 	float4 POSITION;
-	float4 TEXCOORD;
 	float4 COLOR;
 };
 
 struct GameEngineVertex3D
 {
+	static GameEngineInputLayoutInfo VertexInfo;
+
 	float4 POSITION;
 	float4 TEXCOORD;
 	float4 COLOR;

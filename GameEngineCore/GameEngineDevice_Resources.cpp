@@ -5,6 +5,8 @@
 #include "GameEngineVertexBuffer.h"
 #include "GameEngineShader.h"
 #include "GameEngineVertexShader.h"
+#include "GameEngineIndexBuffer.h"
+#include "GameEngineRasterizer.h"
 
 void GameEngineDevice::ResourcesInit()
 {
@@ -87,5 +89,13 @@ void GameEngineDevice::ResourcesInit()
 		};
 
 		GameEngineIndexBuffer::Create("Rect", Index);
+	}
+
+	{
+		D3D11_RASTERIZER_DESC Desc{};
+		Desc.FillMode = D3D11_FILL_SOLID;
+		Desc.CullMode = D3D11_CULL_NONE;
+		Desc.DepthClipEnable = true;
+		auto Rasterizer = GameEngineRasterizer::Create("EngineRasterizer", Desc);
 	}
 }

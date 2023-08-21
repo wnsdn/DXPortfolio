@@ -1,10 +1,9 @@
 #include "PreCompile.h"
-#include "GameEngineVertexShader.h"
+#include "GameEnginePixelShader.h"
 
-#pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
-GameEngineVertexShader::~GameEngineVertexShader()
+GameEnginePixelShader::~GameEnginePixelShader()
 {
 	if (ShaderPtr)
 	{
@@ -13,16 +12,14 @@ GameEngineVertexShader::~GameEngineVertexShader()
 	}
 }
 
-void GameEngineVertexShader::ShaderLoad(
+void GameEnginePixelShader::ShaderLoad(
 	std::string_view _Path,
 	std::string_view _EntryPoint,
 	UINT _VersionHigh,
 	UINT _VersionLow)
 {
 	std::wstring UniPath = GameEngineString::AnsiToUnicode(_Path);
-
-	CreateVersion(ShaderType::Vertex, _VersionHigh, _VersionLow);
-
+	CreateVersion(ShaderType::Pixel, _VersionHigh, _VersionLow);
 	EntryName = _EntryPoint;
 
 #ifdef _DEBUG
@@ -32,7 +29,6 @@ void GameEngineVertexShader::ShaderLoad(
 #endif
 
 	iFlag |= D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
-
 	ID3DBlob* Error = nullptr;
 
 	HRESULT Hresult = D3DCompileFromFile(
@@ -47,14 +43,12 @@ void GameEngineVertexShader::ShaderLoad(
 		&Error);
 	if (Hresult == E_FAIL)
 	{
-		std::string ErrorString =
-			reinterpret_cast<char*>(Error->GetBufferPointer());
-
+		std::string ErrorString = reinterpret_cast<char*>(Error->GetBufferPointer());
 		MsgBoxAssert(ErrorString);
 		return;
 	}
 
-	Hresult = GameEngineCore::MainDevice.GetDevice()->CreateVertexShader(
+	Hresult = GameEngineCore::MainDevice.GetDevice()->CreatePixelShader(
 		BinaryCode->GetBufferPointer(),
 		BinaryCode->GetBufferSize(),
 		nullptr,
@@ -66,7 +60,7 @@ void GameEngineVertexShader::ShaderLoad(
 	}
 }
 
-void GameEngineVertexShader::Setting()
+void GameEnginePixelShader::Setting()
 {
-	GameEngineCore::MainDevice.GetContext()->VSSetShader(ShaderPtr, nullptr, 0);
+	GameEngineCore::MainDevice.GetContext()->PSSetShader(ShaderPtr, nullptr, 0);
 }
