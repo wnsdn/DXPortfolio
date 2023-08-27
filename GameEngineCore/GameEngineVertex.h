@@ -7,7 +7,7 @@ struct GameEngineVertex2D
 	static GameEngineInputLayoutInfo VertexInfo;
 
 	float4 POSITION;
-	float4 COLOR;
+	float4 TEXCOORD;
 };
 
 struct GameEngineVertex3D

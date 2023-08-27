@@ -1,9 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineVertexShader.h"
 
-#pragma comment(lib, "d3d11")
-#pragma comment(lib, "d3dcompiler")
-
 GameEngineVertexShader::~GameEngineVertexShader()
 {
 	if (ShaderPtr)
@@ -26,7 +23,7 @@ void GameEngineVertexShader::ShaderLoad(
 	EntryName = _EntryPoint;
 
 #ifdef _DEBUG
-	int iFlag = D3D10_SHADER_DEBUG;
+	int iFlag = D3DCOMPILE_DEBUG;
 #else
 	int iFlag = 0;
 #endif
@@ -54,7 +51,7 @@ void GameEngineVertexShader::ShaderLoad(
 		return;
 	}
 
-	Hresult = GameEngineCore::MainDevice.GetDevice()->CreateVertexShader(
+	Hresult = GameEngineCore::GetDevice()->CreateVertexShader(
 		BinaryCode->GetBufferPointer(),
 		BinaryCode->GetBufferSize(),
 		nullptr,
@@ -68,5 +65,5 @@ void GameEngineVertexShader::ShaderLoad(
 
 void GameEngineVertexShader::Setting()
 {
-	GameEngineCore::MainDevice.GetContext()->VSSetShader(ShaderPtr, nullptr, 0);
+	GameEngineCore::GetContext()->VSSetShader(ShaderPtr, nullptr, 0);
 }

@@ -1,8 +1,16 @@
+#include "Transform.fx"
 
-
-// 파일명과 함수명을 일치시키고 버텍스 쉐이더면 무조건 뒤에 _VS를 붙입니다.
-// 의미있는 버텍스 쉐이더이다.
-float4 TextureShader_VS(float4 pos : POSITION) : SV_POSITION
+float4 TextureShader_VS(float4 pos : POSITION) : SV_Position
 {
-    return pos;
+    return mul(pos, WorldViewPorjectionMatrix);
+}
+
+Texture2D DiffuseTex : register(t0);
+SamplerState Sampler : register(s0);
+
+float4 TextureShader_PS(float4 pos : SV_Position) : SV_Target
+{
+    float4 Color = DiffuseTex.Sample(Sampler, float2(0, 0));
+
+    return Color;
 }

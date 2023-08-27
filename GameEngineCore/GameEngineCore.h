@@ -5,6 +5,7 @@
 #include <GameEngineBase/GameEngineString.h>
 #include <GameEngineBase/GameEngineDebug.h>
 #include "GameEngineDevice.h"
+#include <d3d11.h>
 
 class GameEngineObject;
 class GameEngineLevel;
@@ -15,6 +16,7 @@ private:
 	static std::shared_ptr<GameEngineLevel> CurLevel;
 	static std::shared_ptr<GameEngineLevel> NextLevel;
 	static std::map<std::string, std::shared_ptr<GameEngineLevel>> AllLevel;
+	static GameEngineDevice MainDevice;
 
 	static void EngineStart(HINSTANCE _Hinst, std::string_view _Name,
 		const POINT& _Pos, const POINT& _Scale);
@@ -31,8 +33,6 @@ private:
 	GameEngineCore& operator=(const GameEngineCore& _Other) = delete;
 	GameEngineCore& operator=(GameEngineCore&& _Other) noexcept = delete;
 public:
-	static GameEngineDevice MainDevice;
-
 	template <typename CoreType>
 	static void EngineStart(HINSTANCE _Hinst)
 	{
@@ -44,31 +44,41 @@ public:
 	}
 
 	template <typename LevelType>
-	static void CreateLevel(std::string_view _LevelName)
+	static void CreateLevel(const std::string& _Name)
 	{
-		std::string Upper = GameEngineString::ToUpperReturn(_LevelName);
-
-		if (AllLevel.find(Upper) != AllLevel.end())
+		if (AllLevel.find(_Name) != AllLevel.end())
 		{
-			MsgBoxAssert(Upper + "Already Exist");
+			MsgBoxAssert(_Name + "Already Exist");
 			return;
 		}
 
-		std::shared_ptr<GameEngineLevel> NewLevel = std::make_shared<LevelType>();
+		auto NewLevel = std::make_shared<LevelType>();
 		LevelInit(NewLevel);
-		AllLevel.emplace(Upper, NewLevel);
+		AllLevel.emplace(_Name, NewLevel);
 	}
-	static void ChangeLevel(std::string_view _LevelName)
+	static void ChangeLevel(const std::string& _Name)
 	{
-		std::string Upper = GameEngineString::ToUpperReturn(_LevelName);
-		auto FindIter = AllLevel.find(Upper);
+		auto FindIter = AllLevel.find(_Name);
 
 		if (FindIter == AllLevel.end())
 		{
-			MsgBoxAssert(Upper + "Not Exist");
+			MsgBoxAssert(_Name + "Not Exist");
 			return;
 		}
 
 		NextLevel = FindIter->second;
+	}
+
+	static ID3D11Device* GetDevice()
+	{
+		return MainDevice.GetDevice();
+	}
+	static ID3D11DeviceContext* GetContext()
+	{
+		return MainDevice.GetContext();
+	}
+	static std::shared_ptr<GameEngineRenderTarget> GetBackBufferRenderTarget()
+	{
+		return MainDevice.GetBackBufferRenderTarget();
 	}
 };

@@ -1,33 +1,60 @@
 #pragma once
 #include "GameEngineResources.h"
 
+#include "..\\GameEngineCore\\ThirdParty\\DirectXTex\\inc\\DirectXTex.h"
+
 class GameEngineTexture : public GameEngineResources<GameEngineTexture>
 {
 private:
-	struct ID3D11Texture2D* Texture2D = nullptr;
-	struct ID3D11RenderTargetView* RTV = nullptr;
-protected:
+	D3D11_TEXTURE2D_DESC Desc;
+
+	ID3D11Texture2D* Texture2D = nullptr;
+
+	ID3D11RenderTargetView* RTV = nullptr;
+	ID3D11ShaderResourceView* SRV = nullptr;
+
+	DirectX::TexMetadata Data;
+	DirectX::ScratchImage Image;
+
+	void ResLoad(std::string_view _Path);
 public:
-	static std::shared_ptr<GameEngineTexture> Create(struct ID3D11Texture2D* _Res)
+	static std::shared_ptr<GameEngineTexture> Create(ID3D11Texture2D* _Res)
 	{
-		std::shared_ptr<GameEngineTexture> NewRes = CreateRes();
+		auto NewRes = CreateRes();
 		NewRes->Texture2D = _Res;
 		return NewRes;
 	}
 
-	struct ID3D11RenderTargetView* GetRTV() const
+	static std::shared_ptr<GameEngineTexture> Load(std::string_view _Path, std::string_view _Name)
+	{
+		auto NewRes = CreateRes(_Name);
+		NewRes->ResLoad(_Path);
+		return NewRes;
+	}
+
+	ID3D11RenderTargetView* GetRTV() const
 	{
 		return RTV;
+	}
+	ID3D11ShaderResourceView* GetSRV() const
+	{
+		return SRV;
+	}
+
+	float4 GetScale()
+	{
+		return { static_cast<float>(Desc.Width), static_cast<float>(Desc.Height) };
 	}
 
 	void CreateRenderTargetView();
 
-#pragma region Constructor
+	void VSSetting(UINT _Slot);
+	void PSSetting(UINT _Slot);
+
 	GameEngineTexture() {}
 	~GameEngineTexture();
 	GameEngineTexture(const GameEngineTexture&) = delete;
 	GameEngineTexture(GameEngineTexture&&) noexcept = delete;
-	GameEngineTexture& operator=(const GameEngineTexture&) = delete;
-	GameEngineTexture& operator=(GameEngineTexture&&) noexcept = delete;
-#pragma endregion
+	void operator=(const GameEngineTexture&) = delete;
+	void operator=(GameEngineTexture&&) noexcept = delete;
 };

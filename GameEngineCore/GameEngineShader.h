@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-#include <d3d11.h>
 
 enum class ShaderType
 {

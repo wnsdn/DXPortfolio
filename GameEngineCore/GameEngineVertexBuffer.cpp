@@ -1,9 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineVertexBuffer.h"
 
-#include <d3d11.h>
-#pragma comment(lib, "d3d11")
-
 void GameEngineVertexBuffer::ResCreate(const void* _Data, size_t _VertexSize, size_t _VertexCount)
 {
 	VertexSize = static_cast<UINT>(_VertexSize);
@@ -17,7 +14,7 @@ void GameEngineVertexBuffer::ResCreate(const void* _Data, size_t _VertexSize, si
 	BufferInfo.CPUAccessFlags = 0;
 	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
 
-	HRESULT Hresult = GameEngineCore::MainDevice.GetDevice()->
+	HRESULT Hresult = GameEngineCore::GetDevice()->
 		CreateBuffer(&BufferInfo, &Data, &Buffer);
 	if (Hresult == E_FAIL)
 	{
@@ -34,6 +31,6 @@ void GameEngineVertexBuffer::Setting()
 		return;
 	}
 
-	GameEngineCore::MainDevice.GetContext()->
+	GameEngineCore::GetContext()->
 		IASetVertexBuffers(0, 1, &Buffer, &VertexSize, &Offset);
 }

@@ -1,9 +1,11 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
 
+class GameEngineSpriteRenderer;
 class Player : public GameEngineActor
 {
 private:
+	std::shared_ptr<GameEngineSpriteRenderer> Renderer0;
 protected:
 	void Start() override;
 	void Update(float _Delta) override;

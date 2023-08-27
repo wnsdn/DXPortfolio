@@ -1,6 +1,5 @@
 #pragma once
 #include <filesystem>
-#include <string_view>
 
 class GameEnginePath
 {
@@ -13,7 +12,18 @@ public:
 	{
 		return Path.string();
 	}
+	std::string GetExtension() const
+	{
+		return Path.extension().string();
+	}
+	std::string GetFilename() const
+	{
+		return Path.filename().string();
+	}
 
-	GameEnginePath() = default;
-	GameEnginePath(const std::filesystem::path& _Path) : Path(_Path) {}
+	GameEnginePath() {}
+	GameEnginePath(std::string_view _Path)
+		: Path(_Path) {}
+	GameEnginePath(const std::filesystem::path& _Path)
+		: Path(_Path) {}
 };

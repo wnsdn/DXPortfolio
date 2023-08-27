@@ -5,41 +5,21 @@
 #include "GameEngineTexture.h"
 #include "GameEngineRenderTarget.h"
 
-#pragma comment(lib, "d3d11")
-
 GameEngineDevice::~GameEngineDevice()
 {
-	if (Device)
-	{
-		Device->Release();
-		Device = nullptr;
-	}
-	if (Context)
-	{
-		Context->Release();
-		Context = nullptr;
-	}
-	if (SwapChain)
-	{
-		SwapChain->Release();
-		SwapChain = nullptr;
-	}
+	SafeRelease(Device);
+	SafeRelease(Context);
+	SafeRelease(SwapChain);
 
 	CoUninitialize();
 }
 
 void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 {
-	HRESULT Hresult = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-	if (Hresult == E_FAIL)
+	auto HR = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	if (FAILED(HR))
 	{
-		MsgBoxAssert(__FUNCTION__);
-		return;
-	}
-
-	if (!_Window.GetHwnd())
-	{
-		MsgBoxAssert(__FUNCTION__);
+		MsgBoxAssert("COINIT Failed");
 		return;
 	}
 
@@ -50,48 +30,41 @@ void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 #endif
 
 	float4 WindowScale = _Window.GetInst().GetScale();
+	DXGI_SWAP_CHAIN_DESC Desc{};
+	Desc.BufferDesc.Width = static_cast<UINT>(WindowScale.X);
+	Desc.BufferDesc.Height = static_cast<UINT>(WindowScale.Y);
+	Desc.BufferDesc.RefreshRate.Numerator = 60;
+	Desc.BufferDesc.RefreshRate.Denominator = 1;
+	Desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	Desc.SampleDesc.Count = 1;
+	Desc.SampleDesc.Quality = 0;
+	Desc.BufferCount = 2;
+	Desc.OutputWindow = _Window.GetHwnd();
+	Desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
+	Desc.Windowed = true;
+	Desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	Desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
-	SwapChainDesc.BufferDesc.Width = static_cast<UINT>(WindowScale.X);
-	SwapChainDesc.BufferDesc.Height = static_cast<UINT>(WindowScale.Y);
-	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	SwapChainDesc.SampleDesc.Count = 1;
-	SwapChainDesc.SampleDesc.Quality = 0;
-	SwapChainDesc.BufferCount = 2;
-	SwapChainDesc.OutputWindow = _Window.GetHwnd();
-	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
-	SwapChainDesc.Windowed = true;
-	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
-	Hresult = D3D11CreateDeviceAndSwapChain(
-		nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, iFlag,
-		nullptr, 0, D3D11_SDK_VERSION, &SwapChainDesc,
-		&SwapChain, &Device, nullptr, &Context);
-	if (Hresult == E_FAIL)
-	{
-		MsgBoxAssert(__FUNCTION__);
-		return;
-	}
-	if (Device->GetFeatureLevel() != D3D_FEATURE_LEVEL_11_0)
-	{
-		MsgBoxAssert(__FUNCTION__);
-		return;
-	}
+	D3D11CreateDeviceAndSwapChain(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		iFlag,
+		nullptr,
+		0,
+		D3D11_SDK_VERSION,
+		&Desc,
+		&SwapChain,
+		&Device,
+		nullptr,
+		&Context);
 
 	ID3D11Texture2D* DXBackBufferTexture = nullptr;
-	Hresult = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-		reinterpret_cast<void**>(&DXBackBufferTexture));
-	if (Hresult == E_FAIL)
-	{
-		MsgBoxAssert(__FUNCTION__);
-		return;
-	}
+	SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&DXBackBufferTexture));
 
 	BackBufferTexture = GameEngineTexture::Create(DXBackBufferTexture);
 	BackBufferRenderTarget = GameEngineRenderTarget::Create(BackBufferTexture);
+
 	ResourcesInit();
 }
 
@@ -103,7 +76,7 @@ void GameEngineDevice::RenderStart()
 	}
 
 	BackBufferRenderTarget->Clear();
-	BackBufferRenderTarget->Setting();
+	//BackBufferRenderTarget->Setting();
 }
 
 void GameEngineDevice::RenderEnd()
@@ -113,8 +86,8 @@ void GameEngineDevice::RenderEnd()
 		return;
 	}
 
-	HRESULT Result = SwapChain->Present(0, 0);
-	if (Result == DXGI_ERROR_DEVICE_REMOVED || Result == DXGI_ERROR_DEVICE_RESET)
+	auto HR = SwapChain->Present(0, 0);
+	if (HR == DXGI_ERROR_DEVICE_REMOVED || HR == DXGI_ERROR_DEVICE_RESET)
 	{
 		MsgBoxAssert(__FUNCTION__);
 		return;

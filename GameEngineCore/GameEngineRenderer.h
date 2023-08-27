@@ -12,6 +12,8 @@ private:
 protected:
 	void Start();
 	virtual void Render(GameEngineCamera* _Camera, float _Delta);
+	void ResSetting();
+	void Draw();
 public:
 	void SetViewCameraSelect(int _Order);
 

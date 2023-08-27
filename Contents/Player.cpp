@@ -2,31 +2,36 @@
 #include "Player.h"
 
 #include <GameEngineCore/GameEngineRenderer.h>
+#include <GameEngineCore/GameEngineSpriteRenderer.h>
+#include <GameEngineCore/GameEngineTexture.h>
 
 void Player::Start()
 {
-	std::shared_ptr<GameEngineRenderer> Renderer = nullptr;
+	Renderer0 = CreateComponent<GameEngineSpriteRenderer>(0);
+	Renderer0->SetSprite("NSet.png");
 
-	Renderer = CreateComponent<GameEngineRenderer>(0);
-	Renderer->Transform.SetLocalPosition({ 0, 150, 0 });
-	Renderer->Transform.SetLocalScale({ 50, 50, 100 });
+	{
+		auto Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
+		Renderer->Transform.SetLocalPosition({ 0, -150, 0 });
+		Renderer->Transform.SetLocalScale({ 50, 50, 100 });
+	}
 
-	Renderer = CreateComponent<GameEngineRenderer>(0);
-	Renderer->Transform.SetLocalPosition({ 0, -150, 0 });
-	Renderer->Transform.SetLocalScale({ 50, 50, 100 });
+	{
+		auto Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
+		Renderer->Transform.SetLocalPosition({ -150, 0, 0 });
+		Renderer->Transform.SetLocalScale({ 50, 50, 100 });
+	}
 
-	Renderer = CreateComponent<GameEngineRenderer>(0);
-	Renderer->Transform.SetLocalPosition({ -150, 0, 0 });
-	Renderer->Transform.SetLocalScale({ 50, 50, 100 });
-
-	Renderer = CreateComponent<GameEngineRenderer>(0);
-	Renderer->Transform.SetLocalPosition({ 150, 0, 0 });
-	Renderer->Transform.SetLocalScale({ 50, 50, 100 });
+	{
+		auto Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
+		Renderer->Transform.SetLocalPosition({ 150, 0, 0 });
+		Renderer->Transform.SetLocalScale({ 50, 50, 100 });
+	}
 }
 
 void Player::Update(float _Delta)
 {
-	float Speed = 100.0f;
+	float Speed = 150.0f;
 
 	if (GameEngineInput::IsPress('A'))
 	{

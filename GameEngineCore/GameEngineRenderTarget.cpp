@@ -1,15 +1,11 @@
 #include "PreCompile.h"
 #include "GameEngineRenderTarget.h"
 
-#include "GameEngineCore.h"
-#include <d3d11.h>
-#pragma comment	(lib, "d3d11")
-
 void GameEngineRenderTarget::Clear()
 {
 	for (int i = 0; i < RTV.size(); ++i)
 	{
-		GameEngineCore::MainDevice.GetContext()->ClearRenderTargetView(
+		GameEngineCore::GetContext()->ClearRenderTargetView(
 			RTV[i], ClearColor[i]);
 	}
 }
@@ -22,6 +18,6 @@ void GameEngineRenderTarget::Setting()
 		return;
 	}
 
-	GameEngineCore::MainDevice.GetContext()->
+	GameEngineCore::GetContext()->
 		OMSetRenderTargets(static_cast<UINT>(RTV.size()), &RTV[0], nullptr);
 }

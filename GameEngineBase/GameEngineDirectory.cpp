@@ -27,3 +27,22 @@ std::vector<GameEngineFile> GameEngineDirectory::GetAllFile(std::vector<std::str
 
 	return Result;
 }
+
+std::vector<GameEngineFile> GameEngineDirectory::GetAllTextureFile()
+{
+	Path.append("Texture");
+	std::filesystem::directory_iterator DirIter{ Path };
+
+	std::vector<GameEngineFile> Result;
+	for (const auto& Entry : DirIter)
+	{
+		if (Entry.is_directory())
+		{
+			continue;
+		}
+
+		Result.push_back(Entry.path());
+	}
+
+	return Result;
+}

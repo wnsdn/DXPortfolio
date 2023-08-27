@@ -13,7 +13,7 @@ GameEngineRasterizer::~GameEngineRasterizer()
 void GameEngineRasterizer::ResCreate(const D3D11_RASTERIZER_DESC& _Desc)
 {
 	Desc = _Desc;
-	if (GameEngineCore::MainDevice.GetDevice()->CreateRasterizerState(&_Desc, &State) == E_FAIL)
+	if (GameEngineCore::GetDevice()->CreateRasterizerState(&_Desc, &State) == E_FAIL)
 	{
 		MsgBoxAssert("레스터라이저 세팅을 만드는데 실패했습니다.");
 		return;
@@ -28,5 +28,5 @@ void GameEngineRasterizer::Setting()
 		return;
 	}
 
-	GameEngineCore::MainDevice.GetContext()->RSSetState(State);
+	GameEngineCore::GetContext()->RSSetState(State);
 }

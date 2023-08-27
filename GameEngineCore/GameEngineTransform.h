@@ -134,6 +134,11 @@ public:
 	}
 	void CalChilds();
 
+	float4x4 GetWorldViewProjectionMatrix()
+	{
+		return TransData.WorldViewProjectionMatrix;
+	}
+
 	GameEngineTransform() = default;
 	~GameEngineTransform() = default;
 	GameEngineTransform(const GameEngineTransform&) = delete;

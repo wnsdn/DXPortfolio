@@ -1,8 +1,4 @@
 #pragma once
-#include <string>
-#include <memory>
-#include <GameEngineBase/GameEnginePath.h>
-#include <GameEngineBase/GameEngineString.h>
 
 template <typename ResourcesType>
 class GameEngineResources
@@ -10,39 +6,36 @@ class GameEngineResources
 private:
 	static std::map<std::string, std::shared_ptr<ResourcesType>> NameRes;
 	static std::list<std::shared_ptr<ResourcesType>> UnNameRes;
-
+protected:
 	std::string Name{};
 	GameEnginePath Path{};
 protected:
 	static std::shared_ptr<ResourcesType> CreateRes()
 	{
-		std::shared_ptr<ResourcesType> NewRes = std::make_shared<ResourcesType>();
+		auto NewRes = std::make_shared<ResourcesType>();
 		UnNameRes.push_back(NewRes);
 		return NewRes;
 	}
 	static std::shared_ptr<ResourcesType> CreateRes(std::string_view _Name)
 	{
-		std::string Upper = GameEngineString::ToUpperReturn(_Name);
-		std::shared_ptr<ResourcesType> NewRes = std::make_shared<ResourcesType>();
-		NewRes->Name = Upper;
-		NameRes.emplace(Upper, NewRes);
-
+		auto NewRes = std::make_shared<ResourcesType>();
+		NewRes->Name = _Name;
+		NameRes.emplace(_Name, NewRes);
 		return NewRes;
 	}
-	static std::shared_ptr<ResourcesType> CreateRes(std::string_view _Name,
+	static std::shared_ptr<ResourcesType> CreateRes(
+		std::string_view _Name,
 		std::string_view _Path)
 	{
-		std::string Upper = GameEngineString::ToUpperReturn(_Name);
-		std::shared_ptr<ResourcesType> NewRes = std::make_shared<ResourcesType>(ResourcesType);
+		auto NewRes = std::make_shared<ResourcesType>(ResourcesType);
+		NewRes->Name = _Name;
 		NewRes->Path = _Path;
-		NewRes->Name = Upper;
-		NameRes.emplace(Upper, NewRes);
+		NameRes.emplace(_Name, NewRes);
 	}
 public:
-	static std::shared_ptr<ResourcesType> Find(std::string_view _Name)
+	static std::shared_ptr<ResourcesType> Find(const std::string& _Name)
 	{
-		std::string Upper = GameEngineString::ToUpperReturn(_Name);
-		auto FindIter = NameRes.find(Upper);
+		auto FindIter = NameRes.find(_Name);
 
 		if (FindIter == NameRes.end())
 		{
@@ -52,14 +45,17 @@ public:
 		return FindIter->second;
 	}
 
-#pragma region Constructor
+	void SetName(std::string_view _Name)
+	{
+		Name = _Name;
+	}
+
 	GameEngineResources() {}
 	~GameEngineResources() {}
 	GameEngineResources(const GameEngineResources&) = delete;
 	GameEngineResources(GameEngineResources&&) noexcept = delete;
-	GameEngineResources& operator=(const GameEngineResources&) = delete;
-	GameEngineResources& operator=(GameEngineResources&&) noexcept = delete;
-#pragma endregion
+	void operator=(const GameEngineResources&) = delete;
+	void operator=(GameEngineResources&&) noexcept = delete;
 };
 
 template <typename ResourcesType>

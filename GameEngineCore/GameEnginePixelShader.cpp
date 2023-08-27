@@ -1,8 +1,6 @@
 #include "PreCompile.h"
 #include "GameEnginePixelShader.h"
 
-#pragma comment(lib, "d3dcompiler")
-
 GameEnginePixelShader::~GameEnginePixelShader()
 {
 	if (ShaderPtr)
@@ -48,7 +46,7 @@ void GameEnginePixelShader::ShaderLoad(
 		return;
 	}
 
-	Hresult = GameEngineCore::MainDevice.GetDevice()->CreatePixelShader(
+	Hresult = GameEngineCore::GetDevice()->CreatePixelShader(
 		BinaryCode->GetBufferPointer(),
 		BinaryCode->GetBufferSize(),
 		nullptr,
@@ -62,5 +60,5 @@ void GameEnginePixelShader::ShaderLoad(
 
 void GameEnginePixelShader::Setting()
 {
-	GameEngineCore::MainDevice.GetContext()->PSSetShader(ShaderPtr, nullptr, 0);
+	GameEngineCore::GetContext()->PSSetShader(ShaderPtr, nullptr, 0);
 }

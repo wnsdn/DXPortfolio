@@ -50,10 +50,10 @@ void GameEngineCamera::Render(float _Delta)
 
 	for (auto& Pair : Renderers)
 	{
-		for (auto Renderer : Pair.second)
+		for (auto& Renderer : Pair.second)
 		{
-			Renderer->Transform.CalculationViewAndProjection
-			(Transform.GetConstTransformDataRef());
+			Renderer->Transform.CalculationViewAndProjection(
+				Transform.GetConstTransformDataRef());
 			Renderer->Render(this, _Delta);
 		}
 	}

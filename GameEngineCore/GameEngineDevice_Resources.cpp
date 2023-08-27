@@ -5,97 +5,72 @@
 #include "GameEngineVertexBuffer.h"
 #include "GameEngineShader.h"
 #include "GameEngineVertexShader.h"
+#include "GameEngineInputLayout.h"
 #include "GameEngineIndexBuffer.h"
+#include "GameEngineTransform.h"
+#include "GameEngineConstantBuffer.h"
 #include "GameEngineRasterizer.h"
+#include "GameEngineSampler.h"
+#include "GameEngineTexture.h"
 
 void GameEngineDevice::ResourcesInit()
 {
+	std::vector<GameEngineVertex2D>Vertex
 	{
-		GameEngineDirectory Dir;
-		Dir.SetPath("GameEngineCoreShader");
-		std::vector<GameEngineFile> Files = Dir.GetAllFile({ ".fx" });
+		{{-0.5f, -0.5f, 0.0f, 1.0f},{0.0f, 0.0f}},
+		{{0.5f, -0.5f, 0.0f, 1.0f},{1.0f, 0.0f}},
+		{{0.5f, 0.5f, 0.0f, 1.0f},{1.0f, 1.0f}},
+		{{-0.5f, 0.5f, 0.0f, 1.0f},{0.0f, 1.0f}}
+	};
+	GameEngineVertexBuffer::Create("Rect", Vertex);
 
-		for (auto& File : Files)
-		{
-			GameEngineShader::AutoCompile(File);
-		}
+	GameEngineDirectory Directory;
+	Directory.SetPath("GameEngineCoreShader");
+	std::vector<GameEngineFile> Files = Directory.GetAllFile({ ".fx" });
+	for (auto& File : Files)
+	{
+		GameEngineShader::AutoCompile(File);
 	}
 
+	Directory.SetPath("GameEngineResources");
+	std::vector<GameEngineFile> TFiles = Directory.GetAllTextureFile();
+	for (auto& File : TFiles)
 	{
-		std::vector<GameEngineVertex2D> Vertex;
-		Vertex.resize(4 * 6);
-
-		GameEngineVertex2D BaseVertexs[4];
-
-		BaseVertexs[0] = { { -0.5f, -0.5f, -0.5f, 1.0f } };
-		BaseVertexs[1] = { { 0.5f, -0.5f, -0.5f, 1.0f } };
-		BaseVertexs[2] = { { 0.5f, 0.5f, -0.5f, 1.0f } };
-		BaseVertexs[3] = { { -0.5f, 0.5f, -0.5f, 1.0f } };
-
-		// 앞면
-		Vertex[0] = BaseVertexs[0];
-		Vertex[1] = BaseVertexs[1];
-		Vertex[2] = BaseVertexs[2];
-		Vertex[3] = BaseVertexs[3];
-
-		// 뒷면
-		Vertex[4].POSITION = BaseVertexs[0].POSITION.RotateReturn({ 180.0f });
-		Vertex[5].POSITION = BaseVertexs[1].POSITION.RotateReturn({ 180.0f });
-		Vertex[6].POSITION = BaseVertexs[2].POSITION.RotateReturn({ 180.0f });
-		Vertex[7].POSITION = BaseVertexs[3].POSITION.RotateReturn({ 180.0f });
-
-		// 왼쪽이나 오른쪽
-		Vertex[8].POSITION = BaseVertexs[0].POSITION.RotateReturn({ 0.0f, 90.0f });
-		Vertex[9].POSITION = BaseVertexs[1].POSITION.RotateReturn({ 0.0f, 90.0f });
-		Vertex[10].POSITION = BaseVertexs[2].POSITION.RotateReturn({ 0.0f, 90.0f });
-		Vertex[11].POSITION = BaseVertexs[3].POSITION.RotateReturn({ 0.0f, 90.0f });
-
-		// 왼쪽이나 오른쪽
-		Vertex[12].POSITION = BaseVertexs[0].POSITION.RotateReturn({ 0.0f, 90.0f });
-		Vertex[13].POSITION = BaseVertexs[1].POSITION.RotateReturn({ 0.0f, 90.0f });
-		Vertex[14].POSITION = BaseVertexs[2].POSITION.RotateReturn({ 0.0f, 90.0f });
-		Vertex[15].POSITION = BaseVertexs[3].POSITION.RotateReturn({ 0.0f, 90.0f });
-
-		// 위거나 아래
-		Vertex[16].POSITION = BaseVertexs[0].POSITION.RotateReturn({ 90.0f });
-		Vertex[17].POSITION = BaseVertexs[1].POSITION.RotateReturn({ 90.0f });
-		Vertex[18].POSITION = BaseVertexs[2].POSITION.RotateReturn({ 90.0f });
-		Vertex[19].POSITION = BaseVertexs[3].POSITION.RotateReturn({ 90.0f });
-
-		Vertex[20].POSITION = BaseVertexs[0].POSITION.RotateReturn({ -90.0f });
-		Vertex[21].POSITION = BaseVertexs[1].POSITION.RotateReturn({ -90.0f });
-		Vertex[22].POSITION = BaseVertexs[2].POSITION.RotateReturn({ -90.0f });
-		Vertex[23].POSITION = BaseVertexs[3].POSITION.RotateReturn({ -90.0f });
-
-		GameEngineVertexBuffer::Create("Box", Vertex);
+		GameEngineTexture::Load(File.ToString(), File.GetFilename());
 	}
 
-	{
-		std::vector<GameEngineVertex2D> Vertex;
-		Vertex.resize(4);
+	//IL
 
-		GameEngineVertex2D BaseVertexs[4];
+	std::vector<unsigned int> Index{ 0, 1, 2, 2, 3, 0 };
+	GameEngineIndexBuffer::Create("Rect", Index);
 
-		BaseVertexs[0] = { { -0.5f, -0.5f, -0.5f, 1.0f } };
-		BaseVertexs[1] = { { 0.5f, -0.5f, -0.5f, 1.0f } };
-		BaseVertexs[2] = { { 0.5f, 0.5f, -0.5f, 1.0f } };
-		BaseVertexs[3] = { { -0.5f, 0.5f, -0.5f, 1.0f } };
+	GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData", ShaderType::Vertex, 0);
 
-		GameEngineVertexBuffer::Create("Rect", Vertex);
+	//IA
 
-		std::vector<unsigned int> Index =
-		{
-			0, 1, 2, 0, 2, 3
-		};
+	//VS
+	//VS
 
-		GameEngineIndexBuffer::Create("Rect", Index);
-	}
+	D3D11_RASTERIZER_DESC Desc{};
+	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+	GameEngineRasterizer::Create("RasterizerState", Desc);
 
-	{
-		D3D11_RASTERIZER_DESC Desc{};
-		Desc.FillMode = D3D11_FILL_SOLID;
-		Desc.CullMode = D3D11_CULL_NONE;
-		Desc.DepthClipEnable = true;
-		auto Rasterizer = GameEngineRasterizer::Create("EngineRasterizer", Desc);
-	}
+	//PS
+
+	//OM
+
+	D3D11_SAMPLER_DESC DescS{};
+	DescS.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	DescS.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	DescS.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	DescS.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+
+	DescS.MipLODBias = 0.0f;
+	DescS.MaxAnisotropy = 1;
+	DescS.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	DescS.MinLOD = -FLT_MAX;
+	DescS.MaxLOD = FLT_MAX;
+
+	auto Sampler = GameEngineSampler::Create("Sampler", DescS);
 }

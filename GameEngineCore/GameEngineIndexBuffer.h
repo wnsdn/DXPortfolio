@@ -1,5 +1,4 @@
 #pragma once
-#include "GameEngineResources.h"
 #include "GameEngineDirectBuffer.h"
 
 class GameEngineInputLayoutInfo;
@@ -26,6 +25,11 @@ public:
 	}
 
 	void Setting();
+
+	int GetIndexCount() const
+	{
+		return IndexCount;
+	}
 
 	GameEngineIndexBuffer() {}
 	~GameEngineIndexBuffer() {}

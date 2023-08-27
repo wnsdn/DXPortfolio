@@ -1,6 +1,4 @@
 #pragma once
-#include <Windows.h>
-
 #include <DirectXMath.h>
 
 struct float4x4;

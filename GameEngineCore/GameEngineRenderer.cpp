@@ -8,6 +8,7 @@
 #include "GameEngineVertexShader.h"
 #include "GameEngineInputLayOut.h"
 #include "GameEngineIndexBuffer.h"
+#include "GameEngineConstantBuffer.h"
 #include "GameEngineRasterizer.h"
 #include "GameEnginePixelShader.h"
 #include "GameEngineRenderTarget.h"
@@ -19,66 +20,53 @@ void GameEngineRenderer::Start()
 
 void GameEngineRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 {
-	{
-		auto VB = GameEngineVertexBuffer::Find("Rect");
-		if (VB)
-		{
-			VB->Setting();
-		}
+	ResSetting();
+	Draw();
+}
 
-		auto VS = GameEngineVertexShader::Find("ColorShader_VS");
-		if (VS)
-		{
-			VS->Setting();
-		}
+void GameEngineRenderer::ResSetting()
+{
+	auto VB = GameEngineVertexBuffer::Find("Rect");
+	auto VS = GameEngineVertexShader::Find("ColorShader_VS");
+	auto IB = GameEngineIndexBuffer::Find("Rect");
+	auto CB = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData");
+	auto RS = GameEngineRasterizer::Find("RasterizerState");
+	auto PS = GameEnginePixelShader::Find("TextureShader_PS");
+	auto RTV = GameEngineCore::GetBackBufferRenderTarget();
 
-		if (VS && VB && !Layout)
-		{
-			Layout = std::make_shared<GameEngineInputLayout>();
-			Layout->ResCreate(VB, VS);
-		}
+	VB->Setting();
+	GameEngineInputLayout IL;
+	IL.ResCreate(VB, VS);
+	IL.Setting();
+	IB->Setting();
+	GameEngineCore::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		if (Layout)
-		{
-			Layout->Setting();
-		}
+	VS->Setting();
 
-		auto IB = GameEngineIndexBuffer::Find("Rect");
-		if (IB)
-		{
-			IB->Setting();
-		}
+	auto& TD = Transform.GetConstTransformDataRef();
+	CB->ChangeData(TD);
+	CB->Setting();
 
-		GameEngineCore::MainDevice.GetContext()->IASetPrimitiveTopology(
-			D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	D3D11_VIEWPORT Viewport{};
+	Viewport.TopLeftX = 0;
+	Viewport.TopLeftY = 0;
+	Viewport.Width = GameEngineWindow::GetInst().GetScale().X;
+	Viewport.Height = GameEngineWindow::GetInst().GetScale().Y;
+	Viewport.MaxDepth = 1;
+	Viewport.MinDepth = 0;
+	GameEngineCore::GetContext()->RSSetViewports(1, &Viewport);
+	RS->Setting();
 
-		D3D11_VIEWPORT ViewPort{};
-		ViewPort.Width = GameEngineWindow::GetInst().GetScale().X;
-		ViewPort.Width = GameEngineWindow::GetInst().GetScale().Y;
-		ViewPort.MinDepth = 0.0f;
-		ViewPort.MaxDepth = 1.0f;
-		ViewPort.TopLeftX = 0.0f;
-		ViewPort.TopLeftY = 0.0f;
-		GameEngineCore::MainDevice.GetContext()->RSSetViewports(1, &ViewPort);
+	PS->Setting();
 
-		auto Rasterizer = GameEngineRasterizer::Find("EngineRasterizer");
-		if (Rasterizer)
-		{
-			Rasterizer->Setting();
-		}
+	RTV->Setting();
+}
 
-		auto PixelShader = GameEnginePixelShader::Find("ColorShader_PS");
-		if (PixelShader)
-		{
-			PixelShader->Setting();
-		}
+void GameEngineRenderer::Draw()
+{
+	auto IB = GameEngineIndexBuffer::Find("Rect");
 
-		auto BackBufferRenderTarget = GameEngineCore::MainDevice.GetBackBufferRenderTarget();
-		if (BackBufferRenderTarget)
-		{
-			BackBufferRenderTarget->Setting();
-		}
-	}
+	GameEngineCore::GetContext()->DrawIndexed(IB->GetIndexCount(), 0, 0);
 }
 
 void GameEngineRenderer::SetViewCameraSelect(int _Order)

@@ -1,8 +1,6 @@
 #pragma once
 #include "GameEngineShader.h"
 #include "GameEngineResources.h"
-#include <d3d11.h>
-#include <d3dcompiler.h>
 
 class GameEngineVertexShader
 	: public GameEngineResources<GameEngineVertexShader>

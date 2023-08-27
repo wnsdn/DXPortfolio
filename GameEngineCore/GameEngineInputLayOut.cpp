@@ -1,9 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineInputLayout.h"
 
-#include <d3d11.h>
-#pragma comment(lib, "d3d11")
-
 UINT GameEngineInputLayoutInfo::FormatSize(DXGI_FORMAT _Format)
 {
 	switch (_Format)
@@ -74,7 +71,7 @@ void GameEngineInputLayout::ResCreate(
 {
 	auto& Infos = _Buffer->VertexInfoPtr->Infos;
 
-	GameEngineCore::MainDevice.GetDevice()->CreateInputLayout(
+	GameEngineCore::GetDevice()->CreateInputLayout(
 		&Infos[0],
 		static_cast<UINT>(Infos.size()),
 		_Shader->BinaryCode->GetBufferPointer(),
@@ -95,5 +92,5 @@ void GameEngineInputLayout::Setting()
 		return;
 	}
 
-	GameEngineCore::MainDevice.GetContext()->IASetInputLayout(Layout);
+	GameEngineCore::GetContext()->IASetInputLayout(Layout);
 }

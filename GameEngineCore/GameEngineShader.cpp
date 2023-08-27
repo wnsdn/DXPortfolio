@@ -1,8 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineShader.h"
 
-#include <GameEngineBase/GameEngineFile.h>
-
 void GameEngineShader::CreateVersion(ShaderType _Type, UINT _VersionHigh,
 	UINT _VersionLow)
 {

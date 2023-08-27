@@ -4,4 +4,7 @@
     <FxCompile Include="ColorShader.fx" />
     <FxCompile Include="TextureShader.fx" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Transform.fx" />
+  </ItemGroup>
 </Project>
