@@ -8,6 +8,8 @@ private:
 	std::shared_ptr<GameEngineSprite> Sprite;
 	SpriteData CurSprite;
 protected:
+	int Index = 0;
+
 	void Render(GameEngineCamera* _Camera, float _Delta) override;
 public:
 	void SetSprite(std::string_view _Name, unsigned int _Index = 0);

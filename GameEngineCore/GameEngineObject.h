@@ -15,6 +15,7 @@ protected:
 	int UpdateOrder = 0;
 	bool bUpdate = true;
 	bool bDeath = false;
+
 	GameEngineObject* Parent = nullptr;
 	std::map<int, std::list<std::shared_ptr<GameEngineObject>>> Childs;
 public:
@@ -23,7 +24,11 @@ public:
 	virtual void Start() {}
 	virtual void Update(float _Delta) {}
 	virtual void Release() {}
+	virtual void LevelStart(GameEngineLevel* _PrevLevel) {}
+	virtual void LevelEnd(GameEngineLevel* _NextLevel) {}
 
+	void AllLevelStart(GameEngineLevel* _PrevLevel);
+	void AllLevelEnd(GameEngineLevel* _NextLevel);
 	virtual void AllUpdate(float _Delta);
 
 	template <typename ConvertType>

@@ -30,6 +30,15 @@ struct float4//Vector
 			float Z;
 			float W;
 		};
+
+		struct
+		{
+			float Pos2DX;
+			float Pos2DY;
+			float Scale2DX;
+			float Scale2DY;
+		};
+
 		DirectX::XMVECTOR Vector;
 	};
 

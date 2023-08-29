@@ -16,8 +16,10 @@ PixelOutput TextureShader_VS(GameEngineVertex2D _Input)
 {
     PixelOutput Result = (PixelOutput) 0;
 
-    Result.POSITION = mul(_Input.POSITION, WorldViewPorjectionMatrix);
-    Result.TEXCOORD = _Input.TEXCOORD;
+    Result.POSITION = mul(_Input.POSITION, WorldViewProjectionMatrix);
+    
+    Result.TEXCOORD.x = (_Input.TEXCOORD.x * Scale2DX) + Pos2DX;
+    Result.TEXCOORD.y = (_Input.TEXCOORD.y * Scale2DY) + Pos2DY;
     
     return Result;
 }

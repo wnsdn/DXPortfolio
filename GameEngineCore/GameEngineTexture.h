@@ -43,7 +43,7 @@ public:
 
 	float4 GetScale()
 	{
-		return { static_cast<float>(Desc.Width), static_cast<float>(Desc.Height) };
+		return { static_cast<float>(Desc.Width), static_cast<float>(Desc.Height), 1.0f, 0.0f };
 	}
 
 	void CreateRenderTargetView();

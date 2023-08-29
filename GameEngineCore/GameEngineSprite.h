@@ -5,7 +5,7 @@ class SpriteData
 {
 public:
 	std::shared_ptr<GameEngineTexture> Texture;
-	float4 SpriteData;
+	float4 SpritePivot;
 
 	float4 GetScale();
 };
@@ -37,7 +37,7 @@ public:
 		return NewRes;
 	}
 
-	const SpriteData& GetSpriteData(unsigned int _Index);
+	SpriteData GetSpriteData(unsigned int _Index);
 
 	GameEngineSprite() {}
 	~GameEngineSprite() {}

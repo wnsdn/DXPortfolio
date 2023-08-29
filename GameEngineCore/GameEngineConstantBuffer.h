@@ -48,7 +48,7 @@ public:
 		ChangeData(&_Data, sizeof(DataType));
 	}
 	void ChangeData(const void* _Data, UINT _Size);
-	void Setting();
+	void Setting(UINT _Slot);
 
 	GameEngineConstantBuffer() {}
 	~GameEngineConstantBuffer() {}

@@ -29,7 +29,7 @@ void GameEngineRenderer::ResSetting()
 	auto VB = GameEngineVertexBuffer::Find("Rect");
 	auto VS = GameEngineVertexShader::Find("TextureShader_VS");
 	auto IB = GameEngineIndexBuffer::Find("Rect");
-	auto CB = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData");
+	auto CB = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData", ShaderType::Vertex);
 	auto RS = GameEngineRasterizer::Find("RasterizerState");
 	auto PS = GameEnginePixelShader::Find("TextureShader_PS");
 	auto RTV = GameEngineCore::GetBackBufferRenderTarget();
@@ -45,7 +45,7 @@ void GameEngineRenderer::ResSetting()
 
 	auto& TD = Transform.GetConstTransformDataRef();
 	CB->ChangeData(TD);
-	CB->Setting();
+	CB->Setting(0);
 
 	D3D11_VIEWPORT Viewport{};
 	Viewport.TopLeftX = 0;

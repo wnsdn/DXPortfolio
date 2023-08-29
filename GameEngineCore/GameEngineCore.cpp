@@ -35,6 +35,13 @@ void GameEngineCore::Update()
 {
 	if (NextLevel)
 	{
+		if (CurLevel)
+		{
+			CurLevel->AllLevelEnd(NextLevel.get());
+		}
+
+		NextLevel->AllLevelStart(CurLevel.get());
+
 		CurLevel = NextLevel;
 		NextLevel = nullptr;
 

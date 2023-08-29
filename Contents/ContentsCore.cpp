@@ -2,11 +2,13 @@
 #include "ContentsCore.h"
 
 #include "PlayLevel.h"
+#include "TitleLevel.h"
 
 void ContentsCore::Start()
 {
 	GameEngineCore::CreateLevel<PlayLevel>("PlayLevel");
-	GameEngineCore::ChangeLevel("PlayLevel");
+	GameEngineCore::CreateLevel<TitleLevel>("TitleLevel");
+	GameEngineCore::ChangeLevel("TitleLevel");
 }
 
 void ContentsCore::Update(float _Delta)
