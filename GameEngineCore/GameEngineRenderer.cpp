@@ -27,7 +27,7 @@ void GameEngineRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 void GameEngineRenderer::ResSetting()
 {
 	auto VB = GameEngineVertexBuffer::Find("Rect");
-	auto VS = GameEngineVertexShader::Find("ColorShader_VS");
+	auto VS = GameEngineVertexShader::Find("TextureShader_VS");
 	auto IB = GameEngineIndexBuffer::Find("Rect");
 	auto CB = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData");
 	auto RS = GameEngineRasterizer::Find("RasterizerState");

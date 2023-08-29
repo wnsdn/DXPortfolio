@@ -20,7 +20,7 @@ public:
 	void PSSetting(UINT _Slot);
 
 	GameEngineSampler() {}
-	~GameEngineSampler() {}
+	~GameEngineSampler();
 	GameEngineSampler(const GameEngineSampler&) = delete;
 	GameEngineSampler(GameEngineSampler&&) noexcept = delete;
 	void operator=(const GameEngineSampler&) = delete;

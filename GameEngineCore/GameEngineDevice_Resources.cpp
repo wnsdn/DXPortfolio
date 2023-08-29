@@ -12,15 +12,16 @@
 #include "GameEngineRasterizer.h"
 #include "GameEngineSampler.h"
 #include "GameEngineTexture.h"
+#include "GameEngineSprite.h"
 
 void GameEngineDevice::ResourcesInit()
 {
 	std::vector<GameEngineVertex2D>Vertex
 	{
-		{{-0.5f, -0.5f, 0.0f, 1.0f},{0.0f, 0.0f}},
-		{{0.5f, -0.5f, 0.0f, 1.0f},{1.0f, 0.0f}},
-		{{0.5f, 0.5f, 0.0f, 1.0f},{1.0f, 1.0f}},
-		{{-0.5f, 0.5f, 0.0f, 1.0f},{0.0f, 1.0f}}
+		{{-0.5f, 0.5f, 0.0f, 1.0f},{0.0f, 0.0f}},
+		{{0.5f, 0.5f, 0.0f, 1.0f},{1.0f, 0.0f}},
+		{{0.5f, -0.5f, 0.0f, 1.0f},{1.0f, 1.0f}},
+		{{-0.5f, -0.5f, 0.0f, 1.0f},{0.0f, 1.0f}}
 	};
 	GameEngineVertexBuffer::Create("Rect", Vertex);
 
@@ -38,6 +39,8 @@ void GameEngineDevice::ResourcesInit()
 	{
 		GameEngineTexture::Load(File.ToString(), File.GetFilename());
 	}
+
+	GameEngineSprite::CreateSingle("NSet.png");
 
 	//IL
 
@@ -62,9 +65,9 @@ void GameEngineDevice::ResourcesInit()
 
 	D3D11_SAMPLER_DESC DescS{};
 	DescS.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	DescS.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	DescS.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	DescS.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	DescS.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+	DescS.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
+	DescS.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
 
 	DescS.MipLODBias = 0.0f;
 	DescS.MaxAnisotropy = 1;

@@ -33,9 +33,9 @@ protected:
 		NameRes.emplace(_Name, NewRes);
 	}
 public:
-	static std::shared_ptr<ResourcesType> Find(const std::string& _Name)
+	static std::shared_ptr<ResourcesType> Find(std::string_view _Name)
 	{
-		auto FindIter = NameRes.find(_Name);
+		auto FindIter = NameRes.find(std::string(_Name));
 
 		if (FindIter == NameRes.end())
 		{

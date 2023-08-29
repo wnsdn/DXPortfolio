@@ -1,12 +1,16 @@
 #pragma once
 #include "GameEngineRenderer.h"
+#include "GameEngineSprite.h"
 
 class GameEngineSpriteRenderer : public GameEngineRenderer
 {
+private:
+	std::shared_ptr<GameEngineSprite> Sprite;
+	SpriteData CurSprite;
 protected:
 	void Render(GameEngineCamera* _Camera, float _Delta) override;
 public:
-	void SetSprite(std::string_view _Name);
+	void SetSprite(std::string_view _Name, unsigned int _Index = 0);
 
 	GameEngineSpriteRenderer() {}
 	~GameEngineSpriteRenderer() {}

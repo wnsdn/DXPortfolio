@@ -13,8 +13,6 @@ private:
 	UINT IndexCount = 0;
 	UINT Offset = 0;
 
-	const GameEngineInputLayoutInfo* VertexInfoPtr;
-
 	void ResCreate(const void* _Data, size_t _IndexCount);
 public:
 	static std::shared_ptr<GameEngineIndexBuffer> Create(std::string_view _Name, const std::vector<unsigned int>& _Data)

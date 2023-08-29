@@ -7,26 +7,8 @@
 
 void Player::Start()
 {
-	Renderer0 = CreateComponent<GameEngineSpriteRenderer>(0);
-	Renderer0->SetSprite("NSet.png");
-
-	{
-		auto Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
-		Renderer->Transform.SetLocalPosition({ 0, -150, 0 });
-		Renderer->Transform.SetLocalScale({ 50, 50, 100 });
-	}
-
-	{
-		auto Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
-		Renderer->Transform.SetLocalPosition({ -150, 0, 0 });
-		Renderer->Transform.SetLocalScale({ 50, 50, 100 });
-	}
-
-	{
-		auto Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
-		Renderer->Transform.SetLocalPosition({ 150, 0, 0 });
-		Renderer->Transform.SetLocalScale({ 50, 50, 100 });
-	}
+	MainSpriteRenderer = CreateComponent<GameEngineSpriteRenderer>(0);
+	MainSpriteRenderer->SetSprite("TestPlayer.png", 5);
 }
 
 void Player::Update(float _Delta)

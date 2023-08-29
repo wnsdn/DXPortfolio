@@ -3,13 +3,19 @@
 
 class SpriteData
 {
+public:
 	std::shared_ptr<GameEngineTexture> Texture;
+	float4 SpriteData;
+
+	float4 GetScale();
 };
 
 class GameEngineSprite : public GameEngineResources<GameEngineSprite>
 {
 private:
-	std::vector<SpriteData> GameEngineSpriteData;
+	std::vector<SpriteData> SpriteDatas;
+protected:
+	void ResCreateCut(std::string_view _Name, unsigned int _X, unsigned int _Y);
 public:
 	static std::shared_ptr<GameEngineSprite> CreateFolder()
 	{
@@ -17,11 +23,21 @@ public:
 		return NewRes;
 	}
 
-	static std::shared_ptr<GameEngineSprite> CreateCut()
+	static std::shared_ptr<GameEngineSprite> CreateCut(std::string_view _Name, unsigned int _X, unsigned int _Y)
 	{
-		auto NewRes = CreateRes();
+		auto NewRes = CreateRes(_Name);
+		NewRes->ResCreateCut(_Name, _X, _Y);
 		return NewRes;
 	}
+
+	static std::shared_ptr<GameEngineSprite> CreateSingle(std::string_view _Name)
+	{
+		auto NewRes = CreateRes(_Name);
+		NewRes->ResCreateCut(_Name, 1, 1);
+		return NewRes;
+	}
+
+	const SpriteData& GetSpriteData(unsigned int _Index);
 
 	GameEngineSprite() {}
 	~GameEngineSprite() {}
