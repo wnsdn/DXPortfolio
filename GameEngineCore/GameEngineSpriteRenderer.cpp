@@ -9,7 +9,6 @@ void GameEngineSpriteRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 {
 	GameEngineRenderer::ResSetting();
 
-	//CurSprite.Texture->PSSetting(0);
 	auto Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "SpriteData", ShaderType::Vertex);
 	Buffer->ChangeData(CurSprite.SpritePivot);
 	Buffer->Setting(1);
