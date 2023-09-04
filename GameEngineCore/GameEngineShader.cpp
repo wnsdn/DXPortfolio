@@ -49,7 +49,7 @@ bool GameEngineShader::AutoCompile(GameEngineFile& _File)
 			size_t FirstIndex = ShaderCode.find_last_of(" ", EntryIndex);
 			auto EntryName = ShaderCode.substr(FirstIndex + 1, EntryIndex - FirstIndex + 2);
 
-			GameEngineVertexShader::Load(_File.ToString(), EntryName);
+			GameEngineVertexShader::Load(_File.GetPath(), EntryName);
 		}
 	}
 
@@ -60,7 +60,7 @@ bool GameEngineShader::AutoCompile(GameEngineFile& _File)
 			size_t FirstIndex = ShaderCode.find_last_of(" ", EntryIndex);
 			auto EntryName = ShaderCode.substr(FirstIndex + 1, EntryIndex - FirstIndex + 2);
 
-			GameEnginePixelShader::Load(_File.ToString(), EntryName);
+			GameEnginePixelShader::Load(_File.GetPath(), EntryName);
 		}
 	}
 

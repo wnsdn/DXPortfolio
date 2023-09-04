@@ -2,6 +2,15 @@
 #include "GameEngineFile.h"
 #include "GameEngineDebug.h"
 
+GameEngineFile::~GameEngineFile()
+{
+	if (pFile)
+	{
+		fclose(pFile);
+		pFile = nullptr;
+	}
+}
+
 void GameEngineFile::Open(FileOpenType _OpenType, FileDataType _DataType, bool _IsStartAllData)
 {
 	std::string Mode{};
@@ -26,7 +35,7 @@ void GameEngineFile::Open(FileOpenType _OpenType, FileDataType _DataType, bool _
 		break;
 	}
 
-	fopen_s(&pFile, ToString().c_str(), Mode.c_str());
+	fopen_s(&pFile, GetPath().c_str(), Mode.c_str());
 
 	OpenType = _OpenType;
 	DataType = _DataType;

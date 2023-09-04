@@ -67,12 +67,12 @@ public:
 	{
 		LiveTime += _Delta;
 	}
-	int GetUpdateOrder() const
+	int GetOrder() const
 	{
 		return UpdateOrder;
 	}
 	template <typename EnumType>
-	void SetUpdateOrder(EnumType _Order)
+	void SetOrder(EnumType _Order)
 	{
 		UpdateOrder = static_cast<int>(_Order);
 	}

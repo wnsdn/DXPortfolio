@@ -1,25 +1,26 @@
 #include "PreCompile.h"
 #include "GameEngineDirectory.h"
 
-#include "GameEngineFile.h"
-
-std::vector<GameEngineFile> GameEngineDirectory::GetAllFile(std::vector<std::string> _Ext)
+std::vector<GameEnginePath> GameEngineDirectory::GetAllPathByExt(std::vector<std::string> _ExtArr)
 {
-	std::filesystem::directory_iterator DirIter{ Path };
+	std::vector<GameEnginePath> Result;
 
-	std::vector<GameEngineFile> Result;
-	for (const auto& Entry : DirIter)
+	if (!std::filesystem::exists(Path))
 	{
-		if (Entry.is_directory())
-		{
-			continue;
-		}
+		assert(false);
+		return std::vector<GameEnginePath>();
+	}
 
-		for (const auto& Ext : _Ext)
+	std::filesystem::directory_iterator RDI{ Path };
+	for (auto& Entry : RDI)
+	{
+		for (auto& Ext : _ExtArr)
 		{
 			if (Entry.path().extension().string() == Ext)
 			{
-				Result.push_back(Entry.path());
+				GameEnginePath NewPath;
+				NewPath.SetPath(Entry.path().string());
+				Result.push_back(NewPath);
 				break;
 			}
 		}
@@ -28,20 +29,58 @@ std::vector<GameEngineFile> GameEngineDirectory::GetAllFile(std::vector<std::str
 	return Result;
 }
 
-std::vector<GameEngineFile> GameEngineDirectory::GetAllTextureFile()
+std::vector<GameEnginePath> GameEngineDirectory::GetAllFileInDir(std::string_view _Directory)
 {
-	Path.append("Texture");
-	std::filesystem::directory_iterator DirIter{ Path };
-
-	std::vector<GameEngineFile> Result;
-	for (const auto& Entry : DirIter)
+	std::vector<GameEnginePath> Result;
+	if (_Directory.data())
 	{
-		if (Entry.is_directory())
+		Path.append(_Directory);
+	}
+
+	if (!std::filesystem::exists(Path))
+	{
+		assert(false);
+		return std::vector<GameEnginePath>();
+	}
+
+	std::filesystem::recursive_directory_iterator RDI{ Path };
+	for (auto& Entry : RDI)
+	{
+		if (std::filesystem::is_directory(Entry))
 		{
 			continue;
 		}
 
-		Result.push_back(Entry.path());
+		GameEnginePath NewPath;
+		NewPath.SetPath(Entry.path().string());
+		Result.push_back(NewPath);
+	}
+
+	return Result;
+}
+
+std::vector<GameEnginePath> GameEngineDirectory::GetAllDirInDir(std::string_view _Directory)
+{
+	std::vector<GameEnginePath> Result;
+	Path.append(_Directory);
+
+	if (!std::filesystem::exists(Path))
+	{
+		assert(false);
+		return std::vector<GameEnginePath>();
+	}
+
+	std::filesystem::recursive_directory_iterator RDI{ Path };
+	for (auto& Entry : RDI)
+	{
+		if (!std::filesystem::is_directory(Entry))
+		{
+			continue;
+		}
+
+		GameEnginePath NewPath;
+		NewPath.SetPath(Entry.path().string());
+		Result.push_back(NewPath);
 	}
 
 	return Result;

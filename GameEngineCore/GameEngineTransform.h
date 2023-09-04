@@ -26,7 +26,7 @@ struct TransformData
 
 	float4x4 ViewMatrix;
 	float4x4 ProjectionMatrix;
-	float4x4 ViewPort;
+	float4x4 Viewport;
 
 	float4x4 WorldViewProjectionMatrix;
 
@@ -65,10 +65,6 @@ public:
 		TransData.ViewMatrix.View(_EyePos, _EyeDir, _UpDir);
 	}
 
-	const TransformData& GetConstTransformDataRef()
-	{
-		return TransData;
-	}
 	void SetLocalScale(const float4& _Value)
 	{
 		TransData.Scale = _Value;
@@ -95,31 +91,43 @@ public:
 		TransformUpdate();
 	}
 
-	float4 GetWorldPosition()
+	const TransformData& GetConstTransformDataRef()
+	{
+		return TransData;
+	}
+	float4 GetLocalScale() const
+	{
+		return TransData.LocalScale;
+	}
+	float4 GetWorldPosition() const
 	{
 		return TransData.WorldMatrix.RowVec[3];
 	}
-	float4 GetWorldFrontVector()
+	float4x4 GetWorldViewProjectionMatrix() const
+	{
+		return TransData.WorldViewProjectionMatrix;
+	}
+	float4 GetWorldFrontVector() const
 	{
 		return TransData.WorldMatrix.RowVec[2].NormalizeReturn();
 	}
-	float4 GetWorldBackVector()
+	float4 GetWorldBackVector() const
 	{
 		return -TransData.WorldMatrix.RowVec[2].NormalizeReturn();
 	}
-	float4 GetWorldRightVector()
+	float4 GetWorldRightVector() const
 	{
 		return TransData.WorldMatrix.RowVec[0].NormalizeReturn();
 	}
-	float4 GetWorldLeftVector()
+	float4 GetWorldLeftVector() const
 	{
 		return -TransData.WorldMatrix.RowVec[0].NormalizeReturn();
 	}
-	float4 GetWorldUpVector()
+	float4 GetWorldUpVector() const
 	{
 		return TransData.WorldMatrix.RowVec[1].NormalizeReturn();
 	}
-	float4 GetWorldDownVector()
+	float4 GetWorldDownVector() const
 	{
 		return -TransData.WorldMatrix.RowVec[1].NormalizeReturn();
 	}
@@ -133,11 +141,6 @@ public:
 		Parent->Childs.push_back(this);
 	}
 	void CalChilds();
-
-	float4x4 GetWorldViewProjectionMatrix()
-	{
-		return TransData.WorldViewProjectionMatrix;
-	}
 
 	GameEngineTransform() = default;
 	~GameEngineTransform() = default;

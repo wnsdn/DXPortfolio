@@ -55,6 +55,11 @@ void GameEngineCore::Update()
 
 	GameEngineTime::Update();
 	float DeltaTime = GameEngineTime::GetFloatDelta();
+	if (DeltaTime > 1.0f / 60.0f)
+	{
+		DeltaTime = 1.0f / 60.0f;
+	}
+
 	if (GameEngineWindow::GetInst().IsFocus())
 	{
 		GameEngineInput::Update();

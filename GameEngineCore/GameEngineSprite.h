@@ -16,10 +16,19 @@ private:
 	std::vector<SpriteData> SpriteDatas;
 protected:
 	void ResCreateCut(std::string_view _Name, unsigned int _X, unsigned int _Y);
+	void ResCreateFolder(std::string_view _Path);
 public:
-	static std::shared_ptr<GameEngineSprite> CreateFolder()
+	static std::shared_ptr<GameEngineSprite> CreateFolder(std::string_view _Path)
 	{
-		auto NewRes = CreateRes();
+		GameEnginePath Path;
+		Path.SetPath(_Path);
+		return CreateFolder(Path.GetPath(), Path.GetFilename());
+	}
+
+	static std::shared_ptr<GameEngineSprite> CreateFolder(std::string_view _Path, std::string_view _Name)
+	{
+		auto NewRes = CreateRes(_Name);
+		NewRes->ResCreateFolder(_Path);
 		return NewRes;
 	}
 
@@ -38,6 +47,10 @@ public:
 	}
 
 	SpriteData GetSpriteData(unsigned int _Index);
+	unsigned int GetSpriteCount()
+	{
+		return static_cast<unsigned int>(SpriteDatas.size());
+	}
 
 	GameEngineSprite() {}
 	~GameEngineSprite() {}

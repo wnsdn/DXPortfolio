@@ -2,23 +2,43 @@
 #include "PlayLevel.h"
 
 #include "Player.h"
+#include "PlayMap.h"
 
 void PlayLevel::Start()
 {
-	GameEngineDirectory Dir;
-	Dir.SetPath("ContentsResources");
-	auto TFiles = Dir.GetAllTextureFile();
-	for (auto& File : TFiles)
 	{
-		GameEngineTexture::Load(File.ToString(), File.GetFilename());
+		GameEngineDirectory Dir;
+		Dir.SetFilenameToPath("ContentsResources");
+		auto AllPath = Dir.GetAllFileInDir("Texture");
+		for (auto& Path : AllPath)
+		{
+			GameEngineFile File;
+			File.SetPath(Path.GetPath());
+			GameEngineTexture::Load(File.GetPath());
+		}
+	}
+
+	{
+		GameEngineDirectory Dir;
+		Dir.SetFilenameToPath("ContentsResources");
+		auto AllPath = Dir.GetAllDirInDir("FolderTexture");
+		for (auto& Path : AllPath)
+		{
+			GameEngineFile File;
+			File.SetPath(Path.GetPath());
+			GameEngineSprite::CreateFolder(File.GetPath());
+		}
 	}
 
 	GameEngineSprite::CreateCut("TestPlayer.png", 6, 6);
+	GameEngineSprite::CreateSingle("TestMap.png");
 
-	GetMainCamera()->Transform.SetLocalPosition({ 0.0f, 0.0f, -500.0f });
-	GetMainCamera()->SetProjectionType(EPROJECTIONTYPE::Perspective);
+	auto HalfWindowScale = GameEngineWindow::GetInst().GetScale().Half();
+	GetMainCamera()->Transform.SetLocalPosition({ HalfWindowScale.X, -HalfWindowScale.Y, -500.0f });
+	GetMainCamera()->SetProjectionType(EPROJECTIONTYPE::Orthographic);
 
-	std::shared_ptr<Player> NewPlayer = CreateActor<Player>();
+	CreateActor<Player>();
+	CreateActor<PlayMap>();
 }
 
 void PlayLevel::Update(float _Delta)

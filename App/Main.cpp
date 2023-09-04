@@ -7,9 +7,10 @@
 #pragma comment(lib, "GameEngineCore.lib")
 #pragma comment(lib, "Contents.lib")
 
+#include <filesystem>
 int WINAPI WinMain(_In_ HINSTANCE _Hinst, _In_opt_ HINSTANCE, _In_ char*, _In_ int)
 {
-	 GameEngineCore::EngineStart<ContentsCore>(_Hinst);
+	GameEngineCore::EngineStart<ContentsCore>(_Hinst);
 
 	return 0;
 }

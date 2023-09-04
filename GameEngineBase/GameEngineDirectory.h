@@ -1,10 +1,10 @@
 #pragma once
 #include "GameEnginePath.h"
 
-class GameEngineFile;
 class GameEngineDirectory : public GameEnginePath
 {
 public:
-	std::vector<GameEngineFile> GetAllFile(std::vector<std::string> _Ext);
-	std::vector<GameEngineFile> GetAllTextureFile();
+	std::vector<GameEnginePath> GetAllPathByExt(std::vector<std::string> _ExtArr);
+	std::vector<GameEnginePath> GetAllFileInDir(std::string_view _Directory = std::string_view());
+	std::vector<GameEnginePath> GetAllDirInDir(std::string_view _Directory = std::string_view());
 };

@@ -17,6 +17,7 @@ struct float4//Vector
 	static const float4 Front;
 	static const float4 Back;
 
+	static const float4 WHITE;
 	static const float4 RED;
 	static const float4 GREEN;
 	static const float4 BLUE;
@@ -33,6 +34,14 @@ struct float4//Vector
 
 		struct
 		{
+			float R;
+			float G;
+			float B;
+			float A;
+		};
+
+		struct
+		{
 			float Pos2DX;
 			float Pos2DY;
 			float Scale2DX;
@@ -43,6 +52,43 @@ struct float4//Vector
 	};
 
 #pragma region Function
+	int iX() const
+	{
+		return static_cast<int>(X);
+	}
+	int iY() const
+	{
+		return static_cast<int>(Y);
+	}
+	UINT uiX() const
+	{
+		return static_cast<UINT>(X);
+	}
+	UINT uiY() const
+	{
+		return static_cast<UINT>(Y);
+	}
+	float hX() const
+	{
+		return X * 0.5f;
+	}
+	float hY() const
+	{
+		return Y * 0.5f;
+	}
+	int ihX() const
+	{
+		return static_cast<int>(X * 0.5f);
+	}
+	int ihY() const
+	{
+		return static_cast<int>(Y * 0.5f);
+	}
+	float4 Half() const
+	{
+		return { X * 0.5f, Y * 0.5f, Z, W };
+	}
+
 	float Length() const
 	{
 		return DirectX::XMVector3Length(Vector).m128_f32[0];
@@ -273,8 +319,8 @@ struct float4x4//Matrix
 	}
 	void Perspective(float _Degree, float _Width, float _Height, float _Far, float _Near)
 	{
-		Matrix = DirectX::XMMatrixPerspectiveFovLH
-		(DirectX::XMConvertToRadians(_Degree), _Width / _Height, _Near, _Far);
+		Matrix = DirectX::XMMatrixPerspectiveFovLH(
+			DirectX::XMConvertToRadians(_Degree), _Width / _Height, _Near, _Far);
 	}
 	void ViewPort(float _Width, float _Height)
 	{

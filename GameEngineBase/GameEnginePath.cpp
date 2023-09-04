@@ -1,36 +1,41 @@
 #include "PreCompile.h"
 #include "GameEnginePath.h"
 
-void GameEnginePath::SetPath(std::string_view _Name)
+void GameEnginePath::SetPath(std::string_view _Path)
 {
-	Path = std::filesystem::current_path();
+	Path = _Path;
+}
 
+void GameEnginePath::SetFilenameToPath(std::string_view _Filename)
+{
+	auto FindPath = std::filesystem::current_path();
 	bool Find = false;
+
 	while (true)
 	{
-		std::filesystem::directory_iterator DirIter(Path);
-		for (const auto& Entry : DirIter)
+		std::filesystem::directory_iterator DI{ FindPath };
+		for (auto& Entry : DI)
 		{
-			if (Entry.path().filename() == _Name)
+			if (Entry.path().filename().string() == _Filename)
 			{
-				Path = Entry.path();
+				Path = Entry;
 				Find = true;
 				break;
 			}
 		}
 
-		if (Find)
+		if (!Find)
 		{
-			break;
+			FindPath = FindPath.parent_path();
+
+			if (FindPath == FindPath.root_path())
+			{
+				assert(false);
+				return;
+			}
 		}
 		else
 		{
-			Path = Path.parent_path();
-		}
-
-		if (Path == Path.root_path())
-		{
-			MsgBoxAssert(std::string(_Name) + "찾을수없습니다");
 			break;
 		}
 	}

@@ -45,6 +45,19 @@ public:
 		return FindIter->second;
 	}
 
+	static void Release(std::string_view _Name)
+	{
+		auto FindIter = NameRes.find(std::string(_Name));
+
+		if (FindIter == NameRes.end())
+		{
+			assert(false);
+			return;
+		}
+
+		return NameRes.erase(FindIter);
+	}
+
 	void SetName(std::string_view _Name)
 	{
 		Name = _Name;

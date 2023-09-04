@@ -22,6 +22,8 @@ private:
 	FileDataType DataType;
 	GameEngineSerializer Serializer;
 public:
+	~GameEngineFile();
+
 	void Open(FileOpenType _OpenType, FileDataType _DataType, bool _IsStartAllData = true);
 	void Read(void* _Data, size_t _Size);
 	//void Write(void* _Data, size_t _Size);
@@ -34,19 +36,6 @@ public:
 	std::string_view GetStringView()
 	{
 		return Serializer.GetDataPtr<const char>();
-	}
-
-	GameEngineFile(std::string_view _Path)
-		: GameEnginePath(_Path), OpenType(), DataType() {}
-	GameEngineFile(const std::filesystem::path& _Path)
-		: GameEnginePath(_Path), OpenType(), DataType() {}
-	~GameEngineFile()
-	{
-		if (pFile)
-		{
-			fclose(pFile);
-			pFile = nullptr;
-		}
 	}
 };
 

@@ -6,6 +6,7 @@ class Player : public GameEngineActor
 {
 private:
 	std::shared_ptr<GameEngineSpriteRenderer> MainSpriteRenderer;
+	float4 GravityForce{ 0.0f, 0.0f, 0.0f, 1.0f };
 protected:
 	void Start() override;
 	void Update(float _Delta) override;
@@ -16,4 +17,6 @@ public:
 	Player(Player&& _Other) noexcept = delete;
 	Player& operator=(const Player& _Other) = delete;
 	Player& operator=(Player&& _Other) noexcept = delete;
+
+	void TestEvent(GameEngineRenderer* _Renderer);
 };

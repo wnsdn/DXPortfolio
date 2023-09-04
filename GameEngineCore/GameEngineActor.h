@@ -20,12 +20,10 @@ public:
 
 	GameEngineLevel* GetLevel();
 
-#pragma region Constructor
 	GameEngineActor() {}
 	~GameEngineActor() {}
 	GameEngineActor(const GameEngineActor& _Other) = delete;
 	GameEngineActor(GameEngineActor&& _Other) noexcept = delete;
 	GameEngineActor& operator=(const GameEngineActor& _Other) = delete;
 	GameEngineActor& operator=(GameEngineActor&& _Other) noexcept = delete;
-#pragma endregion
 };
