@@ -59,6 +59,32 @@ void GameEngineCamera::Render(float _Delta)
 	}
 }
 
+void GameEngineCamera::AllReleaseCheck()
+{
+	if (Renderers.empty())
+	{
+		return;
+	}
+
+	for (auto& Pair : Renderers)
+	{
+		auto Beg = Pair.second.begin();
+		auto End = Pair.second.end();
+
+		for (; Beg != End;)
+		{
+			if (!(*Beg)->IsDeath())
+			{
+				(*Beg)->AllReleaseCheck();
+				++Beg;
+				continue;
+			}
+
+			Beg = Pair.second.erase(Beg);
+		}
+	}
+}
+
 void GameEngineCamera::SetCameraOrder(int _Order)
 {
 	GameEngineLevel* Level = GetLevel();

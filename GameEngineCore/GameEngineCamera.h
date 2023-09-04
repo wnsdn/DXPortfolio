@@ -23,6 +23,7 @@ public:
 	void Start() override;
 	void Update(float _Delta);
 	void Render(float _Delta);
+	void AllReleaseCheck() override;
 
 	void SetCameraOrder(int _Order);
 	void SetProjectionType(EPROJECTIONTYPE _ProjectionType)

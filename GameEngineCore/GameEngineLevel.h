@@ -17,7 +17,9 @@ private:
 	void Render(float _Delta);
 
 	void ActorInit(std::shared_ptr<GameEngineActor> _Actor, int _Order);
-	void ActorRelease();
+	void Release() override;
+
+	void AllReleaseCheck() override;
 protected:
 public:
 	std::shared_ptr<GameEngineCamera> CreateCamera(int _Order, int _CameraOrder);

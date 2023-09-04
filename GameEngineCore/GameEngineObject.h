@@ -29,6 +29,8 @@ public:
 
 	void AllLevelStart(GameEngineLevel* _PrevLevel);
 	void AllLevelEnd(GameEngineLevel* _NextLevel);
+
+	virtual void AllReleaseCheck();
 	virtual void AllUpdate(float _Delta);
 
 	template <typename ConvertType>
@@ -44,6 +46,25 @@ public:
 		}
 
 		return CameraPtr;
+	}
+
+	template <typename ObjectType>
+	std::list<std::shared_ptr<ObjectType>> GetObjectGroupConvert(int _GroupIndex)
+	{
+		std::list<std::shared_ptr<ObjectType>> Result;
+		for (auto& Object : Childs[_GroupIndex])
+		{
+			auto Ptr = Object->GetDynamic_Cast_This<ObjectType>();
+
+			if (!Ptr)
+			{
+				continue;
+			}
+
+			Result.push_back(Ptr);
+		}
+
+		return Result;
 	}
 
 #pragma region BasicFunction
@@ -80,7 +101,7 @@ public:
 	{
 		if (Parent)
 		{
-			return Parent->bUpdate && bUpdate && !bDeath;
+			return Parent->IsUpdate() && bUpdate && !IsDeath();
 		}
 		else
 		{
@@ -99,7 +120,7 @@ public:
 	{
 		if (Parent)
 		{
-			return Parent->bDeath && bDeath;
+			return Parent->IsDeath() || bDeath;
 		}
 		else
 		{

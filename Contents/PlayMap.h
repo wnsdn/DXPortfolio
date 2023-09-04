@@ -4,9 +4,10 @@
 class PlayMap : public GameEngineActor
 {
 private:
-
+	std::shared_ptr<class GameEngineSpriteRenderer> Renderer;
 protected:
 	void Start() override;
+	void Update(float _Delta) override;
 public:
 	PlayMap();
 	~PlayMap();

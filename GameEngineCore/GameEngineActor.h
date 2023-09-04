@@ -9,6 +9,12 @@ private:
 	void ComponentInit(std::shared_ptr<GameEngineComponent> _Component, int _Order);
 protected:
 public:
+	template <typename ObjectType, typename EnumType>
+	std::shared_ptr<ObjectType> CreateComponent(EnumType _Enum)
+	{
+		return CreateComponent<ObjectType>(static_cast<int>(_Enum));
+	}
+
 	template <typename ObjectType>
 	std::shared_ptr<ObjectType> CreateComponent(int _Order = 0)
 	{

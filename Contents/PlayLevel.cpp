@@ -38,7 +38,7 @@ void PlayLevel::Start()
 	GetMainCamera()->SetProjectionType(EPROJECTIONTYPE::Orthographic);
 
 	CreateActor<Player>();
-	CreateActor<PlayMap>();
+	Map = CreateActor<PlayMap>();
 }
 
 void PlayLevel::Update(float _Delta)

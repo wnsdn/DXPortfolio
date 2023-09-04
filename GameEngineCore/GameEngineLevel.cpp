@@ -53,6 +53,33 @@ void GameEngineLevel::ActorInit(std::shared_ptr<GameEngineActor> _Actor, int _Or
 	_Actor->Start();
 }
 
-void GameEngineLevel::ActorRelease()
+void GameEngineLevel::Release()
 {
+	assert(false);
+}
+
+void GameEngineLevel::AllReleaseCheck()
+{
+	for (auto& Pair : Cameras)
+	{
+		Pair.second->AllReleaseCheck();
+	}
+
+	for (auto& Pair : Childs)
+	{
+		auto Beg = Pair.second.begin();
+		auto End = Pair.second.end();
+
+		for (; Beg != End;)
+		{
+			if (!(*Beg)->IsDeath())
+			{
+				(*Beg)->AllReleaseCheck();
+				++Beg;
+				continue;
+			}
+
+			Beg = Pair.second.erase(Beg);
+		}
+	}
 }
