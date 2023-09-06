@@ -1,18 +1,77 @@
 #pragma once
 #include <GameEngineBase/GameEngineMath.h>
 
+enum class ColType
+{
+	SPHERE2D,
+	AABBBOX2D,
+	OBBBOX2D,
+	SPHERE3D,
+	AABBBOX3D,
+	OBBBOX3D,
+	MAX,
+};
+
+class GameEngineTransform;
+struct CollisionParameter
+{
+	GameEngineTransform& Left;
+	GameEngineTransform& Right;
+	ColType LeftType = ColType::AABBBOX2D;
+	ColType RightType = ColType::AABBBOX2D;
+
+	int GetLeftTypeToInt() const
+	{
+		return static_cast<int>(LeftType);
+	}
+	int GetRightTypeToInt() const
+	{
+		return static_cast<int>(RightType);
+	}
+
+	CollisionParameter(
+		GameEngineTransform& _Left,
+		GameEngineTransform& _Right,
+		ColType _LeftType = ColType::AABBBOX2D,
+		ColType _RightType = ColType::AABBBOX2D)
+		: Left(_Left)
+		, Right(_Right)
+		, LeftType(_LeftType)
+		, RightType(_RightType)
+	{}
+};
+
+struct CollisionData
+{
+	union
+	{
+		DirectX::BoundingSphere SPHERE;
+		DirectX::BoundingBox AABB;
+		DirectX::BoundingOrientedBox OBB;
+	};
+
+	CollisionData()
+		: OBB()
+	{
+
+	}
+};
+
 struct TransformData
 {
 	float4 Scale{ float4::OneNull };
 	float4 Rotation{ float4::ZeroNull };
+	float4 Quaternion{ float4::Zero };
 	float4 Position{ float4::Zero };
 
 	float4 LocalScale;
 	float4 LocalRotation;
+	float4 LocalQuaternion;
 	float4 LocalPosition;
 
 	float4 WorldScale;
 	float4 WorldRotation;
+	float4 WorldQuaternion;
 	float4 WorldPosition;
 
 	float4x4 ScaleMatrix;
@@ -51,6 +110,7 @@ private:
 	GameEngineTransform* Parent = nullptr;
 	std::list<GameEngineTransform*> Childs;
 	TransformData TransData;
+	//CollisionData ColData;
 public:
 	void Orthographic(float _Width, float _Height, float _Far, float _Near)
 	{
@@ -141,6 +201,9 @@ public:
 		Parent->Childs.push_back(this);
 	}
 	void CalChilds();
+
+	static bool Collision(const CollisionParameter& _Data);
+	CollisionData ColData;
 
 	GameEngineTransform() = default;
 	~GameEngineTransform() = default;

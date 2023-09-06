@@ -14,7 +14,7 @@ PlayMap::~PlayMap()
 
 void PlayMap::Start()
 {
-	Renderer = CreateComponent<GameEngineSpriteRenderer>(-100);
+	Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
 	Renderer->SetSprite("TestMap.png");
 
 	auto Texture = GameEngineTexture::Find("TestMap.png");
@@ -27,14 +27,6 @@ void PlayMap::Start()
 
 void PlayMap::Update(float _Delta)
 {
-	static float Time = 5.0f;
-	Time -= _Delta;
-
-	if (Renderer && Time <= 0.0f)
-	{
-		Renderer->Death();
-		Renderer = nullptr;
-	}
 }
 
 GameEngineColor PlayMap::GetColor(float4 _Pos, GameEngineColor _DefaultColor)

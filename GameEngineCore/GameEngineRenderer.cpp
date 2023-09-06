@@ -15,7 +15,7 @@
 
 void GameEngineRenderer::Start()
 {
-	SetViewCameraSelect(0);
+	SetCameraOrder(0);
 }
 
 void GameEngineRenderer::Render(GameEngineCamera* _Camera, float _Delta)
@@ -72,14 +72,37 @@ void GameEngineRenderer::Draw()
 void GameEngineRenderer::SetViewCameraSelect(int _Order)
 {
 	GameEngineLevel* Level = GetLevel();
-	std::shared_ptr<GameEngineCamera> Camera = Level->GetCamera(_Order);
+	auto FindCamera = Level->GetCamera(_Order);
 
-	if (!Camera)
+	if (!FindCamera)
 	{
-		MsgBoxAssert(__FUNCTION__);
+		assert(false);
 		return;
 	}
 
+	if (Camera)
+	{
+		Camera->Renderers[GetOrder()].remove(GetDynamic_Cast_This<GameEngineRenderer>());
+	}
+
+	Camera = FindCamera.get();
 	Camera->Renderers[GetOrder()].push_back(GetDynamic_Cast_This<GameEngineRenderer>());
-	ViewInfo[Camera.get()] = _Order;
+}
+
+void GameEngineRenderer::SetRenderOrder(int _Order)
+{
+	if (!Camera)
+	{
+		assert(false);
+		return;
+	}
+
+	Camera->Renderers[GetOrder()].remove(GetDynamic_Cast_This<GameEngineRenderer>());
+	GameEngineObject::SetOrder(_Order);
+	Camera->Renderers[GetOrder()].push_back(GetDynamic_Cast_This<GameEngineRenderer>());
+}
+
+void GameEngineRenderer::SetCameraOrder(int _Order)
+{
+	SetViewCameraSelect(_Order);
 }

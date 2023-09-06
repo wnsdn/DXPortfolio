@@ -10,6 +10,9 @@
     <Filter Include="Level">
       <UniqueIdentifier>{c68dc0cc-ffbb-41e0-97ef-0c1e0449ac64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{414156bc-6f2d-4b3e-ad50-4e72dcc2123d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -28,6 +31,9 @@
     <ClCompile Include="PlayMap.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
@@ -44,6 +50,12 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="PlayMap.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsEnum.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
       <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>

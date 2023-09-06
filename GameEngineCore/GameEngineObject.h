@@ -12,7 +12,7 @@ private:
 protected:
 	std::string Name{};
 	float LiveTime = 0.0f;
-	int UpdateOrder = 0;
+	int Order = 0;
 	bool bUpdate = true;
 	bool bDeath = false;
 
@@ -36,16 +36,33 @@ public:
 	template <typename ConvertType>
 	std::shared_ptr<ConvertType> GetDynamic_Cast_This()
 	{
-		std::shared_ptr<GameEngineObject> ObjectPtr = shared_from_this();
-		std::shared_ptr<ConvertType> CameraPtr =
-			std::dynamic_pointer_cast<ConvertType>(ObjectPtr);
+		auto ObjectPtr = shared_from_this();
+		auto CameraPtr = std::dynamic_pointer_cast<ConvertType>(ObjectPtr);
 
 		if (!CameraPtr)
 		{
-			MsgBoxAssert(__FUNCTION__);
+			return nullptr;
 		}
 
 		return CameraPtr;
+	}
+
+	template <typename EnumType>
+	std::list<std::shared_ptr<GameEngineObject>> GetObjectGroup(EnumType _GroupIndex)
+	{
+		return GetObjectGroup(static_cast<int>(_GroupIndex));
+	}
+
+	template <typename ObjectType>
+	std::list<std::shared_ptr<GameEngineObject>> GetObjectGroup(int _GroupIndex)
+	{
+		return Childs[_GroupIndex];
+	}
+
+	template <typename ObjectType, typename EnumType>
+	std::list<std::shared_ptr<ObjectType>> GetObjectGroupConvert(EnumType _GroupIndex)
+	{
+		return GetObjectGroupConvert<ObjectType>(static_cast<int>(_GroupIndex));
 	}
 
 	template <typename ObjectType>
@@ -90,12 +107,12 @@ public:
 	}
 	int GetOrder() const
 	{
-		return UpdateOrder;
+		return Order;
 	}
 	template <typename EnumType>
 	void SetOrder(EnumType _Order)
 	{
-		UpdateOrder = static_cast<int>(_Order);
+		Order = static_cast<int>(_Order);
 	}
 	bool IsUpdate() const
 	{

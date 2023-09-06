@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
 
 struct float4x4;
 
@@ -49,6 +50,8 @@ struct float4//Vector
 		};
 
 		DirectX::XMVECTOR Vector;
+		DirectX::XMFLOAT3 Float3;
+		DirectX::XMFLOAT4 Float4;
 	};
 
 #pragma region Function
@@ -87,6 +90,11 @@ struct float4//Vector
 	float4 Half() const
 	{
 		return { X * 0.5f, Y * 0.5f, Z, W };
+	}
+
+	float4 ToAbs() const
+	{
+		return DirectX::XMVectorAbs(Vector);
 	}
 
 	float Length() const
@@ -133,6 +141,45 @@ struct float4//Vector
 
 		return Result;
 	}
+
+	float4 QuaternionToEuler()
+	{
+		float4 Result{};
+
+		float SinRCosP = 2.0f * (W * Z + X * Y);
+		float CosRCosP = 1.0f - 2.0f * (Z * Z + X * X);
+
+		Result.Z = atan2f(SinRCosP, CosRCosP);
+
+		float PitchTest = W * X - Y * Z;
+		float ASinThreshold = 0.4999995f;
+		float SinP = 2.0f * PitchTest;
+
+		if (PitchTest < -ASinThreshold)
+		{
+			Result.X = -(0.5f * DirectX::XM_PI);
+		}
+		else if (PitchTest > ASinThreshold)
+		{
+			Result.X = (0.5f * DirectX::XM_PI);
+		}
+		else
+		{
+			Result.X = asinf(SinP);
+		}
+
+		float SinYCosP = 2.0f * (W * Y + X * Z);
+		float CosYCosP = 1.0f - 2.0f * (X * X + Y * Y);
+
+		Result.Y = atan2f(SinYCosP, CosYCosP);
+
+		Result.X = DirectX::XMConvertToDegrees(Result.X);
+		Result.Y = DirectX::XMConvertToDegrees(Result.Y);
+		Result.Z = DirectX::XMConvertToDegrees(Result.Z);
+
+		return Result;
+	}
+
 	static float Dot(const float4& _V1, const float4& _V2)//Dot Product
 	{
 		return DirectX::XMVector3Dot(_V1.Vector, _V2.Vector).m128_f32[0];
@@ -333,6 +380,11 @@ struct float4x4//Matrix
 		Matrix.r[1].m128_f32[1] = -HalfHeight;
 		Matrix.r[3].m128_f32[0] = HalfWidth;
 		Matrix.r[3].m128_f32[1] = HalfHeight;
+	}
+
+	void Decompose(float4& _Scale, float4& _RotQuaternion, float4& _Pos) const
+	{
+		DirectX::XMMatrixDecompose(&_Scale.Vector, &_RotQuaternion.Vector, &_Pos.Vector, Matrix);
 	}
 #pragma endregion
 

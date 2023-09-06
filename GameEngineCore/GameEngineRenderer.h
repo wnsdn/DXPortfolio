@@ -9,6 +9,7 @@ class GameEngineRenderer : public GameEngineComponent
 private:
 	std::map<GameEngineCamera*, int> ViewInfo;
 	std::shared_ptr<GameEngineInputLayout> Layout = nullptr;
+	GameEngineCamera* Camera = nullptr;
 protected:
 	void Start();
 	virtual void Render(GameEngineCamera* _Camera, float _Delta);
@@ -16,6 +17,14 @@ protected:
 	void Draw();
 public:
 	void SetViewCameraSelect(int _Order);
+
+	void SetRenderOrder(int _Order);
+	template <typename EnumType>
+	void SetRenderOrder(EnumType _Order)
+	{
+		SetRenderOrder(static_cast<int>(_Order));
+	}
+	void SetCameraOrder(int _Order);
 
 	GameEngineRenderer() = default;
 	~GameEngineRenderer() = default;

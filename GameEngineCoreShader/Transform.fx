@@ -3,12 +3,17 @@ cbuffer TransformData : register(b0)
 {
     float4 Scale;
     float4 Rotation;
+    float4 Quaternion;
     float4 Position;
+    
     float4 LocalScale;
     float4 LocalRotation;
+    float4 LocalQuaternion;
     float4 LocalPosition;
+    
     float4 WorldScale;
     float4 WorldRotation;
+    float4 WorldQuaternion;
     float4 WorldPosition;
     
     float4x4 ScaleMatrix;           // 크기
@@ -18,10 +23,13 @@ cbuffer TransformData : register(b0)
     float4x4 ParentMatrix;          // 부모
     
     float4x4 LocalWorldMatrix;
+    
     float4x4 WorldMatrix;
+    
     float4x4 ViewMatrix;
     float4x4 ProjectionMatrix;
     float4x4 ViewPort;
+    
     float4x4 WorldViewProjectionMatrix;
 };
 

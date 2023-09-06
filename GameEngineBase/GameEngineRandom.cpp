@@ -17,3 +17,20 @@ float GameEngineRandom::RandomFloat(float _Max, float _Min)
 
 	return RndFloat(Gen);
 }
+
+float4 GameEngineRandom::RandomVectorBox2D(float _MinX, float _MaxX, float _MinY, float _MaxY)
+{
+	float4 Result{};
+
+	{
+		std::uniform_real_distribution<float> RndFloat(min(_MinX, _MaxX), max(_MinX, _MaxX));
+		Result.X = RndFloat(Gen);
+	}
+
+	{
+		std::uniform_real_distribution<float> RndFloat(min(_MinY, _MaxY), max(_MinY, _MaxY));
+		Result.Y = RndFloat(Gen);
+	}
+
+	return Result;
+}

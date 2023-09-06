@@ -52,8 +52,12 @@ void GameEngineCamera::Render(float _Delta)
 	{
 		for (auto& Renderer : Pair.second)
 		{
-			Renderer->Transform.CalculationViewAndProjection(
-				Transform.GetConstTransformDataRef());
+			if (!Renderer->IsUpdate())
+			{
+				continue;
+			}
+
+			Renderer->Transform.CalculationViewAndProjection(Transform.GetConstTransformDataRef());
 			Renderer->Render(this, _Delta);
 		}
 	}

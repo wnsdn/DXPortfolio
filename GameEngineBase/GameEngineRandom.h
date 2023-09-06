@@ -1,5 +1,6 @@
 #pragma once
 #include <random>
+#include "GameEngineMath.h"
 
 class GameEngineRandom
 {
@@ -16,4 +17,5 @@ private:
 public:
 	static int RandomInt(int _Max, int _Min);
 	static float RandomFloat(float _Max, float _Min);
+	static float4 RandomVectorBox2D(float _MinX, float _MaxX, float _MinY, float _MaxY);
 };

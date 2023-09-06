@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "PlayMap.h"
+#include "Monster.h"
 
 void PlayLevel::Start()
 {
@@ -37,8 +38,25 @@ void PlayLevel::Start()
 	GetMainCamera()->Transform.SetLocalPosition({ HalfWindowScale.X, -HalfWindowScale.Y, -500.0f });
 	GetMainCamera()->SetProjectionType(EPROJECTIONTYPE::Orthographic);
 
-	CreateActor<Player>();
-	Map = CreateActor<PlayMap>();
+	{
+		CreateActor<Player>(ContentsObjectType::Player);
+	}
+
+	{
+		for (int i = 0; i < 10; ++i)
+		{
+			CreateActor<Monster>(ContentsObjectType::Monster)->Transform.SetLocalPosition(GameEngineRandom::RandomVectorBox2D(0, 1280, 0, -720));
+		}
+
+		for (int i = 0; i < 4; ++i)
+		{
+			//CreateActor<PlayMap>(ContentsObjectType::Monster);
+		}
+	}
+
+	{
+		Map = CreateActor<PlayMap>(ContentsObjectType::BackGround);
+	}
 }
 
 void PlayLevel::Update(float _Delta)

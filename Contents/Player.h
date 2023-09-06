@@ -6,6 +6,7 @@ class Player : public GameEngineActor
 {
 private:
 	std::shared_ptr<GameEngineSpriteRenderer> MainSpriteRenderer;
+	std::shared_ptr<GameEngineComponent> TestCollision;
 	float4 GravityForce{ 0.0f, 0.0f, 0.0f, 1.0f };
 protected:
 	void Start() override;
