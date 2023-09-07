@@ -1,21 +1,27 @@
 #include "PreCompile.h"
 #include "Player.h"
 
-#include <GameEngineCore/GameEngineRenderer.h>
-#include <GameEngineCore/GameEngineSpriteRenderer.h>
 #include <GameEngineCore/GameEngineTexture.h>
 
+#include "ContentsEnum.h"
 #include "PlayMap.h"
 #include "Monster.h"
 
 void Player::Start()
 {
-	TestCollision = CreateComponent<GameEngineComponent>(30);
-	TestCollision->Transform.SetLocalScale({ 30, 30, 1 });
+	{
+		TestCollision = CreateComponent<GameEngineComponent>(30);
+		TestCollision->Transform.SetLocalScale({ 30, 30, 1 });
 
-	MainSpriteRenderer = CreateComponent<GameEngineSpriteRenderer>(30);
-	MainSpriteRenderer->SetSprite("HoHoYee_AttackABC2");
-	MainSpriteRenderer->Transform.SetLocalScale({ -100.0f, 100.0f, 1.0f });
+		MainSpriteRenderer = CreateComponent<GameEngineSpriteRenderer>(30);
+		MainSpriteRenderer->SetSprite("HoHoYee_AttackABC2");
+		MainSpriteRenderer->Transform.SetLocalScale({ -100.0f, 100.0f, 1.0f });
+	}
+
+	{
+		Col = CreateComponent<GameEngineCollision>(ContentsCollisionType::Player);
+		Col->Transform.SetLocalScale({ -100.0f, 100.0f, 1.0f });
+	}
 
 	auto HalfWindowScale = GameEngineWindow::GetInst().GetScale().Half();
 	Transform.SetLocalPosition({ HalfWindowScale.X, -HalfWindowScale.Y, -500.0f });
@@ -23,20 +29,22 @@ void Player::Start()
 
 void Player::Update(float _Delta)
 {
-	auto MonsterList = GetLevel()->GetObjectGroupConvert<Monster>(ContentsObjectType::Monster);
+	EventParameter Event;
 
-	for (auto& MonsterPtr : MonsterList)
-	{
-		auto& Left = TestCollision->Transform;
-		auto& Right = MonsterPtr->Renderer->Transform;
-		Right.AddLocalRotation({ 0.0f, 0.0f, 360.0f * _Delta });
-
-		if (GameEngineTransform::Collision({ Left, Right, ColType::OBBBOX2D }))
+	Event.Enter = [](GameEngineCollision* Col)
 		{
-			MonsterPtr->Death();
 			int a = 0;
-		}
-	}
+		};
+	Event.Stay = [](GameEngineCollision* Col)
+		{
+			int a = 0;
+		};
+	Event.Exit = [](GameEngineCollision* Col)
+		{
+			Col->GetActor()->Death();
+			int a = 0;
+		};
+	Col->CollisionEvent(ContentsCollisionType::Monster, Event);
 
 	float Speed = 150.0f;
 

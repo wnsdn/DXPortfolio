@@ -7,6 +7,7 @@ class GameEngineLevel : public GameEngineObject
 {
 	friend class GameEngineCamera;
 	friend class GameEngineCore;
+	friend class GameEngineCollision;
 private:
 	std::map<int, std::shared_ptr<GameEngineCamera>> Cameras;
 
@@ -20,6 +21,10 @@ private:
 	void Release() override;
 
 	void AllReleaseCheck() override;
+
+	void PushCollision(std::shared_ptr<class GameEngineCollision> _Collision);
+
+	std::map<int, std::shared_ptr<class GameEngineCollisionGroup>> Collisions;
 protected:
 public:
 	std::shared_ptr<GameEngineCamera> CreateCamera(int _Order, int _CameraOrder);
@@ -50,12 +55,10 @@ public:
 		return Cameras[_Select];
 	}
 
-#pragma region Constructor
 	GameEngineLevel();
 	~GameEngineLevel();
 	GameEngineLevel(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel(GameEngineLevel&& _Other) noexcept = delete;
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
-#pragma endregion
 };

@@ -2,6 +2,8 @@
 #include "GameEngineLevel.h"
 
 #include "GameEngineCamera.h"
+#include "GameEngineCollision.h"
+#include "GameEngineCollisionGroup.h"
 
 GameEngineLevel::GameEngineLevel()
 {
@@ -65,6 +67,11 @@ void GameEngineLevel::AllReleaseCheck()
 		Pair.second->AllReleaseCheck();
 	}
 
+	for (auto& Pair : Collisions)
+	{
+		Pair.second->AllReleaseCheck();
+	}
+
 	for (auto& Pair : Childs)
 	{
 		auto Beg = Pair.second.begin();
@@ -82,4 +89,20 @@ void GameEngineLevel::AllReleaseCheck()
 			Beg = Pair.second.erase(Beg);
 		}
 	}
+}
+
+void GameEngineLevel::PushCollision(std::shared_ptr<class GameEngineCollision> _Collision)
+{
+	if (!_Collision)
+	{
+		MsgBoxAssert("존재하지 않는 콜리전을 사용하려고 했습니다.");
+		return;
+	}
+
+	if (!Collisions.contains(_Collision->GetOrder()))
+	{
+		Collisions[_Collision->GetOrder()] = std::make_shared<GameEngineCollisionGroup>();
+	}
+
+	Collisions[_Collision->GetOrder()]->PushCollision(_Collision);
 }

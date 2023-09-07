@@ -12,3 +12,9 @@ enum class ContentsObjectType
 	Player,
 	Monster,
 };
+
+enum class ContentsCollisionType
+{
+	Player,
+	Monster,
+};

@@ -8,6 +8,8 @@ private:
 	std::shared_ptr<GameEngineSpriteRenderer> MainSpriteRenderer;
 	std::shared_ptr<GameEngineComponent> TestCollision;
 	float4 GravityForce{ 0.0f, 0.0f, 0.0f, 1.0f };
+
+	std::shared_ptr<GameEngineCollision> Col;
 protected:
 	void Start() override;
 	void Update(float _Delta) override;

@@ -12,35 +12,6 @@ enum class ColType
 	MAX,
 };
 
-class GameEngineTransform;
-struct CollisionParameter
-{
-	GameEngineTransform& Left;
-	GameEngineTransform& Right;
-	ColType LeftType = ColType::AABBBOX2D;
-	ColType RightType = ColType::AABBBOX2D;
-
-	int GetLeftTypeToInt() const
-	{
-		return static_cast<int>(LeftType);
-	}
-	int GetRightTypeToInt() const
-	{
-		return static_cast<int>(RightType);
-	}
-
-	CollisionParameter(
-		GameEngineTransform& _Left,
-		GameEngineTransform& _Right,
-		ColType _LeftType = ColType::AABBBOX2D,
-		ColType _RightType = ColType::AABBBOX2D)
-		: Left(_Left)
-		, Right(_Right)
-		, LeftType(_LeftType)
-		, RightType(_RightType)
-	{}
-};
-
 struct CollisionData
 {
 	union
@@ -55,6 +26,34 @@ struct CollisionData
 	{
 
 	}
+};
+
+struct CollisionParameter
+{
+	CollisionData& Left;
+	CollisionData& Right;
+	ColType LeftType = ColType::AABBBOX2D;
+	ColType RightType = ColType::AABBBOX2D;
+
+	int GetLeftTypeToInt() const
+	{
+		return static_cast<int>(LeftType);
+	}
+	int GetRightTypeToInt() const
+	{
+		return static_cast<int>(RightType);
+	}
+
+	CollisionParameter(
+		CollisionData& _Left,
+		CollisionData& _Right,
+		ColType _LeftType = ColType::AABBBOX2D,
+		ColType _RightType = ColType::AABBBOX2D)
+		: Left(_Left)
+		, Right(_Right)
+		, LeftType(_LeftType)
+		, RightType(_RightType)
+	{}
 };
 
 struct TransformData
@@ -110,7 +109,6 @@ private:
 	GameEngineTransform* Parent = nullptr;
 	std::list<GameEngineTransform*> Childs;
 	TransformData TransData;
-	//CollisionData ColData;
 public:
 	void Orthographic(float _Width, float _Height, float _Far, float _Near)
 	{
