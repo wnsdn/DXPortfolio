@@ -18,7 +18,7 @@ public:
 		UINT _VersionHigh = 5,
 		UINT _VersionLow = 0)
 	{
-		auto Res = GameEngineResources::CreateRes(_EntryPoint);
+		auto Res = CreateRes(_EntryPoint);
 		Res->ShaderLoad(_Path, _EntryPoint, _VersionHigh, _VersionLow);
 		return Res;
 	}

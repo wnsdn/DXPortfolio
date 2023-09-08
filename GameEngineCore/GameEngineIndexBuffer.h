@@ -17,7 +17,7 @@ private:
 public:
 	static std::shared_ptr<GameEngineIndexBuffer> Create(std::string_view _Name, const std::vector<unsigned int>& _Data)
 	{
-		auto Res = GameEngineResources::CreateRes(_Name);
+		auto Res = CreateRes(_Name);
 		Res->ResCreate(&_Data[0], _Data.size());
 		return nullptr;
 	}

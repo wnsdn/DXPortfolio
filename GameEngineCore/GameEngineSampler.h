@@ -11,7 +11,7 @@ protected:
 public:
 	static std::shared_ptr<GameEngineSampler> Create(std::string_view _Name, const D3D11_SAMPLER_DESC& _Desc)
 	{
-		auto Res = GameEngineResources::CreateRes(_Name);
+		auto Res = CreateRes(_Name);
 		Res->ResCreate(_Desc);
 		return Res;
 	}

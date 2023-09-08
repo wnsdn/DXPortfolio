@@ -3,7 +3,7 @@
 
 float4 SpriteData::GetScale()
 {
-	return Texture->GetScale() * float4(SpritePivot.Scale2DX, SpritePivot.Scale2DY, 1.0f, 0.0f);
+	return Texture->GetScale() * float4(Pivot.Scale2DX, Pivot.Scale2DY, 1.0f, 0.0f);
 }
 
 void GameEngineSprite::ResCreateCut(std::string_view _Name, unsigned int _X, unsigned int _Y)
@@ -25,7 +25,7 @@ void GameEngineSprite::ResCreateCut(std::string_view _Name, unsigned int _X, uns
 			auto Index = (y * _X) + x;
 			SpriteDatas[Index].Texture = Texture;
 
-			SpriteDatas[Index].SpritePivot = Start;
+			SpriteDatas[Index].Pivot = Start;
 			Start.Pos2DX += Start.Scale2DX;
 		}
 
@@ -45,11 +45,8 @@ void GameEngineSprite::ResCreateFolder(std::string_view _Path)
 
 	for (int i = 0; i < AllPath.size(); ++i)
 	{
-		auto& Path = AllPath[i];
-		auto Texture = GameEngineTexture::Load(Path.GetPath());
-
-		SpriteDatas[i].Texture = Texture;
-		SpriteDatas[i].SpritePivot = float4(0.0f, 0.0f, 1.0f, 1.0f);
+		SpriteDatas[i].Texture = GameEngineTexture::Load(AllPath[i].GetPath());
+		SpriteDatas[i].Pivot = float4(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 }
 

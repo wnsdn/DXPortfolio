@@ -1,5 +1,4 @@
 #pragma once
-#include <Windows.h>
 
 class GameEngineTime
 {
@@ -7,8 +6,7 @@ private:
 	static LARGE_INTEGER Freq;
 	static LARGE_INTEGER Prev;
 	static LARGE_INTEGER Cur;
-	static double DoubleDelta;
-	static float FloatDelta;
+	static double Delta;
 
 	GameEngineTime() {}
 	~GameEngineTime() {}
@@ -23,6 +21,6 @@ public:
 
 	static float GetFloatDelta()
 	{
-		return FloatDelta;
+		return static_cast<float>(Delta);
 	}
 };

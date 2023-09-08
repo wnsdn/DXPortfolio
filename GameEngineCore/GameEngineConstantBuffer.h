@@ -33,7 +33,7 @@ public:
 			return ConstantBuffers[_Byte][Name];
 		}
 
-		auto Res = GameEngineResources::CreateRes();
+		auto Res = CreateRes();
 		Res->SetName(Name);
 		Res->Type = _Type;
 		Res->Slot = _Slot;

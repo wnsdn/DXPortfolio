@@ -30,33 +30,22 @@ void GameEngineTexture::ResLoad(std::string_view _Path)
 	{
 		if (S_OK != DirectX::LoadFromDDSFile(wPath.c_str(), DirectX::DDS_FLAGS_NONE, &Data, Image))
 		{
-			MsgBoxAssert("텍스처 로드에 실패했습니다." + std::string(_Path.data()));
+			assert(false);
 		}
 	}
 	else if (Ext == ".TGA")
 	{
 		if (S_OK != DirectX::LoadFromTGAFile(wPath.c_str(), DirectX::TGA_FLAGS_NONE, &Data, Image))
 		{
-			MsgBoxAssert("텍스처 로드에 실패했습니다." + std::string(_Path.data()));
+			assert(false);
 		}
-
 	}
 	else if (S_OK != DirectX::LoadFromWICFile(wPath.c_str(), DirectX::WIC_FLAGS_NONE, &Data, Image))
 	{
-		MsgBoxAssert("텍스처 로드에 실패했습니다." + std::string(_Path.data()));
+		assert(false);
 	}
 
-	if (S_OK != DirectX::CreateShaderResourceView
-	(
-		GameEngineCore::GetDevice(),
-		Image.GetImages(),
-		Image.GetImageCount(), // 이미지가 겹쳐있을수 있다.
-		Image.GetMetadata(),
-		&SRV
-	))
-	{
-		MsgBoxAssert("텍스처 로드에 실패했습니다." + std::string(_Path.data()));
-	}
+	Check(DirectX::CreateShaderResourceView(GameEngineCore::GetDevice(), Image.GetImages(), Image.GetImageCount(), Image.GetMetadata(), &SRV));
 
 	Desc.Width = static_cast<UINT>(Data.width);
 	Desc.Height = static_cast<UINT>(Data.height);

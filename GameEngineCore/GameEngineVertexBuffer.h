@@ -23,7 +23,7 @@ public:
 		std::string_view _Name,
 		const std::vector<VertexType>& _Data)
 	{
-		auto Res = GameEngineResources::CreateRes(_Name);
+		auto Res = CreateRes(_Name);
 		Res->ResCreate(&_Data[0], sizeof(VertexType), _Data.size());
 		Res->VertexInfoPtr = &VertexType::VertexInfo;
 		return nullptr;

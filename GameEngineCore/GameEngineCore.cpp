@@ -54,11 +54,11 @@ void GameEngineCore::Update()
 	}
 
 	GameEngineTime::Update();
-	float DeltaTime = GameEngineTime::GetFloatDelta();
-	if (DeltaTime > 1.0f / 60.0f)
+	float Delta = GameEngineTime::GetFloatDelta();
+	/*if (Delta > 1.0f / 60.0f)
 	{
-		DeltaTime = 1.0f / 60.0f;
-	}
+		Delta = 1.0f / 60.0f;
+	}*/
 
 	if (GameEngineWindow::GetInst().IsFocus())
 	{
@@ -69,12 +69,12 @@ void GameEngineCore::Update()
 		GameEngineInput::Reset();
 	}
 
-	CoreObject->Update(DeltaTime);
-	CurLevel->AddLiveTime(DeltaTime);
-	CurLevel->AllUpdate(DeltaTime);
+	CoreObject->Update(Delta);
+	CurLevel->AddLiveTime(Delta);
+	CurLevel->AllUpdate(Delta);
 
 	MainDevice.RenderStart();
-	CurLevel->Render(DeltaTime);
+	CurLevel->Render(Delta);
 	MainDevice.RenderEnd();
 
 	CurLevel->AllReleaseCheck();

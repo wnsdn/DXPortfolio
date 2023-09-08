@@ -12,6 +12,7 @@
 #include <chrono>
 #include <functional>
 #include <algorithm>
+#include <filesystem>
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -19,16 +20,20 @@
 
 #include "GameEngineDebug.h"
 
-#define SafeRelease(OBJ)\
-if (OBJ)\
+using namespace std::literals;
+
+#define SafeRelease(_obj)\
+if (_obj)\
 {\
-	OBJ->Release();\
-	OBJ = nullptr;\
+	_obj->Release();\
+	_obj = nullptr;\
 }\
 
-#define SafeDelete(OBJ)\
-if (OBJ)\
+#define SafeDelete(_obj)\
+if (_obj)\
 {\
-	delete OBJ;\
-	OBJ = nullptr;\
+	delete _obj;\
+	_obj = nullptr;\
 }\
+
+#define	Check(_bool) assert(SUCCEEDED(_bool));

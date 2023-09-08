@@ -100,11 +100,10 @@ void GameEngineSpriteRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 	GameEngineRenderer::ResSetting();
 
 	auto Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "SpriteData", ShaderType::Vertex);
-	Buffer->ChangeData(CurSprite.SpritePivot);
+	Buffer->ChangeData(CurSprite.Pivot);
 	Buffer->Setting(1);
 	CurSprite.Texture->PSSetting(0);
 
-	//auto Sampler = GameEngineSampler::Find("Sampler");
 	Sampler->PSSetting(0);
 
 	GameEngineRenderer::Draw();

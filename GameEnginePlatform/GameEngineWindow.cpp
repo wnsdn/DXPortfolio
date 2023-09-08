@@ -1,19 +1,12 @@
 #include "PreCompile.h"
 #include "GameEngineWindow.h"
 
-bool GameEngineWindow::bUpdate = true;
 bool GameEngineWindow::bFocus = true;
 
 void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POINT& _Pos, const POINT& _Scale)
 {
 	Hinst = _Hinst;
 	Scale = _Scale;
-
-	if (!Hinst)
-	{
-		MsgBoxAssert(__FUNCTION__);
-		return;
-	}
 
 	WNDCLASSEXA Wc = {};
 	Wc.cbSize = sizeof(WNDCLASSEXA);
@@ -24,19 +17,11 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 	Wc.hCursor = LoadCursorA(nullptr, IDC_ARROW);
 	RegisterClassExA(&Wc);
 
-	Hwnd = CreateWindowA(_Name.data(), _Name.data(), WS_OVERLAPPEDWINDOW,
-		0, 0, 0, 0, nullptr, nullptr, Hinst, nullptr);
-
-	if (!Hwnd)
-	{
-		MsgBoxAssert(__FUNCTION__);
-		return;
-	}
+	Hwnd = CreateWindowA(_Name.data(), _Name.data(), WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, Hinst, nullptr);
 
 	RECT Rect{ 0, 0, _Scale.x, _Scale.y };
 	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false);
-	SetWindowPos(Hwnd, nullptr, _Pos.x, _Pos.y,
-		Rect.right - Rect.left, Rect.bottom - Rect.top, SWP_NOZORDER);
+	SetWindowPos(Hwnd, nullptr, _Pos.x, _Pos.y, Rect.right - Rect.left, Rect.bottom - Rect.top, SWP_NOZORDER);
 
 	ShowWindow(Hwnd, SW_SHOW);
 }
@@ -50,14 +35,13 @@ void GameEngineWindow::MessageLoop(std::function<void()> _Start,
 		_Start();
 	}
 
-	MSG Msg = {};
-	while (bUpdate)
+	MSG Msg{};
+	while (Msg.message != WM_QUIT)
 	{
 		if (PeekMessageA(&Msg, nullptr, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&Msg);
 			DispatchMessageA(&Msg);
-			continue;
 		}
 
 		if (_Update)
@@ -83,7 +67,7 @@ LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
 		bFocus = false;
 		return 0;
 	case WM_DESTROY:
-		bUpdate = false;
+		PostQuitMessage(0);
 		return 0;
 	}
 

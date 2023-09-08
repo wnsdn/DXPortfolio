@@ -1,13 +1,8 @@
 #pragma once
-#include <Windows.h>
-#include <functional>
-#include <string_view>
-#include <memory>
 
 class GameEngineWindow
 {
 private:
-	static bool bUpdate;
 	static bool bFocus;
 
 	HINSTANCE Hinst = nullptr;
@@ -17,10 +12,7 @@ private:
 	static LRESULT CALLBACK WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp);
 public:
 	void Init(HINSTANCE _Hinst, std::string_view _Name, const POINT& _Pos, const POINT& _Scale);
-	void MessageLoop(
-		std::function<void()> _Start,
-		std::function<void()> _Update,
-		std::function<void()> _Release);
+	void MessageLoop(std::function<void()> _Start, std::function<void()> _Update, std::function<void()> _Release);
 
 #pragma region GetSet
 	static GameEngineWindow& GetInst()

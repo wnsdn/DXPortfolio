@@ -13,7 +13,7 @@ public:
 	static std::shared_ptr<GameEngineRenderTarget> Create(std::shared_ptr<GameEngineTexture> _Texture,
 		const float4& _Color = float4::BLUE)
 	{
-		auto NewRes = GameEngineResources::CreateRes();
+		auto NewRes = CreateRes();
 		NewRes->ClearColor.push_back(_Color);
 		NewRes->Textures.push_back(_Texture);
 		_Texture->CreateRenderTargetView();

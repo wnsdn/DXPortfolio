@@ -5,7 +5,7 @@ class SpriteData
 {
 public:
 	std::shared_ptr<GameEngineTexture> Texture;
-	float4 SpritePivot;
+	float4 Pivot;
 
 	float4 GetScale();
 };
