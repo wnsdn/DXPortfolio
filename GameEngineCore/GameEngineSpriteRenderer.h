@@ -42,6 +42,13 @@ enum class SamplerOption
 	POINT,
 };
 
+enum class PivotType
+{
+	Center,
+	Bottom,
+	Left,
+};
+
 class GameEngineSampler;
 class GameEngineSpriteRenderer : public GameEngineRenderer
 {
@@ -49,19 +56,33 @@ class GameEngineSpriteRenderer : public GameEngineRenderer
 private:
 	std::map<std::string, std::shared_ptr<GameEngineFrameAnimation>> FrameAnimations;
 	std::shared_ptr<GameEngineFrameAnimation> CurFrameAnimations;
-	std::shared_ptr<GameEngineSprite> Sprite;
+
+	static std::shared_ptr<GameEngineSampler> DefaultSampler;
 	std::shared_ptr<GameEngineSampler> Sampler;
+
+	std::shared_ptr<GameEngineSprite> Sprite;
 	SpriteData CurSprite;
 
 	bool IsImageSize = false;
-	float AutoScaleRatio = 1.0f;
+	float4 AutoScaleRatio{ 1.0f, 1.0f, 1.0f };
 	bool IsPause = false;
+
+	float4 Pivot{ 0.5f, 0.5f };
+	GameEngineTransform ImageTransform;
 protected:
 	int Index = 0;
 
+	void Start() override;
 	void Update(float _Delta) override;
 	void Render(GameEngineCamera* _Camera, float _Delta) override;
 public:
+	GameEngineSpriteRenderer();
+	~GameEngineSpriteRenderer();
+	GameEngineSpriteRenderer(const GameEngineSpriteRenderer&) = delete;
+	GameEngineSpriteRenderer(GameEngineSpriteRenderer&&) noexcept = delete;
+	void operator=(const GameEngineSpriteRenderer&) = delete;
+	void operator=(GameEngineSpriteRenderer&&) noexcept = delete;
+
 	void SetSprite(std::string_view _Name, unsigned int _Index = 0);
 
 	void CreateAnimation(
@@ -72,12 +93,12 @@ public:
 		unsigned int _End = -1,
 		bool _Loop = true);
 
-	void ChangeAnimation(std::string_view _AnimationName, bool _Force = false);
+	void ChangeAnimation(std::string_view _AnimationName, bool _Force = false, unsigned int _FrameIndex = 0);
 
 	void AutoSpriteSizeOn();
 	void AutoSpriteSizeOff();
 
-	void SetAutoScaleRatio(float _Ratio)
+	void SetAutoScaleRatio(const float4& _Ratio)
 	{
 		AutoScaleRatio = _Ratio;
 	}
@@ -86,6 +107,14 @@ public:
 	bool IsCurAnimationEnd() const
 	{
 		return CurFrameAnimations->IsEnd;
+	}
+	bool IsCurAnimation(std::string_view _AnimationName)
+	{
+		return CurFrameAnimations->AnimationName == _AnimationName;
+	}
+	unsigned int GetCurIndex() const
+	{
+		return CurFrameAnimations->CurIndex;
 	}
 
 	void AnimationPauseSwitch();
@@ -96,11 +125,20 @@ public:
 	void SetEndEvent(std::string_view _AnimationName, std::function<void(GameEngineSpriteRenderer*)> _Function);
 	void SetFrameEvent(std::string_view _AnimationName, int _Frame, std::function<void(GameEngineSpriteRenderer*)> _Function);
 
-	GameEngineSpriteRenderer();
-	~GameEngineSpriteRenderer();
-	GameEngineSpriteRenderer(const GameEngineSpriteRenderer&) = delete;
-	GameEngineSpriteRenderer(GameEngineSpriteRenderer&&) noexcept = delete;
-	void operator=(const GameEngineSpriteRenderer&) = delete;
-	void operator=(GameEngineSpriteRenderer&&) noexcept = delete;
+	void SetPivotType(PivotType _Type);
+	void SetImageScale(const float4& _Scale);
+	void AddImageScale(const float4& _Scale);
+	float4 GetImageScale() const;
+
+	static void SetDefaultSampler(std::string_view _SamplerName);
+
+	std::shared_ptr<GameEngineSprite> GetSprite() const
+	{
+		return Sprite;
+	}
+	const SpriteData& GetCurSprite()
+	{
+		return CurSprite;
+	}
 };
 

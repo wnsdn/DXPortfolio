@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "TitleLevel.h"
 
+#include "Background.h"
+
 TitleLevel::TitleLevel()
 {
 }
@@ -11,7 +13,37 @@ TitleLevel::~TitleLevel()
 
 void TitleLevel::Start()
 {
-	GetMainCamera()->Transform.SetLocalPosition({ 0.0f, 0.0f, -500.0f });
+	{
+		GameEngineDirectory Dir;
+		Dir.SetFilenameToPath("ContentsResources");
+		auto AllPath = Dir.GetAllFileInDir("Title");
+		for (auto& Path : AllPath)
+		{
+			GameEngineFile File;
+			File.SetPath(Path.GetPath());
+			GameEngineTexture::Load(File.GetPath());
+		}
+	}
+	{
+		GameEngineDirectory Dir;
+		Dir.SetFilenameToPath("ContentsResources");
+		auto AllPath = Dir.GetAllDirInDir("FolderTexture");
+		for (auto& Path : AllPath)
+		{
+			GameEngineFile File;
+			File.SetPath(Path.GetPath());
+			GameEngineSprite::CreateFolder(File.GetPath());
+		}
+	}
+
+	GameEngineSprite::CreateSingle("Title_BG.png");
+
+	{
+		CreateActor<Background>(ContentsObjectType::BackGround);
+	}
+
+	float4 HalfWndScale = GameEngineWindow::GetInst().GetScale().Half();
+	GetMainCamera()->Transform.SetLocalPosition({ HalfWndScale.X, -HalfWndScale.Y, -500.0f });
 	GetMainCamera()->SetProjectionType(EPROJECTIONTYPE::Perspective);
 }
 

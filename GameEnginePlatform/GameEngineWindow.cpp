@@ -15,6 +15,7 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 	Wc.hInstance = Hinst;
 	Wc.style = CS_VREDRAW | CS_HREDRAW;
 	Wc.hCursor = LoadCursorA(nullptr, IDC_ARROW);
+
 	RegisterClassExA(&Wc);
 
 	Hwnd = CreateWindowA(_Name.data(), _Name.data(), WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, Hinst, nullptr);

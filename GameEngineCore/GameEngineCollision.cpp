@@ -45,10 +45,19 @@ bool GameEngineCollision::Collision(int _Order, const float4& _Next, std::functi
 bool GameEngineCollision::CollisionEvent(int _Order, const EventParameter& _Event)
 {
 	auto& OtherGroup = GetLevel()->Collisions[_Order];
+
+	if (!OtherGroup)
+	{
+		return false;
+	}
+
 	return OtherGroup->CollisionEvent(GetDynamic_Cast_This<GameEngineCollision>(), _Event);
 }
 
 void GameEngineCollision::Release()
 {
-	int a = 0;
+	for (auto& Collision : Others)
+	{
+		Collision->Others.erase(this);
+	}
 }

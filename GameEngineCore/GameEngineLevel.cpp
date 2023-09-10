@@ -69,6 +69,11 @@ void GameEngineLevel::AllReleaseCheck()
 
 	for (auto& Pair : Collisions)
 	{
+		if (!Pair.second)
+		{
+			continue;
+		}
+
 		Pair.second->AllReleaseCheck();
 	}
 
@@ -79,9 +84,10 @@ void GameEngineLevel::AllReleaseCheck()
 
 		for (; Beg != End;)
 		{
+			(*Beg)->AllReleaseCheck();
+
 			if (!(*Beg)->IsDeath())
 			{
-				(*Beg)->AllReleaseCheck();
 				++Beg;
 				continue;
 			}

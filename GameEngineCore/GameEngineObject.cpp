@@ -1,6 +1,19 @@
 #include "PreCompile.h"
 #include "GameEngineObject.h"
 
+void GameEngineObject::AllRelease()
+{
+	Release();
+
+	for (auto& Pair : Childs)
+	{
+		for (auto& Object : Pair.second)
+		{
+			Object->AllRelease();
+		}
+	}
+}
+
 void GameEngineObject::AllLevelStart(GameEngineLevel* _PrevLevel)
 {
 	LevelStart(_PrevLevel);
@@ -41,7 +54,8 @@ void GameEngineObject::AllReleaseCheck()
 {
 	if (IsDeath())
 	{
-		Release();
+		AllRelease();
+		return;
 	}
 
 	for (auto& Pair : Childs)

@@ -11,6 +11,8 @@ private:
 	std::shared_ptr<GameEngineInputLayout> Layout = nullptr;
 	GameEngineCamera* Camera = nullptr;
 protected:
+	GameEngineTransform* DataTransform;
+
 	void Start();
 	virtual void Render(GameEngineCamera* _Camera, float _Delta);
 	void ResSetting();

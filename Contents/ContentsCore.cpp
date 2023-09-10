@@ -6,6 +6,8 @@
 
 void ContentsCore::Start()
 {
+	GameEngineSpriteRenderer::SetDefaultSampler("POINT");
+
 	GameEngineCore::CreateLevel<PlayLevel>("PlayLevel");
 	GameEngineCore::CreateLevel<TitleLevel>("TitleLevel");
 	GameEngineCore::ChangeLevel("PlayLevel");

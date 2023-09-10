@@ -18,6 +18,8 @@ protected:
 
 	GameEngineObject* Parent = nullptr;
 	std::map<int, std::list<std::shared_ptr<GameEngineObject>>> Childs;
+
+	void AllRelease();
 public:
 	GameEngineTransform Transform{};
 
@@ -82,6 +84,16 @@ public:
 		}
 
 		return Result;
+	}
+
+	template <typename ChildType>
+	std::shared_ptr<GameEngineObject> CreateChild(int _Order)
+	{
+		std::shared_ptr<GameEngineObject> NewChild = std::make_shared<ChildType>();
+		NewChild->SetOrder(_Order);
+		NewChild->SetParent(this, _Order);
+		NewChild->Start();
+		return NewChild;
 	}
 
 #pragma region BasicFunction

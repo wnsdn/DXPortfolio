@@ -7,6 +7,7 @@ private:
 
 protected:
 	void Start() override;
+	void Update(float _Delta) override;
 public:
 	Monster();
 	~Monster();
@@ -14,6 +15,4 @@ public:
 	Monster(Monster&&) noexcept = delete;
 	void operator=(const Monster&) = delete;
 	void operator=(Monster&&) noexcept = delete;
-
-	std::shared_ptr<GameEngineSpriteRenderer> Renderer;
 };

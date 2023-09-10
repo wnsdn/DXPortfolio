@@ -18,7 +18,6 @@ void PlayLevel::Start()
 			GameEngineTexture::Load(File.GetPath());
 		}
 	}
-
 	{
 		GameEngineDirectory Dir;
 		Dir.SetFilenameToPath("ContentsResources");
@@ -32,31 +31,16 @@ void PlayLevel::Start()
 	}
 
 	GameEngineSprite::CreateCut("TestPlayer.png", 6, 6);
-	GameEngineSprite::CreateSingle("TestMap.png");
+	GameEngineSprite::CreateCut("Man.png", 4, 4);
+
+	{
+		CreateActor<Player>(ContentsObjectType::Player);
+		CreateActor<Monster>(ContentsObjectType::Monster);
+	}
 
 	auto HalfWindowScale = GameEngineWindow::GetInst().GetScale().Half();
 	GetMainCamera()->Transform.SetLocalPosition({ HalfWindowScale.X, -HalfWindowScale.Y, -500.0f });
 	GetMainCamera()->SetProjectionType(EPROJECTIONTYPE::Orthographic);
-
-	{
-		CreateActor<Player>(ContentsObjectType::Player);
-	}
-
-	{
-		for (int i = 0; i < 10; ++i)
-		{
-			CreateActor<Monster>(ContentsObjectType::Monster)->Transform.SetLocalPosition(GameEngineRandom::RandomVectorBox2D(0, 1280, 0, -720));
-		}
-
-		for (int i = 0; i < 4; ++i)
-		{
-			//CreateActor<PlayMap>(ContentsObjectType::Monster);
-		}
-	}
-
-	{
-		Map = CreateActor<PlayMap>(ContentsObjectType::BackGround);
-	}
 }
 
 void PlayLevel::Update(float _Delta)

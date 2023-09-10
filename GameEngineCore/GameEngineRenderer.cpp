@@ -15,6 +15,7 @@
 
 void GameEngineRenderer::Start()
 {
+	DataTransform = &Transform;
 	SetCameraOrder(0);
 }
 
@@ -43,7 +44,7 @@ void GameEngineRenderer::ResSetting()
 
 	VS->Setting();
 
-	auto& TD = Transform.GetConstTransformDataRef();
+	auto& TD = DataTransform->GetConstTransformDataRef();
 	CB->ChangeData(TD);
 	CB->Setting(0);
 

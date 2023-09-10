@@ -1,6 +1,4 @@
 #pragma once
-#include <string_view>
-#include <GameEngineBase/GameEngineMath.h>
 #include <GameEngineCore/GameEngineObject.h>
 
 class ContentsCore : public GameEngineObject
@@ -10,9 +8,16 @@ protected:
 	void Update(float _Delta) override;
 	void Release() override;
 public:
+	ContentsCore() {}
+	~ContentsCore() override {}
+	ContentsCore(const ContentsCore& _Other) = delete;
+	ContentsCore(ContentsCore&& _Other) noexcept = delete;
+	ContentsCore& operator=(const ContentsCore& _Other) = delete;
+	ContentsCore& operator=(ContentsCore&& _Other) noexcept = delete;
+
 	static std::string_view GetWndName()
 	{
-		return "MyGame";
+		return "A Dance of Fire and Ice";
 	}
 	static POINT GetWndPos()
 	{
@@ -22,11 +27,4 @@ public:
 	{
 		return { 1280, 720 };
 	}
-
-	ContentsCore() {}
-	~ContentsCore() override {}
-	ContentsCore(const ContentsCore& _Other) = delete;
-	ContentsCore(ContentsCore&& _Other) noexcept = delete;
-	ContentsCore& operator=(const ContentsCore& _Other) = delete;
-	ContentsCore& operator=(ContentsCore&& _Other) noexcept = delete;
 };
