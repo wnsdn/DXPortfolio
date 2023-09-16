@@ -3,14 +3,17 @@
 
 #include "GameEngineVertex.h"
 #include "GameEngineVertexBuffer.h"
-#include "GameEngineShader.h"
+#include "GameEngineIndexBuffer.h"
 #include "GameEngineVertexShader.h"
 #include "GameEngineInputLayout.h"
-#include "GameEngineIndexBuffer.h"
+
 #include "GameEngineTransform.h"
 #include "GameEngineConstantBuffer.h"
+
 #include "GameEngineRasterizer.h"
 #include "GameEngineSampler.h"
+#include "GameEngineBlend.h"
+
 #include "GameEngineTexture.h"
 #include "GameEngineSprite.h"
 
@@ -30,7 +33,7 @@ void GameEngineDevice::ResourcesInit()
 	}
 
 	//GER Texture Load
-	{
+	/*{
 		GameEngineDirectory Dir;
 		Dir.SetFilenameToPath("GameEngineResources");
 		auto AllPath = Dir.GetAllFileInDir("Texture");
@@ -40,7 +43,7 @@ void GameEngineDevice::ResourcesInit()
 		}
 	}
 
-	GameEngineSprite::CreateSingle("NSet.png");
+	GameEngineSprite::CreateSingle("NSet.png");*/
 
 	//VB
 	std::vector<GameEngineVertex2D>Vertex
@@ -64,7 +67,25 @@ void GameEngineDevice::ResourcesInit()
 		D3D11_RASTERIZER_DESC Desc{};
 		Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-		GameEngineRasterizer::Create("RasterizerState", Desc);
+		GameEngineRasterizer::Create("Rasterizer", Desc);
+	}
+
+	//Blend
+	{
+		D3D11_BLEND_DESC Desc{};
+		Desc.IndependentBlendEnable = false;
+		Desc.RenderTarget[0].BlendEnable = true;
+
+		Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
+		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+		Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+
+		Desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		GameEngineBlend::Create("Blend", Desc);
 	}
 
 	// Sampler
@@ -78,12 +99,11 @@ void GameEngineDevice::ResourcesInit()
 		Desc.MipLODBias = 0.0f;
 		Desc.MaxAnisotropy = 1;
 		Desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-		Desc.MinLOD = -FLT_MAX;
+		Desc.MinLOD = FLT_MIN;
 		Desc.MaxLOD = FLT_MAX;
 
 		GameEngineSampler::Create("LINEAR", Desc);
 	}
-
 	// Sampler
 	{
 		D3D11_SAMPLER_DESC Desc{};
@@ -95,7 +115,7 @@ void GameEngineDevice::ResourcesInit()
 		Desc.MipLODBias = 0.0f;
 		Desc.MaxAnisotropy = 1;
 		Desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-		Desc.MinLOD = -FLT_MAX;
+		Desc.MinLOD = FLT_MIN;
 		Desc.MaxLOD = FLT_MAX;
 
 		GameEngineSampler::Create("POINT", Desc);

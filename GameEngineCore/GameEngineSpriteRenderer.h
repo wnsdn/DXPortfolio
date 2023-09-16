@@ -13,7 +13,6 @@ class GameEngineFrameAnimation
 
 	std::shared_ptr<GameEngineSprite> Sprite = nullptr;
 
-	float Inter;
 	bool Loop;
 	bool IsEnd;
 
@@ -34,6 +33,8 @@ class GameEngineFrameAnimation
 	SpriteData Update(float _Delta);
 
 	void EventCall(int _Frame);
+public:
+	std::vector<float> Inter;
 };
 
 enum class SamplerOption
@@ -47,6 +48,7 @@ enum class PivotType
 	Center,
 	Bottom,
 	Left,
+	LeftTop,
 };
 
 class GameEngineSampler;
@@ -57,7 +59,6 @@ private:
 	std::map<std::string, std::shared_ptr<GameEngineFrameAnimation>> FrameAnimations;
 	std::shared_ptr<GameEngineFrameAnimation> CurFrameAnimations;
 
-	static std::shared_ptr<GameEngineSampler> DefaultSampler;
 	std::shared_ptr<GameEngineSampler> Sampler;
 
 	std::shared_ptr<GameEngineSprite> Sprite;
@@ -68,6 +69,7 @@ private:
 	bool IsPause = false;
 
 	float4 Pivot{ 0.5f, 0.5f };
+	float4 Alpha{ 0.0f, 0.0f, 0.0f, 1.0f };
 	GameEngineTransform ImageTransform;
 protected:
 	int Index = 0;
@@ -85,28 +87,44 @@ public:
 
 	void SetSprite(std::string_view _Name, unsigned int _Index = 0);
 
-	void CreateAnimation(
-		std::string_view _AnimationName,
-		std::string_view _SpriteName,
-		float _Inter = 0.1f,
-		unsigned int _Start = -1,
-		unsigned int _End = -1,
-		bool _Loop = true);
-
+	void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, float _Inter = 0.1f, unsigned int _Start = -1, unsigned int _End = -1, bool _Loop = true);
 	void ChangeAnimation(std::string_view _AnimationName, bool _Force = false, unsigned int _FrameIndex = 0);
 
 	void AutoSpriteSizeOn();
 	void AutoSpriteSizeOff();
 
+	void SetAutoScaleRatio(float _Ratio)
+	{
+		AutoScaleRatio.X = _Ratio;
+		AutoScaleRatio.Y = _Ratio;
+	}
 	void SetAutoScaleRatio(const float4& _Ratio)
 	{
 		AutoScaleRatio = _Ratio;
 	}
+
+	bool IsRight() const
+	{
+		return AutoScaleRatio.X > 0;
+	}
+	void RightFlip()
+	{
+		AutoScaleRatio.X = abs(AutoScaleRatio.X);
+	}
+	void LeftFlip()
+	{
+		AutoScaleRatio.X = -abs(AutoScaleRatio.X);
+	}
+
 	void SetSamplerState(SamplerOption _Option);
 
 	bool IsCurAnimationEnd() const
 	{
 		return CurFrameAnimations->IsEnd;
+	}
+	bool IsCurSprite(std::string_view _SpriteName)
+	{
+		return Sprite == GameEngineSprite::Find(_SpriteName);
 	}
 	bool IsCurAnimation(std::string_view _AnimationName)
 	{
@@ -115,6 +133,17 @@ public:
 	unsigned int GetCurIndex() const
 	{
 		return CurFrameAnimations->CurIndex;
+	}
+
+	std::shared_ptr<GameEngineFrameAnimation> FindAnimation(std::string_view _AnimationName)
+	{
+		std::string Name{ _AnimationName };
+		if (!FrameAnimations.contains(Name))
+		{
+			return nullptr;
+		}
+
+		return FrameAnimations[Name];
 	}
 
 	void AnimationPauseSwitch();
@@ -126,11 +155,13 @@ public:
 	void SetFrameEvent(std::string_view _AnimationName, int _Frame, std::function<void(GameEngineSpriteRenderer*)> _Function);
 
 	void SetPivotType(PivotType _Type);
+	void SetPivotValue(const float4& _Value)
+	{
+		Pivot = _Value;
+	}
 	void SetImageScale(const float4& _Scale);
 	void AddImageScale(const float4& _Scale);
 	float4 GetImageScale() const;
-
-	static void SetDefaultSampler(std::string_view _SamplerName);
 
 	std::shared_ptr<GameEngineSprite> GetSprite() const
 	{
@@ -139,6 +170,41 @@ public:
 	const SpriteData& GetCurSprite()
 	{
 		return CurSprite;
+	}
+
+	void SetAlpha(float _Value)
+	{
+		if (Alpha.A == _Value)
+		{
+			return;
+		}
+
+		if (_Value > 1.0f)
+		{
+			_Value = 1.0f;
+		}
+		else if (_Value < 0.0f)
+		{
+			_Value = 0.0f;
+		}
+		Alpha.A = _Value;
+	}
+	void AddAlpha(float _Value)
+	{
+		Alpha.A += _Value;
+
+		if (Alpha.A > 1.0f)
+		{
+			Alpha.A = 1.0f;
+		}
+		else if (Alpha.A < 0.0f)
+		{
+			Alpha.A = 0.0f;
+		}
+	}
+	float GetAlpha() const
+	{
+		return Alpha.A;
 	}
 };
 

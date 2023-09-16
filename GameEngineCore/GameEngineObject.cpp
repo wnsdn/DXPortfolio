@@ -9,6 +9,8 @@ void GameEngineObject::AllRelease()
 	{
 		for (auto& Object : Pair.second)
 		{
+			Object->bDeath = true;
+			Object->Parent = nullptr;
 			Object->AllRelease();
 		}
 	}

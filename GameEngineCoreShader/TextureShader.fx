@@ -27,14 +27,16 @@ PixelOutput TextureShader_VS(GameEngineVertex2D _Input)
 Texture2D DiffuseTex : register(t0);
 SamplerState Sampler : register(s0);
 
-float4 TextureShader_PS(PixelOutput _Input) : SV_Target0
+float4 TextureShader_PS(PixelOutput _Input) : SV_Target
 {
     float4 Color = DiffuseTex.Sample(Sampler, _Input.TEXCOORD.xy);
 
-    if (0.0f >= Color.a)
+    if (Color.a <= 0.0f)
     {
         clip(-1);
     }
+    
+    Color.a = Alpha.a;
 
     return Color;
 }

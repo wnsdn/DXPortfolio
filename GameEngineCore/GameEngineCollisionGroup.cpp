@@ -164,36 +164,30 @@ bool GameEngineCollisionGroup::CollisionEvent(std::shared_ptr<GameEngineCollisio
 			continue;
 		}
 
-		auto Other = Col.get();
-		if (_Col->Others.contains(Other))
+		if (_Col->Others.contains(Col))
 		{
 			if (_Event.Exit)
 			{
-				_Event.Exit(Other);
-				Other->Others.erase(_Col.get());
-				_Col->Others.erase(Other);
+				_Event.Exit(_Col.get(), Col.get());
 			}
 		}
 	}
 
 	if (!ResultCollision.empty())
 	{
-		for (auto& ResCol : ResultCollision)
+		for (auto& Other : ResultCollision)
 		{
-			auto Other = ResCol.get();
 			if (!_Col->Others.contains(Other))
 			{
 				if (_Event.Enter)
 				{
-					_Event.Enter(Other);
-					Other->Others.insert(_Col.get());
-					_Col->Others.insert(Other);
+					_Event.Enter(_Col.get(), Other.get());
 				}
 				else
 				{
 					if (_Event.Stay)
 					{
-						_Event.Stay(Other);
+						_Event.Stay(_Col.get(), Other.get());
 					}
 				}
 			}

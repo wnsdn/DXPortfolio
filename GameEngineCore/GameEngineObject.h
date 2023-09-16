@@ -86,12 +86,12 @@ public:
 		return Result;
 	}
 
-	template <typename ChildType>
-	std::shared_ptr<GameEngineObject> CreateChild(int _Order)
+	template <typename ChildType, typename EnumType>
+	std::shared_ptr<GameEngineObject> CreateChild(EnumType _Order)
 	{
 		std::shared_ptr<GameEngineObject> NewChild = std::make_shared<ChildType>();
-		NewChild->SetOrder(_Order);
-		NewChild->SetParent(this, _Order);
+		NewChild->SetOrder(static_cast<int>(_Order));
+		NewChild->SetParent(this, static_cast<int>(_Order));
 		NewChild->Start();
 		return NewChild;
 	}

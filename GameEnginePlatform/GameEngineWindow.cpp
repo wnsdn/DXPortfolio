@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineWindow.h"
+#include <App/resource.h>
 
 bool GameEngineWindow::bFocus = true;
 
@@ -15,7 +16,8 @@ void GameEngineWindow::Init(HINSTANCE _Hinst, std::string_view _Name, const POIN
 	Wc.hInstance = Hinst;
 	Wc.style = CS_VREDRAW | CS_HREDRAW;
 	Wc.hCursor = LoadCursorA(nullptr, IDC_ARROW);
-
+	Wc.hIcon = LoadIconA(Hinst, MAKEINTRESOURCEA(IDI_ICON1));
+	Wc.hIconSm = LoadIconA(Hinst, MAKEINTRESOURCEA(IDI_ICON1));
 	RegisterClassExA(&Wc);
 
 	Hwnd = CreateWindowA(_Name.data(), _Name.data(), WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, Hinst, nullptr);

@@ -111,8 +111,7 @@ void GameEngineTransform::CalculationViewAndProjection(const TransformData& _Tra
 	CalculationViewAndProjection(_TransData.ViewMatrix, _TransData.ProjectionMatrix);
 }
 
-void GameEngineTransform::CalculationViewAndProjection(const float4x4& _View,
-	const float4x4& _Projection)
+void GameEngineTransform::CalculationViewAndProjection(const float4x4& _View, const float4x4& _Projection)
 {
 	TransData.ViewMatrix = _View;
 	TransData.ProjectionMatrix = _Projection;
@@ -124,7 +123,7 @@ void GameEngineTransform::TransformUpdate()
 	TransData.LocalCalculation();
 	TransData.WorldMatrix = TransData.LocalWorldMatrix;
 
-	if (Parent)
+	if (Parent && ParentCalc)
 	{
 		TransData.ParentMatrix = Parent->TransData.WorldMatrix;
 		TransData.WorldMatrix = TransData.LocalWorldMatrix * TransData.ParentMatrix;

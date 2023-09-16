@@ -2,12 +2,13 @@
 #include "GameEngineObject.h"
 #include "GameEngineComponent.h"
 
+class GameEngineCollision;
 class EventParameter
 {
 public:
-	std::function<void(class GameEngineCollision* _Collisions)> Enter = nullptr;
-	std::function<void(class GameEngineCollision* _Collisions)> Stay = nullptr;
-	std::function<void(class GameEngineCollision* _Collisions)> Exit = nullptr;
+	std::function<void(GameEngineCollision*, GameEngineCollision*)> Enter = nullptr;
+	std::function<void(GameEngineCollision*, GameEngineCollision*)> Stay = nullptr;
+	std::function<void(GameEngineCollision*, GameEngineCollision*)> Exit = nullptr;
 };
 
 class GameEngineCollision : public GameEngineComponent
@@ -15,7 +16,7 @@ class GameEngineCollision : public GameEngineComponent
 	friend class GameEngineCollisionGroup;
 private:
 	ColType CollisionType = ColType::SPHERE2D;
-	std::set<GameEngineCollision*> Others;
+	std::set<std::shared_ptr<GameEngineCollision>> Others;
 protected:
 	void Start() override;
 	void Release() override;
@@ -66,7 +67,6 @@ public:
 	{
 		CollisionType = _CollisionType;
 	}
-
 	ColType GetCollisionType() const
 	{
 		return CollisionType;

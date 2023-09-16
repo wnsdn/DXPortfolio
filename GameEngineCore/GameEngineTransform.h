@@ -109,6 +109,7 @@ private:
 	GameEngineTransform* Parent = nullptr;
 	std::list<GameEngineTransform*> Childs;
 	TransformData TransData;
+	bool ParentCalc = true;
 public:
 	void Orthographic(float _Width, float _Height, float _Far, float _Near)
 	{
@@ -154,6 +155,16 @@ public:
 		TransformUpdate();
 	}
 
+	void SetRevolutionMatrix(const float4& _Rot)
+	{
+		TransData.RevolutionMatrix.Rotation(_Rot);
+		TransformUpdate();
+	}
+	void SetParentCalc(bool _ParentCalc)
+	{
+		ParentCalc = _ParentCalc;
+	}
+
 	const TransformData& GetConstTransformDataRef()
 	{
 		return TransData;
@@ -162,9 +173,25 @@ public:
 	{
 		return TransData.LocalScale;
 	}
+	float4 GetLocalRotation() const
+	{
+		return TransData.LocalRotation;
+	}
+	float4 GetLocalPosition() const
+	{
+		return TransData.LocalPosition;
+	}
+	float4 GetWorldScale() const
+	{
+		return TransData.WorldScale;
+	}
+	float4 GetWorldRotation() const
+	{
+		return TransData.WorldRotation;
+	}
 	float4 GetWorldPosition() const
 	{
-		return TransData.WorldMatrix.RowVec[3];
+		return TransData.WorldPosition;
 	}
 	float4x4 GetWorldViewProjectionMatrix() const
 	{
@@ -202,6 +229,7 @@ public:
 	{
 		Parent = &_Parent;
 		Parent->Childs.push_back(this);
+		TransformUpdate();
 	}
 	void CalChilds();
 

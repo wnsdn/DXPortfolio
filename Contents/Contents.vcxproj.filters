@@ -1,68 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="01. PreCompile">
-      <UniqueIdentifier>{1a5d5f57-9da5-44e1-81a4-ab0f755a907b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Actor">
       <UniqueIdentifier>{31dd2b39-e52f-4d59-bce2-56e6ed5b06df}</UniqueIdentifier>
     </Filter>
     <Filter Include="Level">
       <UniqueIdentifier>{c68dc0cc-ffbb-41e0-97ef-0c1e0449ac64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Global">
-      <UniqueIdentifier>{414156bc-6f2d-4b3e-ad50-4e72dcc2123d}</UniqueIdentifier>
+    <Filter Include="00. PreCompile">
+      <UniqueIdentifier>{1a5d5f57-9da5-44e1-81a4-ab0f755a907b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Global">
+      <UniqueIdentifier>{43df4a9d-472e-4e71-8c48-71e0a52ce04f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Tile">
+      <UniqueIdentifier>{fd0e615b-53aa-4eb1-a183-e989c233be04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
-      <Filter>01. PreCompile</Filter>
+      <Filter>00. PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
-    <ClCompile Include="PlayLevel.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="TitleLevel.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="PlayMap.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
     <ClCompile Include="Background.cpp">
       <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile_Main.cpp">
+      <Filter>Actor\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile_Play.cpp">
+      <Filter>Actor\Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
-      <Filter>01. PreCompile</Filter>
+      <Filter>00. PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="ContentsCore.h" />
-    <ClInclude Include="PlayLevel.h">
-      <Filter>Level</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="TitleLevel.h">
       <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="PlayMap.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="ContentsEnum.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Background.h">
       <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>01. Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile_Main.h">
+      <Filter>Actor\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile_Play.h">
+      <Filter>Actor\Tile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,16 +1,12 @@
 #include "PreCompile.h"
 #include "ContentsCore.h"
 
-#include "PlayLevel.h"
 #include "TitleLevel.h"
 
 void ContentsCore::Start()
 {
-	GameEngineSpriteRenderer::SetDefaultSampler("POINT");
-
-	GameEngineCore::CreateLevel<PlayLevel>("PlayLevel");
 	GameEngineCore::CreateLevel<TitleLevel>("TitleLevel");
-	GameEngineCore::ChangeLevel("PlayLevel");
+	GameEngineCore::ChangeLevel("TitleLevel");
 }
 
 void ContentsCore::Update(float _Delta)

@@ -27,6 +27,7 @@ void GameEngineCore::Start()
 {
 	GameEngineTime::Init();
 	GameEngineInput::Init();
+	GameEngineSound::Init();
 
 	CoreObject->Start();
 }
@@ -53,12 +54,9 @@ void GameEngineCore::Update()
 		return;
 	}
 
+	GameEngineSound::Update();
 	GameEngineTime::Update();
 	float Delta = GameEngineTime::GetFloatDelta();
-	/*if (Delta > 1.0f / 60.0f)
-	{
-		Delta = 1.0f / 60.0f;
-	}*/
 
 	if (GameEngineWindow::GetInst().IsFocus())
 	{
@@ -83,6 +81,8 @@ void GameEngineCore::Update()
 void GameEngineCore::Release()
 {
 	CoreObject->Release();
+	GameEngineSound::SoundRelease();
+	GameEngineSound::SystemRelease();
 }
 
 void GameEngineCore::LevelInit(std::shared_ptr<GameEngineLevel> _Level)

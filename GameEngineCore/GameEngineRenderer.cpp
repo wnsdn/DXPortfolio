@@ -11,6 +11,7 @@
 #include "GameEngineConstantBuffer.h"
 #include "GameEngineRasterizer.h"
 #include "GameEnginePixelShader.h"
+#include "GameEngineBlend.h"
 #include "GameEngineRenderTarget.h"
 
 void GameEngineRenderer::Start()
@@ -31,8 +32,9 @@ void GameEngineRenderer::ResSetting()
 	auto VS = GameEngineVertexShader::Find("TextureShader_VS");
 	auto IB = GameEngineIndexBuffer::Find("Rect");
 	auto CB = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData", ShaderType::Vertex);
-	auto RS = GameEngineRasterizer::Find("RasterizerState");
+	auto RS = GameEngineRasterizer::Find("Rasterizer");
 	auto PS = GameEnginePixelShader::Find("TextureShader_PS");
+	auto BS = GameEngineBlend::Find("Blend");
 	auto RTV = GameEngineCore::GetBackBufferRenderTarget();
 
 	VB->Setting();
@@ -42,11 +44,10 @@ void GameEngineRenderer::ResSetting()
 	IB->Setting();
 	GameEngineCore::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	VS->Setting();
-
 	auto& TD = DataTransform->GetConstTransformDataRef();
 	CB->ChangeData(TD);
 	CB->Setting(0);
+	VS->Setting();
 
 	D3D11_VIEWPORT Viewport{};
 	Viewport.TopLeftX = 0;
@@ -60,6 +61,7 @@ void GameEngineRenderer::ResSetting()
 
 	PS->Setting();
 
+	BS->Setting();
 	RTV->Setting();
 }
 

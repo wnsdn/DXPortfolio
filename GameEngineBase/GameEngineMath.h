@@ -188,6 +188,11 @@ struct float4//Vector
 	{
 		return DirectX::XMVector3Cross(_V1.Vector, _V2.Vector);
 	}
+	static float Length2D(const float4& _Left, const float4& _Right)
+	{
+		float4 Diff = _Left - _Right;
+		return DirectX::XMVector2Length(Diff).m128_f32[0];
+	}
 #pragma endregion
 
 #pragma region Operator

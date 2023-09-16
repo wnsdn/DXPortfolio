@@ -12,15 +12,19 @@ Background::~Background()
 void Background::Start()
 {
 	auto WndScale = GameEngineWindow::GetInst().GetScale();
-	auto HalfWndScale = WndScale.Half();
-	HalfWndScale.Y *= -1.0f;
+	auto Pos = WndScale.Half();
+	Pos.Y *= -1.0f;
 
-	auto Renderer = CreateComponent<GameEngineSpriteRenderer>(0);
-	Renderer->SetSprite("Title_BG.png");
+	auto Renderer = CreateComponent<GameEngineSpriteRenderer>(ContentsRenderType::BackGround);
+	Renderer->SetSprite("title_bg.png");
 	Renderer->SetImageScale(WndScale);
-	Renderer->Transform.SetLocalPosition(HalfWndScale);
+
+	Transform.SetLocalPosition(Pos);
 }
 
 void Background::Update(float _Delta)
 {
+	auto CamPos = GetLevel()->GetMainCamera()->Transform.GetLocalPosition();
+
+	Transform.SetLocalPosition(CamPos);
 }

@@ -20,35 +20,69 @@ void GameEngineCollision::Start()
 
 bool GameEngineCollision::Collision(int _Order)
 {
+	if (!GetLevel()->Collisions.contains(_Order))
+	{
+		return false;
+	}
+
 	auto& OtherGroup = GetLevel()->Collisions[_Order];
 	return OtherGroup->Collision(GetDynamic_Cast_This<GameEngineCollision>());
 }
 
 bool GameEngineCollision::Collision(int _Order, const float4& _NextPos)
 {
+	if (!GetLevel()->Collisions.contains(_Order))
+	{
+		return false;
+	}
+
 	auto& OtherGroup = GetLevel()->Collisions[_Order];
 	return OtherGroup->Collision(GetDynamic_Cast_This<GameEngineCollision>(), _NextPos);
 }
 
 bool GameEngineCollision::Collision(int _Order, std::function<void(std::vector<std::shared_ptr<GameEngineCollision>>& _Collision)> _Collision)
 {
+	if (!GetLevel()->Collisions.contains(_Order))
+	{
+		return false;
+	}
+
 	auto& OtherGroup = GetLevel()->Collisions[_Order];
 	return OtherGroup->Collision(GetDynamic_Cast_This<GameEngineCollision>(), _Collision);
 }
 
 bool GameEngineCollision::Collision(int _Order, const float4& _Next, std::function<void(std::vector<std::shared_ptr<GameEngineCollision>>& _Collision)> _Collision)
 {
+	if (!GetLevel()->Collisions.contains(_Order))
+	{
+		return false;
+	}
+
 	auto& OtherGroup = GetLevel()->Collisions[_Order];
 	return OtherGroup->Collision(GetDynamic_Cast_This<GameEngineCollision>(), _Next, _Collision);
 }
 
 bool GameEngineCollision::CollisionEvent(int _Order, const EventParameter& _Event)
 {
-	auto& OtherGroup = GetLevel()->Collisions[_Order];
-
-	if (!OtherGroup)
+	if (!GetLevel()->Collisions.contains(_Order))
 	{
 		return false;
+	}
+
+	auto& OtherGroup = GetLevel()->Collisions[_Order];
+
+	auto Beg = Others.begin();
+	auto End = Others.end();
+
+	for (; Beg != End;)
+	{
+		if (!(*Beg)->IsDeath())
+		{
+			++Beg;
+			continue;
+		}
+
+		Beg = Others.erase(Beg);
 	}
 
 	return OtherGroup->CollisionEvent(GetDynamic_Cast_This<GameEngineCollision>(), _Event);
@@ -56,8 +90,5 @@ bool GameEngineCollision::CollisionEvent(int _Order, const EventParameter& _Even
 
 void GameEngineCollision::Release()
 {
-	for (auto& Collision : Others)
-	{
-		Collision->Others.erase(this);
-	}
+	int a = 0;
 }

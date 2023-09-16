@@ -40,3 +40,8 @@ cbuffer SpriteData : register(b1)
     float Scale2DX;
     float Scale2DY;
 };
+
+cbuffer AlphaData : register(b2)
+{
+    float4 Alpha;
+};

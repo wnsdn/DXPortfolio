@@ -9,12 +9,12 @@ enum class ContentsRenderType
 enum class ContentsObjectType
 {
 	BackGround,
+	Tile,
 	Player,
-	Monster,
 };
 
 enum class ContentsCollisionType
 {
 	Player,
-	Monster,
+	Tile,
 };

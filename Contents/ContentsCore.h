@@ -25,6 +25,6 @@ public:
 	}
 	static POINT GetWndScale()
 	{
-		return { 1280, 720 };
+		return { 960, 540};
 	}
 };

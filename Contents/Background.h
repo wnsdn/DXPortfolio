@@ -3,11 +3,6 @@
 
 class Background : public GameEngineActor
 {
-private:
-
-protected:
-	void Start() override;
-	void Update(float _Delta) override;
 public:
 	Background();
 	~Background();
@@ -15,4 +10,8 @@ public:
 	Background(Background&&) noexcept = delete;
 	void operator=(const Background&) = delete;
 	void operator=(Background&&) noexcept = delete;
+protected:
+	void Start() override;
+	void Update(float _Delta) override;
+private:
 };

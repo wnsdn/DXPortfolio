@@ -5,8 +5,6 @@
 #include "GameEngineSampler.h"
 #include "GameEngineConstantBuffer.h"
 
-std::shared_ptr<GameEngineSampler> GameEngineSpriteRenderer::DefaultSampler;
-
 void GameEngineFrameAnimation::Reset()
 {
 	CurTime = 0.0f;
@@ -35,11 +33,11 @@ SpriteData GameEngineFrameAnimation::Update(float _Delta)
 
 	CurTime += _Delta;
 
-	if (CurTime >= Inter)
+	if (CurTime >= Inter[CurIndex])
 	{
 		++CurIndex;
 		EventCheck = true;
-		CurTime -= Inter;
+		CurTime -= Inter[CurIndex];
 
 		if (CurIndex > End - Start)
 		{
@@ -74,12 +72,6 @@ void GameEngineFrameAnimation::EventCall(int _Frame)
 
 GameEngineSpriteRenderer::GameEngineSpriteRenderer()
 {
-	if (!DefaultSampler)
-	{
-		assert(false);
-	}
-
-	Sampler = DefaultSampler;
 }
 
 GameEngineSpriteRenderer::~GameEngineSpriteRenderer()
@@ -92,6 +84,8 @@ void GameEngineSpriteRenderer::Start()
 
 	DataTransform = &ImageTransform;
 	ImageTransform.SetParent(Transform);
+
+	Sampler = GameEngineSampler::Find("POINT");
 }
 
 void GameEngineSpriteRenderer::Update(float _Delta)
@@ -133,8 +127,12 @@ void GameEngineSpriteRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 	auto Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "SpriteData", ShaderType::Vertex);
 	Buffer->ChangeData(CurSprite.Pivot);
 	Buffer->Setting(1);
-	CurSprite.Texture->PSSetting(0);
 
+	Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "AlphaData", ShaderType::Pixel);
+	Buffer->ChangeData(Alpha);
+	Buffer->Setting(2);
+
+	CurSprite.Texture->PSSetting(0);
 	Sampler->PSSetting(0);
 
 	GameEngineRenderer::Draw();
@@ -182,7 +180,6 @@ void GameEngineSpriteRenderer::CreateAnimation(
 	NewAnimation->SpriteName = _SpriteName;
 	NewAnimation->Sprite = Sprite;
 	NewAnimation->Loop = _Loop;
-	NewAnimation->Inter = _Inter;
 	NewAnimation->Parent = this;
 
 	if (_Start != -1)
@@ -203,10 +200,15 @@ void GameEngineSpriteRenderer::CreateAnimation(
 		NewAnimation->End = Sprite->GetSpriteCount() - 1;
 	}
 
-
 	for (auto i = NewAnimation->Start; i <= NewAnimation->End; i++)
 	{
 		NewAnimation->Index.push_back(i);
+	}
+
+	NewAnimation->Inter.resize(NewAnimation->Index.size());
+	for (int i = 0; i < NewAnimation->Index.size(); ++i)
+	{
+		NewAnimation->Inter[i] = _Inter;
 	}
 
 	NewAnimation->CurIndex = 0;
@@ -231,6 +233,7 @@ void GameEngineSpriteRenderer::ChangeAnimation(std::string_view _AnimationName, 
 	CurFrameAnimations = FrameAnimations[Name];
 	CurFrameAnimations->Reset();
 	CurFrameAnimations->CurIndex = _FrameIndex;
+	CurSprite = CurFrameAnimations->Sprite->GetSpriteData(CurFrameAnimations->CurIndex);
 }
 
 void GameEngineSpriteRenderer::AutoSpriteSizeOn()
@@ -322,6 +325,9 @@ void GameEngineSpriteRenderer::SetPivotType(PivotType _Type)
 	case PivotType::Left:
 		Pivot = { 1.0f, 0.5f };
 		break;
+	case PivotType::LeftTop:
+		Pivot = { 1.0f, 0.0f };
+		break;
 	}
 }
 
@@ -338,9 +344,4 @@ void GameEngineSpriteRenderer::AddImageScale(const float4& _Scale)
 float4 GameEngineSpriteRenderer::GetImageScale() const
 {
 	return ImageTransform.GetLocalScale();
-}
-
-void GameEngineSpriteRenderer::SetDefaultSampler(std::string_view _SamplerName)
-{
-	DefaultSampler = GameEngineSampler::Find(_SamplerName);
 }
