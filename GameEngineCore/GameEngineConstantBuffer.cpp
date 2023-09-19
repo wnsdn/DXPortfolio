@@ -10,11 +10,7 @@ void GameEngineConstantBuffer::ResCreate(int _ByteSize)
 	BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
 
-	if (GameEngineCore::GetDevice()->CreateBuffer(&BufferInfo, nullptr, &Buffer) != S_OK)
-	{
-		MsgBoxAssert("상수 버퍼 생성에 실패했습니다.");
-		return;
-	}
+	Check(GameEngineCore::GetDevice()->CreateBuffer(&BufferInfo, nullptr, &Buffer));
 }
 
 void GameEngineConstantBuffer::ChangeData(const void* _Data, UINT _Size)
@@ -48,7 +44,8 @@ void GameEngineConstantBuffer::ChangeData(const void* _Data, UINT _Size)
 
 void GameEngineConstantBuffer::Setting(UINT _Slot)
 {
-	switch (Type)
+	GameEngineCore::GetContext()->VSSetConstantBuffers(_Slot, 1, &Buffer);
+	/*switch (Type)
 	{
 	case ShaderType::None:
 		break;
@@ -70,5 +67,5 @@ void GameEngineConstantBuffer::Setting(UINT _Slot)
 		break;
 	default:
 		break;
-	}
+	}*/
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "GameEngineShaderResHelper.h"
 
 enum class ShaderType
 {
@@ -14,13 +15,6 @@ enum class ShaderType
 
 class GameEngineShader
 {
-private:
-	ShaderType ShaderTypeValue = ShaderType::None;
-protected:
-	std::string Version;
-	ID3DBlob* BinaryCode = nullptr;
-
-	void CreateVersion(ShaderType _Type, UINT _VersionHigh, UINT _VersionLow);
 public:
 	static bool AutoCompile(GameEngineFile& _File);
 
@@ -30,5 +24,14 @@ public:
 	GameEngineShader(GameEngineShader&&) noexcept = delete;
 	void operator=(const GameEngineShader&) = delete;
 	void operator=(GameEngineShader&&) noexcept = delete;
+
+	GameEngineShaderResHelper ResHelper;
+protected:
+	void CreateVersion(ShaderType _Type, UINT _VersionHigh, UINT _VersionLow);
+
+	std::string Version;
+	ID3DBlob* BinaryCode = nullptr;
+private:
+	ShaderType ShaderTypeValue = ShaderType::None;
 };
 

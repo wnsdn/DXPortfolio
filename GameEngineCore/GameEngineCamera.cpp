@@ -106,3 +106,17 @@ void GameEngineCamera::SetCameraOrder(int _Order)
 	CameraOrder = _Order;
 	Level->Cameras[CameraOrder] = GetDynamic_Cast_This<GameEngineCamera>();
 }
+
+float4 GameEngineCamera::GetWorldMousePos2D()
+{
+	float4x4 Viewport{};
+	float4 MousePos = GameEngineWindow::GetInst().GetMousePos();
+	float4 Scale = GameEngineWindow::GetInst().GetScale();
+
+	Viewport.ViewPort(Scale.X, Scale.Y);
+	MousePos *= Viewport.InverseReturn();
+	MousePos *= Transform.GetConstTransformDataRef().ProjectionMatrix.InverseReturn();
+	MousePos *= Transform.GetConstTransformDataRef().ViewMatrix.InverseReturn();
+
+	return MousePos;
+}

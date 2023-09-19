@@ -97,6 +97,11 @@ struct float4//Vector
 		return DirectX::XMVectorAbs(Vector);
 	}
 
+	std::string ToString(std::string_view _Next = "")
+	{
+		return "X : " + std::to_string(X) + " Y : " + std::to_string(Y) + " Z : " + std::to_string(Z) + _Next.data();
+	}
+
 	float Length() const
 	{
 		return DirectX::XMVector3Length(Vector).m128_f32[0];
@@ -178,6 +183,15 @@ struct float4//Vector
 		Result.Z = DirectX::XMConvertToDegrees(Result.Z);
 
 		return Result;
+	}
+
+	float4 EulerToQuaternion()
+	{
+		float4 Result = Vector;
+		Result.X = DirectX::XMConvertToRadians(Result.X);
+		Result.Y = DirectX::XMConvertToRadians(Result.Y);
+		Result.Z = DirectX::XMConvertToRadians(Result.Z);
+		return DirectX::XMQuaternionRotationRollPitchYawFromVector(Result.Vector);
 	}
 
 	static float Dot(const float4& _V1, const float4& _V2)//Dot Product
@@ -387,9 +401,18 @@ struct float4x4//Matrix
 		Matrix.r[3].m128_f32[1] = HalfHeight;
 	}
 
+	void Compose(float4& _Scale, float4& _RotQuaternion, float4& _Pos)
+	{
+		Matrix = DirectX::XMMatrixAffineTransformation(_Scale.Vector, _RotQuaternion.Vector, _RotQuaternion.Vector, _Pos.Vector);
+	}
 	void Decompose(float4& _Scale, float4& _RotQuaternion, float4& _Pos) const
 	{
 		DirectX::XMMatrixDecompose(&_Scale.Vector, &_RotQuaternion.Vector, &_Pos.Vector, Matrix);
+	}
+
+	float4x4 InverseReturn() const
+	{
+		return DirectX::XMMatrixInverse(nullptr, Matrix);
 	}
 #pragma endregion
 

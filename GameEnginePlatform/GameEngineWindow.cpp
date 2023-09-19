@@ -59,6 +59,15 @@ void GameEngineWindow::MessageLoop(std::function<void()> _Start,
 	}
 }
 
+float4 GameEngineWindow::GetMousePos()
+{
+	POINT MonitorPoint{};
+	GetCursorPos(&MonitorPoint);
+	ScreenToClient(Hwnd, &MonitorPoint);
+
+	return float4{ static_cast<float>(MonitorPoint.x), static_cast<float>(MonitorPoint.y) };
+}
+
 LRESULT GameEngineWindow::WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp)
 {
 	switch (_Msg)

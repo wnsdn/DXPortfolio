@@ -124,11 +124,11 @@ void GameEngineSpriteRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 
 	GameEngineRenderer::ResSetting();
 
-	auto Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "SpriteData", ShaderType::Vertex);
+	auto Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "SpriteData");
 	Buffer->ChangeData(CurSprite.Pivot);
 	Buffer->Setting(1);
 
-	Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "AlphaData", ShaderType::Pixel);
+	Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "AlphaData");
 	Buffer->ChangeData(Alpha);
 	Buffer->Setting(2);
 

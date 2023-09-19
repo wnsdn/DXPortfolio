@@ -121,6 +121,11 @@ void GameEngineTilemap::Render(GameEngineCamera* _Camera, float _Delta)
 	{
 		for (int x = StartX; x < EndX; ++x)
 		{
+			if (Tiles[y][x].Index < 0)
+			{
+				continue;
+			}
+
 			auto CB1 = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData");
 
 			if (CB1)

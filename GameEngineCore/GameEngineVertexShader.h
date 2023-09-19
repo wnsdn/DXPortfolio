@@ -11,12 +11,9 @@ private:
 	std::string EntryName;
 	ID3D11VertexShader* ShaderPtr = nullptr;
 
-	void ShaderLoad(std::string_view _Path, std::string_view _EntryPoint,
-		UINT _VersionHigh = 5, UINT _VersionLow = 0);
+	void ShaderLoad(std::string_view _Path, std::string_view _EntryPoint, UINT _VersionHigh = 5, UINT _VersionLow = 0);
 public:
-	static std::shared_ptr<GameEngineVertexShader> Load(
-		std::string_view _Path, std::string_view _EntryPoint,
-		UINT _VersionHigh = 5, UINT _VersionLow = 0)
+	static std::shared_ptr<GameEngineVertexShader> Load(std::string_view _Path, std::string_view _EntryPoint, UINT _VersionHigh = 5, UINT _VersionLow = 0)
 	{
 		auto Res = GameEngineVertexShader::CreateRes(_EntryPoint);
 		Res->ShaderLoad(_Path, _EntryPoint, _VersionHigh, _VersionLow);

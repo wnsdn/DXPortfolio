@@ -129,19 +129,9 @@ public:
 		TransData.Scale = _Value;
 		TransformUpdate();
 	}
-	void AddLocalScale(const float4& _Value)
-	{
-		TransData.Scale += _Value;
-		TransformUpdate();
-	}
 	void SetLocalRotation(const float4& _Value)
 	{
 		TransData.Rotation = _Value;
-		TransformUpdate();
-	}
-	void AddLocalRotation(const float4& _Value)
-	{
-		TransData.Rotation += _Value;
 		TransformUpdate();
 	}
 	void SetLocalPosition(const float4& _Value)
@@ -149,10 +139,80 @@ public:
 		TransData.Position = _Value;
 		TransformUpdate();
 	}
+	void AddLocalScale(const float4& _Value)
+	{
+		TransData.Scale += _Value;
+		TransformUpdate();
+	}
+	void AddLocalRotation(const float4& _Value)
+	{
+		TransData.Rotation += _Value;
+		TransformUpdate();
+	}
 	void AddLocalPosition(const float4& _Value)
 	{
 		TransData.Position += _Value;
 		TransformUpdate();
+	}
+	float4 GetLocalScale() const
+	{
+		return TransData.LocalScale;
+	}
+	float4 GetLocalRotationEuler() const
+	{
+		return TransData.LocalRotation;
+	}
+	float4 GetLocalPosition() const
+	{
+		return TransData.LocalPosition;
+	}
+
+	bool AbsoluteScale = false;
+	bool AbsolutePosition = false;
+	bool AbsoluteRotation = false;
+
+	void SetWorldScale(const float4& _Value)
+	{
+		AbsoluteScale = true;
+		TransData.Scale = _Value;
+		TransformUpdate();
+	}
+	void SetWorldRotation(const float4& _Value)
+	{
+		AbsoluteRotation = true;
+		TransData.Rotation = _Value;
+		TransformUpdate();
+	}
+	void SetWorldPosition(const float4& _Value)
+	{
+		AbsolutePosition = true;
+		TransData.Position = _Value;
+		TransformUpdate();
+	}
+	void AddWorldScale(const float4& _Value)
+	{
+		SetWorldScale(GetWorldScale() + _Value);
+	}
+	void AddWorldRotation(const float4& _Value)
+	{
+		SetWorldRotation(GetWorldRotationEuler() + _Value);
+	}
+	void AddWorldPosition(const float4& _Value)
+	{
+		SetWorldPosition(GetWorldPosition() + _Value);
+	}
+
+	float4 GetWorldScale() const
+	{
+		return TransData.WorldScale;
+	}
+	float4 GetWorldRotationEuler() const
+	{
+		return TransData.WorldRotation;
+	}
+	float4 GetWorldPosition() const
+	{
+		return TransData.WorldPosition;
 	}
 
 	void SetRevolutionMatrix(const float4& _Rot)
@@ -168,30 +228,6 @@ public:
 	const TransformData& GetConstTransformDataRef()
 	{
 		return TransData;
-	}
-	float4 GetLocalScale() const
-	{
-		return TransData.LocalScale;
-	}
-	float4 GetLocalRotation() const
-	{
-		return TransData.LocalRotation;
-	}
-	float4 GetLocalPosition() const
-	{
-		return TransData.LocalPosition;
-	}
-	float4 GetWorldScale() const
-	{
-		return TransData.WorldScale;
-	}
-	float4 GetWorldRotation() const
-	{
-		return TransData.WorldRotation;
-	}
-	float4 GetWorldPosition() const
-	{
-		return TransData.WorldPosition;
 	}
 	float4x4 GetWorldViewProjectionMatrix() const
 	{

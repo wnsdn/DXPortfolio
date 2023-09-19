@@ -156,4 +156,7 @@ void Player::Update(float _Delta)
 			IsMove = true;
 		}
 	}
+
+	/*float4 WorldMousePos = GetLevel()->GetMainCamera()->GetWorldMousePos2D();
+	OutputDebugStringA(WorldMousePos.ToString("\n").c_str());*/
 }

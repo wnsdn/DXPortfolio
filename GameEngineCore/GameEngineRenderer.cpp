@@ -31,7 +31,7 @@ void GameEngineRenderer::ResSetting()
 	auto VB = GameEngineVertexBuffer::Find("Rect");
 	auto VS = GameEngineVertexShader::Find("TextureShader_VS");
 	auto IB = GameEngineIndexBuffer::Find("Rect");
-	auto CB = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData", ShaderType::Vertex);
+	auto CB = GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData");
 	auto RS = GameEngineRasterizer::Find("Rasterizer");
 	auto PS = GameEnginePixelShader::Find("TextureShader_PS");
 	auto BS = GameEngineBlend::Find("Blend");

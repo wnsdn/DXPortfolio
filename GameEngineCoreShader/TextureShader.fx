@@ -21,6 +21,8 @@ PixelOutput TextureShader_VS(GameEngineVertex2D _Input)
     Result.TEXCOORD.x = (_Input.TEXCOORD.x * Scale2DX) + Pos2DX;
     Result.TEXCOORD.y = (_Input.TEXCOORD.y * Scale2DY) + Pos2DY;
     
+    Result.TEXCOORD.w = Alpha.a;
+    
     return Result;
 }
 
@@ -36,7 +38,7 @@ float4 TextureShader_PS(PixelOutput _Input) : SV_Target
         clip(-1);
     }
     
-    Color.a = Alpha.a;
+    Color.a = _Input.TEXCOORD.w;
 
     return Color;
 }

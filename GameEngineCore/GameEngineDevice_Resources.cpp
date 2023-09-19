@@ -60,7 +60,7 @@ void GameEngineDevice::ResourcesInit()
 	GameEngineIndexBuffer::Create("Rect", Index);
 
 	//CB Transform
-	GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData", ShaderType::Vertex, 0);
+	GameEngineConstantBuffer::CreateAndFind(sizeof(TransformData), "TransformData");
 
 	// Rasterizer
 	{
@@ -95,29 +95,13 @@ void GameEngineDevice::ResourcesInit()
 		Desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 		Desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 		Desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-
-		Desc.MipLODBias = 0.0f;
 		Desc.MaxAnisotropy = 1;
 		Desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 		Desc.MinLOD = FLT_MIN;
 		Desc.MaxLOD = FLT_MAX;
-
 		GameEngineSampler::Create("LINEAR", Desc);
-	}
-	// Sampler
-	{
-		D3D11_SAMPLER_DESC Desc{};
+
 		Desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-		Desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-		Desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-		Desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-
-		Desc.MipLODBias = 0.0f;
-		Desc.MaxAnisotropy = 1;
-		Desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-		Desc.MinLOD = FLT_MIN;
-		Desc.MaxLOD = FLT_MAX;
-
 		GameEngineSampler::Create("POINT", Desc);
 	}
 }

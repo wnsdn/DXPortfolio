@@ -126,20 +126,48 @@ void GameEngineTransform::TransformUpdate()
 	if (Parent && ParentCalc)
 	{
 		TransData.ParentMatrix = Parent->TransData.WorldMatrix;
-		TransData.WorldMatrix = TransData.LocalWorldMatrix * TransData.ParentMatrix;
+		TransData.WorldMatrix *= TransData.ParentMatrix;
+
+		if (AbsoluteScale || AbsoluteRotation || AbsolutePosition)
+		{
+			float4 WScale, WRotation, WPosition;
+			float4 LScale, LRotation, LPosition;
+
+			TransData.WorldMatrix.Decompose(WScale, WRotation, WPosition);
+
+			if (AbsoluteScale)
+			{
+				WScale = TransData.Scale;
+			}
+			if (AbsoluteRotation)
+			{
+				WRotation = TransData.Rotation.EulerToQuaternion();
+			}
+			if (AbsolutePosition)
+			{
+				WPosition = TransData.Position;
+			}
+
+			TransData.WorldMatrix.Compose(WScale, WRotation, WPosition);
+			TransData.LocalWorldMatrix = TransData.WorldMatrix * TransData.ParentMatrix.InverseReturn();
+		}
 	}
 
 	TransData.WorldMatrix.Decompose(TransData.WorldScale, TransData.WorldQuaternion, TransData.WorldPosition);
 	TransData.WorldRotation = TransData.WorldQuaternion.QuaternionToEuler();
 
 	TransData.LocalWorldMatrix.Decompose(TransData.LocalScale, TransData.LocalQuaternion, TransData.LocalPosition);
-	TransData.LocalRotation = TransData.WorldQuaternion.QuaternionToEuler();
+	TransData.LocalRotation = TransData.LocalQuaternion.QuaternionToEuler();
 
 	ColData.OBB.Extents = TransData.WorldScale.ToAbs().Half().Float3;
 	ColData.OBB.Center = TransData.WorldPosition.Float3;
 	ColData.OBB.Orientation = TransData.WorldQuaternion.Float4;
 
 	CalChilds();
+
+	AbsoluteScale = false;
+	AbsoluteRotation = false;
+	AbsolutePosition = false;
 }
 
 void GameEngineTransform::CalChilds()

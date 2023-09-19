@@ -2,19 +2,17 @@
 
 class GameEngineWindow
 {
-private:
-	static bool bFocus;
-
-	HINSTANCE Hinst = nullptr;
-	HWND Hwnd = nullptr;
-	float4 Scale{};
-
-	static LRESULT CALLBACK WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp);
 public:
+	GameEngineWindow() {}
+	~GameEngineWindow() {}
+	GameEngineWindow(const GameEngineWindow&) = delete;
+	GameEngineWindow(GameEngineWindow&&) noexcept = delete;
+	void operator=(const GameEngineWindow&) = delete;
+	void operator=(GameEngineWindow&&) noexcept = delete;
+
 	void Init(HINSTANCE _Hinst, std::string_view _Name, const POINT& _Pos, const POINT& _Scale);
 	void MessageLoop(std::function<void()> _Start, std::function<void()> _Update, std::function<void()> _Release);
 
-#pragma region GetSet
 	static GameEngineWindow& GetInst()
 	{
 		static GameEngineWindow Instance;
@@ -32,12 +30,13 @@ public:
 	{
 		return Scale;
 	}
-#pragma endregion
+	float4 GetMousePos();
+private:
+	static bool bFocus;
 
-	GameEngineWindow() {}
-	~GameEngineWindow() {}
-	GameEngineWindow(const GameEngineWindow&) = delete;
-	GameEngineWindow(GameEngineWindow&&) noexcept = delete;
-	void operator=(const GameEngineWindow&) = delete;
-	void operator=(GameEngineWindow&&) noexcept = delete;
+	HINSTANCE Hinst = nullptr;
+	HWND Hwnd = nullptr;
+	float4 Scale{};
+
+	static LRESULT CALLBACK WndProc(HWND _Hwnd, UINT _Msg, WPARAM _Wp, LPARAM _Lp);
 };

@@ -10,16 +10,10 @@ GameEngineVertexShader::~GameEngineVertexShader()
 	}
 }
 
-void GameEngineVertexShader::ShaderLoad(
-	std::string_view _Path,
-	std::string_view _EntryPoint,
-	UINT _VersionHigh,
-	UINT _VersionLow)
+void GameEngineVertexShader::ShaderLoad(std::string_view _Path, std::string_view _EntryPoint, UINT _VersionHigh, UINT _VersionLow)
 {
 	std::wstring UniPath = GameEngineString::AnsiToUnicode(_Path);
-
 	CreateVersion(ShaderType::Vertex, _VersionHigh, _VersionLow);
-
 	EntryName = _EntryPoint;
 
 #ifdef _DEBUG
@@ -32,35 +26,17 @@ void GameEngineVertexShader::ShaderLoad(
 
 	ID3DBlob* Error = nullptr;
 
-	HRESULT Hresult = D3DCompileFromFile(
-		UniPath.c_str(),
-		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE,
-		EntryName.c_str(),
-		Version.c_str(),
-		iFlag,
-		0,
-		&BinaryCode,
-		&Error);
-	if (Hresult == E_FAIL)
+	Check(D3DCompileFromFile(UniPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryName.c_str(), Version.c_str(), iFlag, 0, &BinaryCode, &Error));
+	if (Error)
 	{
-		std::string ErrorString =
-			reinterpret_cast<char*>(Error->GetBufferPointer());
-
+		std::string ErrorString = reinterpret_cast<char*>(Error->GetBufferPointer());
 		MsgBoxAssert(ErrorString);
 		return;
 	}
 
-	Hresult = GameEngineCore::GetDevice()->CreateVertexShader(
-		BinaryCode->GetBufferPointer(),
-		BinaryCode->GetBufferSize(),
-		nullptr,
-		&ShaderPtr);
-	if (Hresult == E_FAIL)
-	{
-		MsgBoxAssert("버텍스 쉐이더 생성에 실패했습니다.");
-		return;
-	}
+	Check(GameEngineCore::GetDevice()->CreateVertexShader(BinaryCode->GetBufferPointer(), BinaryCode->GetBufferSize(), nullptr, &ShaderPtr));
+
+	ResHelper.ShaderResCheck(EntryName, BinaryCode);
 }
 
 void GameEngineVertexShader::Setting()
