@@ -6,47 +6,143 @@
 #include <memory>
 #include "GameEngineTransform.h"
 
-class GameEngineObject : public std::enable_shared_from_this<GameEngineObject>
+class GameEngineObjectBase
 {
-private:
-protected:
-	std::string Name{};
-	float LiveTime = 0.0f;
-	int Order = 0;
-	bool bUpdate = true;
-	bool bDeath = false;
-
-	GameEngineObject* Parent = nullptr;
-	std::map<int, std::list<std::shared_ptr<GameEngineObject>>> Childs;
-
-	void AllRelease();
 public:
-	GameEngineTransform Transform{};
+	int GetOrder()
+	{
+		return Order;
+	}
 
-	virtual void Start() {}
-	virtual void Update(float _Delta) {}
-	virtual void Release() {}
-	virtual void LevelStart(GameEngineLevel* _PrevLevel) {}
-	virtual void LevelEnd(GameEngineLevel* _NextLevel) {}
+	template <typename EnumType>
+	void SetOrder(EnumType _Order)
+	{
+		SetOrder(static_cast<int>(_Order));
+	}
+	virtual void SetOrder(int _Order)
+	{
+		Order = _Order;
+	}
 
-	void AllLevelStart(GameEngineLevel* _PrevLevel);
-	void AllLevelEnd(GameEngineLevel* _NextLevel);
+	virtual void On()
+	{
+		IsUpdateValue = true;
+	}
+	virtual void Off()
+	{
+		IsUpdateValue = false;
+	}
 
+	void Death()
+	{
+		this->IsDeathValue = true;
+	}
+
+	virtual bool IsUpdate()
+	{
+		return IsUpdateValue && !IsDeathValue;
+	}
+	virtual bool IsDeath()
+	{
+		return IsDeathValue;
+	}
+
+protected:
+	int Order = 0;
+	bool IsUpdateValue = true;
+	bool IsDeathValue = false;
+};
+
+class GameEngineObject : public std::enable_shared_from_this<GameEngineObject>, public GameEngineObjectBase
+{
+	friend class GameEngineLevel;
+	friend class GameEngineCore;
+public:
+	GameEngineObject() {}
+	virtual ~GameEngineObject() {}
+	GameEngineObject(const GameEngineObject& _Other) = delete;
+	GameEngineObject(GameEngineObject&& _Other) noexcept = delete;
+	GameEngineObject& operator=(const GameEngineObject& _Other) = delete;
+	GameEngineObject& operator=(GameEngineObject&& _Other) noexcept = delete;
+
+	GameEngineTransform Transform;
+
+	virtual void Start() {};
+	virtual void Update(float _Delta) {};
+	virtual void Release() {};
+	virtual void LevelStart(class GameEngineLevel* _PrevLevel) {};
+	virtual void LevelEnd(class GameEngineLevel* _NextLevel) {};
+
+	float GetLiveTime() const
+	{
+		return LiveTime;
+	}
+	float ResetLiveTime()
+	{
+		LiveTime = 0.0f;
+	}
+
+	void SetName(const std::string& _Name)
+	{
+		Name = _Name;
+	}
+	std::string GetName() const
+	{
+		return Name;
+	}
+
+	void AllLevelStart(class GameEngineLevel* _PrevLevel);
+	void AllLevelEnd(class GameEngineLevel* _NextLevel);
 	virtual void AllReleaseCheck();
 	virtual void AllUpdate(float _Delta);
+
+	template <typename ChildType>
+	std::shared_ptr<GameEngineObject> CreateChild(int _Order)
+	{
+		std::shared_ptr<GameEngineObject> NewChild = std::make_shared<ChildType>();
+		NewChild->SetOrder(_Order);
+		NewChild->SetParent(this, _Order);
+		NewChild->Start();
+		return NewChild;
+	}
+
+	void SetParent(GameEngineObject* _Parent, int _Order)
+	{
+		Parent = _Parent;
+		Parent->Childs[_Order].push_back(shared_from_this());
+		Transform.SetParent(_Parent->Transform);
+	}
+	template <typename ParentType>
+	void SetParent(std::shared_ptr<ParentType> _Parent)
+	{
+		Parent = _Parent.get();
+		Transform.SetParent(_Parent->Transform);
+	}
+
+	GameEngineObject* GetParentObject() const
+	{
+		return Parent;
+	}
+
+	template <typename ParentType>
+	ParentType* GetParent()
+	{
+		return dynamic_cast<ParentType*>(Parent);
+	}
 
 	template <typename ConvertType>
 	std::shared_ptr<ConvertType> GetDynamic_Cast_This()
 	{
-		auto ObjectPtr = shared_from_this();
-		auto CameraPtr = std::dynamic_pointer_cast<ConvertType>(ObjectPtr);
+		auto Object = shared_from_this();
+		auto Convert = std::dynamic_pointer_cast<ConvertType>(Object);
 
-		if (!CameraPtr)
+		if (!Convert)
 		{
+			assert(false);
 			return nullptr;
 		}
 
-		return CameraPtr;
+		return Convert;
 	}
 
 	template <typename EnumType>
@@ -54,11 +150,11 @@ public:
 	{
 		return GetObjectGroup(static_cast<int>(_GroupIndex));
 	}
-
 	template <typename ObjectType>
 	std::list<std::shared_ptr<GameEngineObject>> GetObjectGroup(int _GroupIndex)
 	{
-		return Childs[_GroupIndex];
+		auto& Group = Childs[_GroupIndex];
+		return Group;
 	}
 
 	template <typename ObjectType, typename EnumType>
@@ -66,12 +162,12 @@ public:
 	{
 		return GetObjectGroupConvert<ObjectType>(static_cast<int>(_GroupIndex));
 	}
-
 	template <typename ObjectType>
 	std::list<std::shared_ptr<ObjectType>> GetObjectGroupConvert(int _GroupIndex)
 	{
 		std::list<std::shared_ptr<ObjectType>> Result;
-		for (auto& Object : Childs[_GroupIndex])
+		auto& Group = Childs[_GroupIndex];
+		for (auto& Object : Group)
 		{
 			auto Ptr = Object->GetDynamic_Cast_This<ObjectType>();
 
@@ -86,110 +182,39 @@ public:
 		return Result;
 	}
 
-	template <typename ChildType, typename EnumType>
-	std::shared_ptr<GameEngineObject> CreateChild(EnumType _Order)
+	bool IsUpdate() override
 	{
-		std::shared_ptr<GameEngineObject> NewChild = std::make_shared<ChildType>();
-		NewChild->SetOrder(static_cast<int>(_Order));
-		NewChild->SetParent(this, static_cast<int>(_Order));
-		NewChild->Start();
-		return NewChild;
+		if (!Parent)
+		{
+			return IsUpdateValue && !IsDeathValue;
+		}
+		else
+		{
+			return Parent->IsUpdate() && IsUpdateValue && !IsDeath();
+		}
 	}
+	bool IsDeath() override
+	{
+		if (!Parent)
+		{
+			return IsDeathValue;
+		}
+		else
+		{
+			return Parent->IsDeath() || IsDeathValue;
+		}
+	}
+protected:
+	GameEngineObject* Parent = nullptr;
+	std::map<int, std::list<std::shared_ptr<class GameEngineObject>>> Childs;
+private:
+	std::string Name{};
+	float LiveTime = 0.0f;
 
-#pragma region BasicFunction
-	std::string_view GetName() const
-	{
-		return Name;
-	}
-	void SetName(std::string_view _Name)
-	{
-		Name = _Name;
-	}
-	float GetLiveTime() const
-	{
-		return LiveTime;
-	}
-	void ResetLiveTime()
-	{
-		LiveTime = 0.0f;
-	}
 	void AddLiveTime(float _Delta)
 	{
 		LiveTime += _Delta;
 	}
-	int GetOrder() const
-	{
-		return Order;
-	}
-	template <typename EnumType>
-	void SetOrder(EnumType _Order)
-	{
-		Order = static_cast<int>(_Order);
-	}
-	bool IsUpdate() const
-	{
-		if (Parent)
-		{
-			return Parent->IsUpdate() && bUpdate && !IsDeath();
-		}
-		else
-		{
-			return bUpdate && !bDeath;
-		}
-	}
-	void On()
-	{
-		bUpdate = true;
-	}
-	void Off()
-	{
-		bUpdate = false;
-	}
-	bool IsDeath() const
-	{
-		if (Parent)
-		{
-			return Parent->IsDeath() || bDeath;
-		}
-		else
-		{
-			return bDeath;
-		}
-	}
-	void Death()
-	{
-		bDeath = true;
-		bUpdate = false;
-	}
-	GameEngineObject* GetParent() const
-	{
-		return Parent;
-	}
-	template <typename ParentType>
-	ParentType* GetParent() const
-	{
-		return dynamic_cast<ParentType*>(Parent);
-	}
-	void SetParent(GameEngineObject* _Parent, int _Order)
-	{
-		Parent = _Parent;
-		Parent->Childs[_Order].push_back(shared_from_this());
-		Transform.SetParent(_Parent->Transform);
-	}
-	template <typename ParentType>
-	void SetParent(std::shared_ptr<ParentType> _Parent)
-	{
-		Parent = _Parent.get();
-		Transform.SetParent(_Parent->Transform);
-	}
-#pragma endregion
 
-#pragma region Constructor
-	GameEngineObject() {}
-	virtual ~GameEngineObject() {}
-	GameEngineObject(const GameEngineObject& _Other) = delete;
-	GameEngineObject(GameEngineObject&& _Other) noexcept = delete;
-	GameEngineObject& operator=(const GameEngineObject& _Other) = delete;
-	GameEngineObject& operator=(GameEngineObject&& _Other) noexcept = delete;
-#pragma endregion
+	void AllRelease();
 };

@@ -6,7 +6,7 @@
 
 GameEngineLevel* GameEngineCoreObject::GetLevel()
 {
-	GameEngineObject* ParentType = GetParent();
+	GameEngineObject* ParentType = GetParentObject();
 
 	while (ParentType)
 	{
@@ -16,16 +16,16 @@ GameEngineLevel* GameEngineCoreObject::GetLevel()
 			return Level;
 		}
 
-		ParentType = ParentType->GetParent();
+		ParentType = ParentType->GetParentObject();
 	}
 
-	MsgBoxAssert(__FUNCTION__);
+	assert(false);
 	return nullptr;
 }
 
 GameEngineActor* GameEngineCoreObject::GetActor()
 {
-	GameEngineObject* ParentType = GetParent();
+	GameEngineObject* ParentType = GetParentObject();
 
 	while (ParentType)
 	{
@@ -35,9 +35,9 @@ GameEngineActor* GameEngineCoreObject::GetActor()
 			return Actor;
 		}
 
-		ParentType = ParentType->GetParent();
+		ParentType = ParentType->GetParentObject();
 	}
 
-	MsgBoxAssert(__FUNCTION__);
+	assert(false);
 	return nullptr;
 }

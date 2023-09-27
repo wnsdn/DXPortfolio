@@ -20,7 +20,7 @@ std::string GameEngineString::UnicodeToAnsi(std::wstring_view _Text)
 		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
 	if (!Size)
 	{
-		MsgBoxAssert("문자열 반환 실패");
+		assert(false);
 		return std::string();
 	}
 
@@ -31,7 +31,7 @@ std::string GameEngineString::UnicodeToAnsi(std::wstring_view _Text)
 		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
 	if (!Size)
 	{
-		MsgBoxAssert("문자열 반환 실패");
+		assert(false);
 		return std::string();
 	}
 
@@ -44,7 +44,7 @@ std::string GameEngineString::UnicodeToUTF8(std::wstring_view _Text)
 		static_cast<int>(_Text.size()), nullptr, 0, nullptr, 0);
 	if (!Size)
 	{
-		MsgBoxAssert("문자열 반환 실패");
+		assert(false);
 		return std::string();
 	}
 
@@ -55,7 +55,7 @@ std::string GameEngineString::UnicodeToUTF8(std::wstring_view _Text)
 		static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
 	if (!Size)
 	{
-		MsgBoxAssert("문자열 반환 실패");
+		assert(false);
 		return std::string();
 	}
 

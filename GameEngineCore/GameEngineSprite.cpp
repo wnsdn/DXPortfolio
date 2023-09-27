@@ -54,7 +54,7 @@ SpriteData GameEngineSprite::GetSpriteData(unsigned int _Index)
 {
 	if (_Index >= SpriteDatas.size())
 	{
-		MsgBoxAssert("인덱스를 오버해서 스프라이트 데이터를 가져오려고 했습니다.");
+		assert(false);
 		return SpriteData();
 	}
 

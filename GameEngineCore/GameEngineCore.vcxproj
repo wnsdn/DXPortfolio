@@ -203,9 +203,17 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="GameEngineDebugCore.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameEngineDevice.cpp" />
     <ClCompile Include="GameEngineDevice_Resources.cpp" />
     <ClCompile Include="GameEngineDirectBuffer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineGeometryShader.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -218,6 +226,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="GameEngineLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineMaterial.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineMesh.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -238,6 +254,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="GameEngineRenderTarget.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineRenderUnit.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -277,6 +297,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="GameEngineUIRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameEngineVertex.cpp">
       <SubType>
       </SubType>
@@ -297,6 +321,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EngineEnum.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameEngineActor.h">
       <SubType>
       </SubType>
@@ -333,8 +361,16 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="GameEngineDebugCore.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameEngineDevice.h" />
     <ClInclude Include="GameEngineDirectBuffer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineGeometryShader.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -347,6 +383,14 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="GameEngineLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineMaterial.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineMesh.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -367,6 +411,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="GameEngineRenderTarget.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineRenderUnit.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -403,6 +451,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="GameEngineTransform.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineUIRenderer.h">
       <SubType>
       </SubType>
     </ClInclude>

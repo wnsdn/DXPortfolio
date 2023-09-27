@@ -11,6 +11,7 @@ enum class ContentsObjectType
 	BackGround,
 	Tile,
 	Player,
+	UI,
 };
 
 enum class ContentsCollisionType

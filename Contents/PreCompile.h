@@ -11,8 +11,10 @@
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineSprite.h>
 #include <GameEngineCore/GameEngineSpriteRenderer.h>
+#include <GameEngineCore/GameEngineUIRenderer.h>
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineRenderTarget.h>
+#include <GameEngineCore/GameEngineTexture.h>
 
 #include <GameEngineCore/GameEngineTilemap.h>
 

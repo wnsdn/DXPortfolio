@@ -17,13 +17,13 @@ void GameEngineConstantBuffer::ChangeData(const void* _Data, UINT _Size)
 {
 	if (!_Data)
 	{
-		MsgBoxAssert(Name + "nullptr인 데이터를 세팅하려고 했습니다.");
+		assert(false);
 		return;
 	}
 
 	if (BufferInfo.ByteWidth != _Size)
 	{
-		MsgBoxAssert(Name + "크기가 다른 데이터로 상수버퍼를 세팅하려고 했습니다.");
+		assert(false);
 		return;
 	}
 
@@ -33,7 +33,7 @@ void GameEngineConstantBuffer::ChangeData(const void* _Data, UINT _Size)
 
 	if (!Data.pData)
 	{
-		MsgBoxAssert(Name + "버퍼 수정 권한을 얻어내지 못했습니다.");
+		assert(false);
 		return;
 	}
 
@@ -42,30 +42,24 @@ void GameEngineConstantBuffer::ChangeData(const void* _Data, UINT _Size)
 	GameEngineCore::GetContext()->Unmap(Buffer, 0);
 }
 
-void GameEngineConstantBuffer::Setting(UINT _Slot)
+void GameEngineConstantBuffer::VSSetting(UINT _Slot)
 {
-	GameEngineCore::GetContext()->VSSetConstantBuffers(_Slot, 1, &Buffer);
-	/*switch (Type)
+	if (!Buffer)
 	{
-	case ShaderType::None:
-		break;
-	case ShaderType::Vertex:
-		GameEngineCore::GetContext()->VSSetConstantBuffers(_Slot, 1, &Buffer);
-		break;
-	case ShaderType::Hull:
-		break;
-	case ShaderType::Tessellator:
-		break;
-	case ShaderType::Domain:
-		break;
-	case ShaderType::Geometry:
-		break;
-	case ShaderType::Pixel:
-		GameEngineCore::GetContext()->PSSetConstantBuffers(_Slot, 1, &Buffer);
-		break;
-	case ShaderType::Max:
-		break;
-	default:
-		break;
-	}*/
+		assert(false);
+		return;
+	}
+
+	GameEngineCore::GetContext()->VSSetConstantBuffers(_Slot, 1, &Buffer);
+}
+
+void GameEngineConstantBuffer::PSSetting(UINT _Slot)
+{
+	if (!Buffer)
+	{
+		assert(false);
+		return;
+	}
+
+	GameEngineCore::GetContext()->PSSetConstantBuffers(_Slot, 1, &Buffer);
 }

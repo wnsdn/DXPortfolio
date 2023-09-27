@@ -3,10 +3,6 @@
 
 class ContentsCore : public GameEngineObject
 {
-protected:
-	void Start() override;
-	void Update(float _Delta) override;
-	void Release() override;
 public:
 	ContentsCore() {}
 	~ContentsCore() override {}
@@ -27,4 +23,7 @@ public:
 	{
 		return { 960, 540};
 	}
+protected:
+	void Start() override;
+	void Update(float _Delta) override;
 };

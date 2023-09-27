@@ -8,18 +8,14 @@ class GameEngineRenderTarget;
 class GameEngineDevice
 {
 	friend class GameEngineCore;
-private:
-	IDXGISwapChain* SwapChain = nullptr;
-	ID3D11Device* Device = nullptr;
-	ID3D11DeviceContext* Context = nullptr;
-
-	std::shared_ptr<GameEngineTexture> BackBufferTexture;
-	std::shared_ptr<GameEngineRenderTarget> BackBufferRenderTarget;
-
-	void RenderStart();
-	void RenderEnd();
-	void ResourcesInit();
 public:
+	GameEngineDevice() {}
+	~GameEngineDevice();
+	GameEngineDevice(const GameEngineDevice&) = delete;
+	GameEngineDevice(GameEngineDevice&&) noexcept = delete;
+	void operator=(const GameEngineDevice&) = delete;
+	void operator=(GameEngineDevice&&) noexcept = delete;
+
 	void Initialize(const GameEngineWindow& _Window);
 	ID3D11Device* GetDevice() const
 	{
@@ -33,11 +29,15 @@ public:
 	{
 		return BackBufferRenderTarget;
 	}
+private:
+	IDXGISwapChain* SwapChain = nullptr;
+	ID3D11Device* Device = nullptr;
+	ID3D11DeviceContext* Context = nullptr;
 
-	GameEngineDevice() {}
-	~GameEngineDevice();
-	GameEngineDevice(const GameEngineDevice&) = delete;
-	GameEngineDevice(GameEngineDevice&&) noexcept = delete;
-	void operator=(const GameEngineDevice&) = delete;
-	void operator=(GameEngineDevice&&) noexcept = delete;
+	std::shared_ptr<GameEngineTexture> BackBufferTexture;
+	std::shared_ptr<GameEngineRenderTarget> BackBufferRenderTarget;
+
+	void RenderStart();
+	void RenderEnd();
+	void ResourcesInit();
 };

@@ -83,6 +83,11 @@ void GameEngineCore::Release()
 	CoreObject->Release();
 	GameEngineSound::SoundRelease();
 	GameEngineSound::SystemRelease();
+
+	for (auto& Level : AllLevel)
+	{
+		Level.second->Release();
+	}
 }
 
 void GameEngineCore::LevelInit(std::shared_ptr<GameEngineLevel> _Level)

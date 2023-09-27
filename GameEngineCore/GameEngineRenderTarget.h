@@ -29,8 +29,6 @@ public:
 	{
 		ClearColor[_Index] = _Color;
 	}
-protected:
-
 private:
 	std::vector<std::shared_ptr<GameEngineTexture>> Textures;
 	std::vector<struct ID3D11RenderTargetView*> RTV;

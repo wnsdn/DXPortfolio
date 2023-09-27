@@ -1,5 +1,6 @@
 #pragma once
 #include "GameEngineResources.h"
+#include "GameEngineSampler.h"
 
 #include "..\\GameEngineCore\\ThirdParty\\DirectXTex\\inc\\DirectXTex.h"
 
@@ -20,37 +21,31 @@ struct GameEngineColor
 
 class GameEngineTexture : public GameEngineResources<GameEngineTexture>
 {
-private:
-	D3D11_TEXTURE2D_DESC Desc;
-
-	ID3D11Texture2D* Texture2D = nullptr;
-
-	ID3D11RenderTargetView* RTV = nullptr;
-	ID3D11ShaderResourceView* SRV = nullptr;
-
-	DirectX::TexMetadata Data;
-	DirectX::ScratchImage Image;
-
-	void ResLoad(std::string_view _Path);
 public:
+	GameEngineTexture() : Data{}, Desc{} {}
+	~GameEngineTexture();
+	GameEngineTexture(const GameEngineTexture&) = delete;
+	GameEngineTexture(GameEngineTexture&&) noexcept = delete;
+	void operator=(const GameEngineTexture&) = delete;
+	void operator=(GameEngineTexture&&) noexcept = delete;
+
 	static std::shared_ptr<GameEngineTexture> Create(ID3D11Texture2D* _Res)
 	{
 		auto NewRes = CreateRes();
 		NewRes->Texture2D = _Res;
 		return NewRes;
 	}
-
-	static std::shared_ptr<GameEngineTexture> Load(std::string_view _Path)
+	static std::shared_ptr<GameEngineTexture> Load(std::string_view _Path, D3D11_FILTER _Filter = D3D11_FILTER_MIN_MAG_MIP_POINT, D3D11_TEXTURE_ADDRESS_MODE _Address = D3D11_TEXTURE_ADDRESS_CLAMP)
 	{
 		GameEnginePath Path;
 		Path.SetPath(_Path);
-		return Load(Path.GetPath(), Path.GetFilename());
+		return Load(Path.GetPath(), Path.GetFilename(), _Filter, _Address);
 	}
-
-	static std::shared_ptr<GameEngineTexture> Load(std::string_view _Path, std::string_view _Name)
+	static std::shared_ptr<GameEngineTexture> Load(std::string_view _Path, std::string_view _Name, D3D11_FILTER _Filter = D3D11_FILTER_MIN_MAG_MIP_POINT, D3D11_TEXTURE_ADDRESS_MODE _Address = D3D11_TEXTURE_ADDRESS_CLAMP)
 	{
 		auto NewRes = CreateRes(_Name);
 		NewRes->ResLoad(_Path);
+		NewRes->Sampler = GameEngineSampler::Create(_Filter, _Address);
 		return NewRes;
 	}
 
@@ -76,10 +71,21 @@ public:
 	void VSSetting(UINT _Slot);
 	void PSSetting(UINT _Slot);
 
-	GameEngineTexture() : Data{}, Desc{} {}
-	~GameEngineTexture();
-	GameEngineTexture(const GameEngineTexture&) = delete;
-	GameEngineTexture(GameEngineTexture&&) noexcept = delete;
-	void operator=(const GameEngineTexture&) = delete;
-	void operator=(GameEngineTexture&&) noexcept = delete;
+	std::shared_ptr<GameEngineSampler> GetBaseSampler() const
+	{
+		return Sampler;
+	}
+private:
+	void ResLoad(std::string_view _Path);
+
+	D3D11_TEXTURE2D_DESC Desc;
+
+	ID3D11Texture2D* Texture2D = nullptr;
+	ID3D11RenderTargetView* RTV = nullptr;
+	ID3D11ShaderResourceView* SRV = nullptr;
+
+	DirectX::TexMetadata Data;
+	DirectX::ScratchImage Image;
+
+	std::shared_ptr<GameEngineSampler> Sampler;
 };

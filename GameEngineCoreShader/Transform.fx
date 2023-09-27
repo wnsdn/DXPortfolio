@@ -45,3 +45,11 @@ cbuffer AlphaData : register(b2)
 {
     float4 Alpha;
 };
+
+cbuffer SpriteRendererInfo : register(b3)
+{
+    int FlipLeft = 0;
+    int FlipUp = 0;
+    float Temp1;
+    float Temp2;
+}

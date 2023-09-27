@@ -53,8 +53,7 @@ void GameEngineTexture::ResLoad(std::string_view _Path)
 
 GameEngineColor GameEngineTexture::GetColor(unsigned int _X, unsigned int _Y, GameEngineColor _DefaultColor) const
 {
-	if (_X < 0 || _X >= GetScale().uiX() ||
-		_Y < 0 || _Y >= GetScale().uiY())
+	if (_X < 0 || _X >= GetScale().uiX() || _Y < 0 || _Y >= GetScale().uiY())
 	{
 		return _DefaultColor;
 	}
@@ -90,7 +89,7 @@ GameEngineColor GameEngineTexture::GetColor(unsigned int _X, unsigned int _Y, Ga
 		return ResultColor;
 	}
 	default:
-		MsgBoxAssert("색깔을 처리하는 함수를 만들지 없는 포맷입니다");
+		assert(false);
 		break;
 	}
 

@@ -51,11 +51,13 @@ void GameEngineFile::Read(void* _Data, size_t _Size)
 {
 	if (!pFile)
 	{
-		MsgBoxAssert("열리지 않은 파일을 읽으려고 했습니다. Open을 먼저 실행해주세요.");
+		assert(false);
+		return;
 	}
 	if (OpenType != FileOpenType::Read)
 	{
-		MsgBoxAssert("읽기 모드로 열리지 않은 파일입니다.");
+		assert(false);
+		return;
 	}
 
 	fread_s(_Data, _Size, _Size, 1, pFile);

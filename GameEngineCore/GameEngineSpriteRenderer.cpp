@@ -82,10 +82,18 @@ void GameEngineSpriteRenderer::Start()
 {
 	GameEngineRenderer::Start();
 
-	DataTransform = &ImageTransform;
 	ImageTransform.SetParent(Transform);
 
-	Sampler = GameEngineSampler::Find("POINT");
+	SetMesh("Rect");
+	SetMaterial("2DTexture");
+
+	auto& Data = ImageTransform.GetConstTransformDataRef();
+	GetShaderResHelper().SetConstantBufferLink("TransformData", Data);
+	GetShaderResHelper().SetConstantBufferLink("SpriteData", CurSprite.Pivot);
+	GetShaderResHelper().SetConstantBufferLink("AlphaData", Alpha);
+	GetShaderResHelper().SetConstantBufferLink("SpriteRendererInfo", SpriteRendererInfoValue);
+
+	SetSprite("NSet.png");
 }
 
 void GameEngineSpriteRenderer::Update(float _Delta)
@@ -122,20 +130,9 @@ void GameEngineSpriteRenderer::Render(GameEngineCamera* _Camera, float _Delta)
 	ImageTransform.TransformUpdate();
 	ImageTransform.CalculationViewAndProjection(Transform.GetConstTransformDataRef());
 
-	GameEngineRenderer::ResSetting();
+	GetShaderResHelper().SetTexture("DiffuseTex", CurSprite.Texture);
 
-	auto Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "SpriteData");
-	Buffer->ChangeData(CurSprite.Pivot);
-	Buffer->Setting(1);
-
-	Buffer = GameEngineConstantBuffer::CreateAndFind(sizeof(float4), "AlphaData");
-	Buffer->ChangeData(Alpha);
-	Buffer->Setting(2);
-
-	CurSprite.Texture->PSSetting(0);
-	Sampler->PSSetting(0);
-
-	GameEngineRenderer::Draw();
+	GameEngineRenderer::Render(_Camera, _Delta);
 }
 
 void GameEngineSpriteRenderer::SetSprite(std::string_view _Name, unsigned int _Index)
@@ -144,7 +141,8 @@ void GameEngineSpriteRenderer::SetSprite(std::string_view _Name, unsigned int _I
 
 	if (!Sprite)
 	{
-		MsgBoxAssert("존재하지 않는 스프라이트를 사용하려고 했습니다.");
+		assert(false);
+		return;
 	}
 
 	CurSprite = Sprite->GetSpriteData(_Index);
@@ -163,14 +161,14 @@ void GameEngineSpriteRenderer::CreateAnimation(
 	auto Sprite = GameEngineSprite::Find(_SpriteName);
 	if (!Sprite)
 	{
-		MsgBoxAssert("존재하지 않는 스프라이트로 애니메이션을 만들려고 했습니다.");
+		assert(false);
 		return;
 	}
 
 	std::string Name{ _AnimationName };
 	if (FrameAnimations.contains(Name))
 	{
-		MsgBoxAssert("이미 존재하는 애니메이션을 또 만들려고 했습니다.");
+		assert(false);
 		return;
 	}
 
@@ -221,7 +219,7 @@ void GameEngineSpriteRenderer::ChangeAnimation(std::string_view _AnimationName, 
 	auto FindIter = FrameAnimations.find(Name);
 	if (FindIter == FrameAnimations.end())
 	{
-		MsgBoxAssert("존재하지 않는 애니메이션으로 체인지하려고 했습니다.");
+		assert(false);
 		return;
 	}
 
@@ -244,21 +242,6 @@ void GameEngineSpriteRenderer::AutoSpriteSizeOn()
 void GameEngineSpriteRenderer::AutoSpriteSizeOff()
 {
 	IsImageSize = false;
-}
-
-void GameEngineSpriteRenderer::SetSamplerState(SamplerOption _Option)
-{
-	switch (_Option)
-	{
-	case SamplerOption::LINEAR:
-		Sampler = GameEngineSampler::Find("LINEAR");
-		break;
-	case SamplerOption::POINT:
-		Sampler = GameEngineSampler::Find("POINT");
-		break;
-	default:
-		break;
-	}
 }
 
 void GameEngineSpriteRenderer::AnimationPauseSwitch()
@@ -318,6 +301,9 @@ void GameEngineSpriteRenderer::SetPivotType(PivotType _Type)
 	{
 	case PivotType::Center:
 		Pivot = { 0.5f, 0.5f };
+		break;
+	case PivotType::Top:
+		Pivot = { 0.5f, 0.0f };
 		break;
 	case PivotType::Bottom:
 		Pivot = { 0.5f, 1.0f };

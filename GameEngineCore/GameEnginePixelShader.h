@@ -2,16 +2,16 @@
 #include "GameEngineShader.h"
 #include "GameEngineResources.h"
 
-class GameEnginePixelShader
-	: public GameEngineResources<GameEnginePixelShader>
-	, public GameEngineShader
+class GameEnginePixelShader : public GameEngineResources<GameEnginePixelShader>, public GameEngineShader
 {
-private:
-	std::string EntryName{};
-	ID3D11PixelShader* ShaderPtr = nullptr;
-
-	void ShaderLoad(std::string_view _Path, std::string_view _EntryPoint, UINT _VersionHigh = 5, UINT _VersionLow = 0);
 public:
+	GameEnginePixelShader() {}
+	~GameEnginePixelShader();
+	GameEnginePixelShader(const GameEnginePixelShader&) = delete;
+	GameEnginePixelShader(GameEnginePixelShader&&) noexcept = delete;
+	void operator=(const GameEnginePixelShader&) = delete;
+	void operator=(GameEnginePixelShader&&) noexcept = delete;
+
 	static std::shared_ptr<GameEnginePixelShader> Load(std::string_view _Path, std::string_view _EntryPoint, UINT _VersionHigh = 5, UINT _VersionLow = 0)
 	{
 		auto Res = CreateRes(_EntryPoint);
@@ -20,12 +20,8 @@ public:
 	}
 
 	void Setting();
+private:
+	void ShaderLoad(std::string_view _Path, std::string_view _EntryPoint, UINT _VersionHigh = 5, UINT _VersionLow = 0);
 
-	GameEnginePixelShader() {}
-	~GameEnginePixelShader();
-	GameEnginePixelShader(const GameEnginePixelShader&) = delete;
-	GameEnginePixelShader(GameEnginePixelShader&&) noexcept = delete;
-	void operator=(const GameEnginePixelShader&) = delete;
-	void operator=(GameEnginePixelShader&&) noexcept = delete;
+	ID3D11PixelShader* ShaderPtr = nullptr;
 };
-

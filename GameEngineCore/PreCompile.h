@@ -9,3 +9,6 @@
 
 #include "GameEngineCore.h"
 #include "GameEngineSprite.h"
+#include "GameEngineDebugCore.h"
+
+#include "EngineEnum.h"

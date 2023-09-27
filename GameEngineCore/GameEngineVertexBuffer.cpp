@@ -18,7 +18,7 @@ void GameEngineVertexBuffer::ResCreate(const void* _Data, size_t _VertexSize, si
 		CreateBuffer(&BufferInfo, &Data, &Buffer);
 	if (Hresult == E_FAIL)
 	{
-		MsgBoxAssert("버텍스 버퍼 생성에 실패했습니다.");
+		assert(false);
 		return;
 	}
 }
@@ -27,10 +27,9 @@ void GameEngineVertexBuffer::Setting()
 {
 	if (!Buffer)
 	{
-		MsgBoxAssert("만들어지지도 않은 버텍스 버퍼를 세팅할 수는 없습니다.");
+		assert(false);
 		return;
 	}
 
-	GameEngineCore::GetContext()->
-		IASetVertexBuffers(0, 1, &Buffer, &VertexSize, &Offset);
+	GameEngineCore::GetContext()->IASetVertexBuffers(0, 1, &Buffer, &VertexSize, &Offset);
 }

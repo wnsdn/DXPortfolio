@@ -19,6 +19,7 @@ private:
 	std::set<std::shared_ptr<GameEngineCollision>> Others;
 protected:
 	void Start() override;
+	void Update(float _Delta) override;
 	void Release() override;
 public:
 	GameEngineCollision();

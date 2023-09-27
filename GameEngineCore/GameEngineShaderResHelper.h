@@ -1,4 +1,7 @@
 #pragma once
+#include "GameEngineConstantBuffer.h"
+#include "GameEngineTexture.h"
+#include "GameEngineSampler.h"
 
 class GameEngineShaderResources
 {
@@ -14,6 +17,11 @@ private:
 class GameEngineConstantBufferSetter : public GameEngineShaderResources
 {
 public:
+	std::shared_ptr<GameEngineConstantBuffer> Res;
+
+	const void* CPUDataPtr = nullptr;
+	UINT DataSize = -1;
+
 	void Setting() override;
 	void Reset() override;
 };
@@ -21,6 +29,8 @@ public:
 class GameEngineTextureSetter : public GameEngineShaderResources
 {
 public:
+	std::shared_ptr<GameEngineTexture> Res;
+
 	void Setting() override;
 	void Reset() override;
 };
@@ -28,6 +38,8 @@ public:
 class GameEngineSamplerSetter : public GameEngineShaderResources
 {
 public:
+	std::shared_ptr<GameEngineSampler> Res;
+
 	void Setting() override;
 	void Reset() override;
 };
@@ -37,12 +49,41 @@ class GameEngineShaderResHelper
 public:
 	GameEngineShaderResHelper();
 	~GameEngineShaderResHelper();
-	GameEngineShaderResHelper(const GameEngineShaderResHelper&) = delete;
-	GameEngineShaderResHelper(GameEngineShaderResHelper&&) noexcept = delete;
-	void operator=(const GameEngineShaderResHelper&) = delete;
-	void operator=(GameEngineShaderResHelper&&) noexcept = delete;
 
-	void ShaderResCheck(std::string _FunctionName, ID3DBlob* _CompileCode);
+	void ShaderResCheck(std::string _FunctionName, class GameEngineShader* _Shader, ID3DBlob* _CompileCode);
+
+	void ShaderResCopy(class GameEngineShader* _Shader);
+
+	void AllShaderResourcesSetting();
+
+	bool IsConstantBuffer(std::string_view _Name)
+	{
+		std::string Name{ _Name };
+		return ConstantBufferSetters.contains(Name);
+	}
+	bool IsTexture(std::string_view _Name)
+	{
+		std::string Name{ _Name };
+		return TextureSetters.contains(Name);
+	}
+	bool IsSampler(std::string_view _Name)
+	{
+		std::string Name{ _Name };
+		return SamplerSetters.contains(Name);
+	}
+
+	template <typename DataType>
+	void SetConstantBufferLink(std::string_view _Name, const DataType& _Data)
+	{
+		SetConstantBufferLink(_Name, &_Data, sizeof(_Data));
+	}
+	void SetConstantBufferLink(std::string_view _Name, const void* _Data, size_t _Size);
+
+	void SetTexture(std::string_view _Name, std::string_view _TextureName);
+	void SetTexture(std::string_view _Name, std::shared_ptr<GameEngineTexture> _Texture);
+	void SetSampler(std::string_view _Name, std::shared_ptr<GameEngineSampler> _TextureSampler);
+
+	void ResClear();
 protected:
 
 private:

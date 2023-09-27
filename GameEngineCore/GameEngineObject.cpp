@@ -1,21 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineObject.h"
 
-void GameEngineObject::AllRelease()
-{
-	Release();
-
-	for (auto& Pair : Childs)
-	{
-		for (auto& Object : Pair.second)
-		{
-			Object->bDeath = true;
-			Object->Parent = nullptr;
-			Object->AllRelease();
-		}
-	}
-}
-
 void GameEngineObject::AllLevelStart(GameEngineLevel* _PrevLevel)
 {
 	LevelStart(_PrevLevel);
@@ -24,7 +9,7 @@ void GameEngineObject::AllLevelStart(GameEngineLevel* _PrevLevel)
 	{
 		for (auto& Child : Pair.second)
 		{
-			if (!Child->bUpdate)
+			if (!Child->IsUpdate())
 			{
 				continue;
 			}
@@ -42,12 +27,27 @@ void GameEngineObject::AllLevelEnd(GameEngineLevel* _NextLevel)
 	{
 		for (auto& Child : Pair.second)
 		{
-			if (!Child->bUpdate)
+			if (!Child->IsUpdate())
 			{
 				continue;
 			}
 
 			Child->LevelEnd(_NextLevel);
+		}
+	}
+}
+
+void GameEngineObject::AllRelease()
+{
+	Release();
+
+	for (auto& Pair : Childs)
+	{
+		for (auto& Object : Pair.second)
+		{
+			Object->IsDeathValue = true;
+			Object->Parent = nullptr;
+			Object->AllRelease();
 		}
 	}
 }
@@ -62,19 +62,19 @@ void GameEngineObject::AllReleaseCheck()
 
 	for (auto& Pair : Childs)
 	{
-		auto Beg = Pair.second.begin();
+		auto Start = Pair.second.begin();
 		auto End = Pair.second.end();
 
-		for (; Beg != End;)
+		for (; Start != End;)
 		{
-			if (!(*Beg)->IsDeath())
+			if (!(*Start)->IsDeath())
 			{
-				(*Beg)->AllReleaseCheck();
-				++Beg;
+				(*Start)->AllReleaseCheck();
+				++Start;
 				continue;
 			}
 
-			Beg = Pair.second.erase(Beg);
+			Start = Pair.second.erase(Start);
 		}
 	}
 }
@@ -87,7 +87,7 @@ void GameEngineObject::AllUpdate(float _Delta)
 	{
 		for (auto& Child : Pair.second)
 		{
-			if (!Child->bUpdate)
+			if (!Child->IsUpdate())
 			{
 				continue;
 			}

@@ -292,6 +292,21 @@ void TitleLevel::Update(float _Delta)
 	}
 }
 
+void TitleLevel::Release()
+{
+	for (int y = 0; y < MainY; ++y)
+	{
+		for (int x = 0; x < MainX; ++x)
+		{
+			MainTile[y][x]->Release();
+		}
+	}
+	for (int x = 0; x < WorldX; ++x)
+	{
+		WorldTile[x]->Release();
+	}
+}
+
 void TitleLevel::LevelStart(GameEngineLevel* _PrevLevel)
 {
 	int a = 0;

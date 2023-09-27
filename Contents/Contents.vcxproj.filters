@@ -37,6 +37,9 @@
     <ClCompile Include="Tile_Play.cpp">
       <Filter>Actor\Tile</Filter>
     </ClCompile>
+    <ClCompile Include="MainUIActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
@@ -60,6 +63,9 @@
     </ClInclude>
     <ClInclude Include="Tile_Play.h">
       <Filter>Actor\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="MainUIActor.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,12 +1,13 @@
 #pragma once
 
 #include <Windows.h>
+#include <assert.h>
+
 #include <map>
 #include <list>
 #include <set>
 #include <vector>
 #include <array>
-
 #include <string>
 #include <string_view>
 #include <memory>
@@ -23,18 +24,18 @@
 
 using namespace std::literals;
 
-#define SafeRelease(_obj)\
-if (_obj)\
+#define SafeRelease(Input)\
+if (Input)\
 {\
-	_obj->Release();\
-	_obj = nullptr;\
+	Input->Release();\
+	Input = nullptr;\
 }\
 
-#define SafeDelete(_obj)\
-if (_obj)\
+#define SafeDelete(Input)\
+if (Input)\
 {\
-	delete _obj;\
-	_obj = nullptr;\
+	delete Input;\
+	Input = nullptr;\
 }\
 
-#define	Check(_bool) assert(SUCCEEDED(_bool));
+#define	Check(Input) assert(SUCCEEDED(Input));

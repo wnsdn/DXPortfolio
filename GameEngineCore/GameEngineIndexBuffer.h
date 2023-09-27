@@ -2,19 +2,17 @@
 #include "GameEngineDirectBuffer.h"
 
 class GameEngineInputLayoutInfo;
-class GameEngineIndexBuffer
-	: public GameEngineResources<GameEngineIndexBuffer>
-	, public GameEngineDirectBuffer
+class GameEngineIndexBuffer : public GameEngineResources<GameEngineIndexBuffer>, public GameEngineDirectBuffer
 {
 	friend class GameEngineInputLayout;
-private:
-	DXGI_FORMAT Format = DXGI_FORMAT::DXGI_FORMAT_R32_UINT;
-	UINT IndexSize = 4;
-	UINT IndexCount = 0;
-	UINT Offset = 0;
-
-	void ResCreate(const void* _Data, size_t _IndexCount);
 public:
+	GameEngineIndexBuffer() {}
+	~GameEngineIndexBuffer() {}
+	GameEngineIndexBuffer(const GameEngineIndexBuffer&) = delete;
+	GameEngineIndexBuffer(GameEngineIndexBuffer&&) noexcept = delete;
+	void operator=(const GameEngineIndexBuffer&) = delete;
+	void operator=(GameEngineIndexBuffer&&) noexcept = delete;
+
 	static std::shared_ptr<GameEngineIndexBuffer> Create(std::string_view _Name, const std::vector<unsigned int>& _Data)
 	{
 		auto Res = CreateRes(_Name);
@@ -28,12 +26,12 @@ public:
 	{
 		return IndexCount;
 	}
+private:
+	void ResCreate(const void* _Data, size_t _IndexCount);
 
-	GameEngineIndexBuffer() {}
-	~GameEngineIndexBuffer() {}
-	GameEngineIndexBuffer(const GameEngineIndexBuffer&) = delete;
-	GameEngineIndexBuffer(GameEngineIndexBuffer&&) noexcept = delete;
-	void operator=(const GameEngineIndexBuffer&) = delete;
-	void operator=(GameEngineIndexBuffer&&) noexcept = delete;
+	DXGI_FORMAT Format = DXGI_FORMAT::DXGI_FORMAT_R32_UINT;
+	UINT IndexSize = 4;
+	UINT IndexCount = 0;
+	UINT Offset = 0;
 };
 

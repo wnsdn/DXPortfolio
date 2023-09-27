@@ -12,7 +12,3 @@ void ContentsCore::Start()
 void ContentsCore::Update(float _Delta)
 {
 }
-
-void ContentsCore::Release()
-{
-}

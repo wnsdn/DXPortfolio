@@ -5,10 +5,12 @@
 #include "GameEngineCollision.h"
 #include "GameEngineCollisionGroup.h"
 
+bool GameEngineLevel::IsDebug = true;
+
 GameEngineLevel::GameEngineLevel()
 {
-	CreateCamera(0, 0);
-	CreateCamera(0, 100);
+	CreateCamera(0, ECAMERAORDER::Main);
+	CreateCamera(0, ECAMERAORDER::UI);
 }
 
 GameEngineLevel::~GameEngineLevel()
@@ -24,6 +26,8 @@ std::shared_ptr<GameEngineCamera> GameEngineLevel::CreateCamera(int _Order, int 
 
 void GameEngineLevel::AllUpdate(float _Delta)
 {
+	GameEngineDebug::GameEngineDebugCore::CurLevel = this;
+
 	Update(_Delta);
 
 	for (auto& Pair : Childs)
@@ -43,9 +47,19 @@ void GameEngineLevel::AllUpdate(float _Delta)
 
 void GameEngineLevel::Render(float _Delta)
 {
-	for (auto& Pair : Cameras)
+	for (auto& CameraPair : Cameras)
 	{
-		Pair.second->Render(_Delta);
+		if (!CameraPair.second)
+		{
+			continue;
+		}
+
+		CameraPair.second->Render(_Delta);
+	}
+
+	if (IsDebug)
+	{
+		GameEngineDebug::GameEngineDebugCore::DebugRender();
 	}
 }
 
@@ -57,13 +71,17 @@ void GameEngineLevel::ActorInit(std::shared_ptr<GameEngineActor> _Actor, int _Or
 
 void GameEngineLevel::Release()
 {
-	assert(false);
 }
 
 void GameEngineLevel::AllReleaseCheck()
 {
 	for (auto& Pair : Cameras)
 	{
+		if (!Pair.second)
+		{
+			continue;
+		}
+
 		Pair.second->AllReleaseCheck();
 	}
 
@@ -101,7 +119,7 @@ void GameEngineLevel::PushCollision(std::shared_ptr<class GameEngineCollision> _
 {
 	if (!_Collision)
 	{
-		MsgBoxAssert("존재하지 않는 콜리전을 사용하려고 했습니다.");
+		assert(false);
 		return;
 	}
 

@@ -14,6 +14,7 @@ public:
 	void Init(const float4& _Pos);
 	void SpriteChange();
 	void SpriteReset(UINT _Repeat);
+	void Release() override;
 
 	std::vector<std::shared_ptr<Tile_Main>> Others;
 	std::shared_ptr<GameEngineSpriteRenderer> Renderer = nullptr;
@@ -23,5 +24,4 @@ public:
 protected:
 	void Start() override;
 	void Update(float _Delta) override;
-private:
 };

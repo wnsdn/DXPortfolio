@@ -21,7 +21,6 @@ void Tile_Main::SpriteChange()
 		Effect->SetSprite("bottomglow_E.png");
 		Effect->SetImageScale({ 60.0f, 60.0f });
 	}
-
 }
 
 void Tile_Main::SpriteReset(UINT _Repeat)
@@ -52,4 +51,12 @@ void Tile_Main::Start()
 
 void Tile_Main::Update(float _Delta)
 {
+}
+
+void Tile_Main::Release()
+{
+	for (auto& Other : Others)
+	{
+		Other = nullptr;
+	}
 }

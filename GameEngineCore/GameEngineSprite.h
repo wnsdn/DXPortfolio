@@ -12,12 +12,14 @@ public:
 
 class GameEngineSprite : public GameEngineResources<GameEngineSprite>
 {
-private:
-	std::vector<SpriteData> SpriteDatas;
-protected:
-	void ResCreateCut(std::string_view _Name, unsigned int _X, unsigned int _Y);
-	void ResCreateFolder(std::string_view _Path);
 public:
+	GameEngineSprite() {}
+	~GameEngineSprite() {}
+	GameEngineSprite(const GameEngineSprite&) = delete;
+	GameEngineSprite(GameEngineSprite&&) noexcept = delete;
+	void operator=(const GameEngineSprite&) = delete;
+	void operator=(GameEngineSprite&&) noexcept = delete;
+
 	static std::shared_ptr<GameEngineSprite> CreateFolder(std::string_view _Path)
 	{
 		GameEnginePath Path;
@@ -51,12 +53,10 @@ public:
 	{
 		return static_cast<unsigned int>(SpriteDatas.size());
 	}
-
-	GameEngineSprite() {}
-	~GameEngineSprite() {}
-	GameEngineSprite(const GameEngineSprite&) = delete;
-	GameEngineSprite(GameEngineSprite&&) noexcept = delete;
-	void operator=(const GameEngineSprite&) = delete;
-	void operator=(GameEngineSprite&&) noexcept = delete;
+protected:
+	void ResCreateCut(std::string_view _Name, unsigned int _X, unsigned int _Y);
+	void ResCreateFolder(std::string_view _Path);
+private:
+	std::vector<SpriteData> SpriteDatas;
 };
 

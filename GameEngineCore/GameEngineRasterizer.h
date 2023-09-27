@@ -3,12 +3,14 @@
 
 class GameEngineRasterizer : public GameEngineResources<GameEngineRasterizer>
 {
-private:
-	D3D11_RASTERIZER_DESC Desc{};
-	ID3D11RasterizerState* State = nullptr;
-protected:
-	void ResCreate(const D3D11_RASTERIZER_DESC& _Desc);
 public:
+	GameEngineRasterizer() {}
+	~GameEngineRasterizer();
+	GameEngineRasterizer(const GameEngineRasterizer&) = delete;
+	GameEngineRasterizer(GameEngineRasterizer&&) noexcept = delete;
+	void operator=(const GameEngineRasterizer&) = delete;
+	void operator=(GameEngineRasterizer&&) noexcept = delete;
+
 	static std::shared_ptr<GameEngineRasterizer> Create(std::string_view _Name, const D3D11_RASTERIZER_DESC& _Desc)
 	{
 		auto Res = CreateRes(_Name);
@@ -17,12 +19,10 @@ public:
 	}
 
 	void Setting();
-
-	GameEngineRasterizer() {}
-	~GameEngineRasterizer();
-	GameEngineRasterizer(const GameEngineRasterizer&) = delete;
-	GameEngineRasterizer(GameEngineRasterizer&&) noexcept = delete;
-	void operator=(const GameEngineRasterizer&) = delete;
-	void operator=(GameEngineRasterizer&&) noexcept = delete;
+protected:
+	void ResCreate(const D3D11_RASTERIZER_DESC& _Desc);
+private:
+	D3D11_RASTERIZER_DESC Desc{};
+	ID3D11RasterizerState* State = nullptr;
 };
 

@@ -4,14 +4,14 @@
 class GameEngineConstantBuffer : public GameEngineResources<GameEngineConstantBuffer>, public GameEngineDirectBuffer
 {
 public:
-	GameEngineConstantBuffer() {}
+	GameEngineConstantBuffer() : BufferDesc{} {}
 	~GameEngineConstantBuffer() {}
 	GameEngineConstantBuffer(const GameEngineConstantBuffer&) = delete;
 	GameEngineConstantBuffer(GameEngineConstantBuffer&&) noexcept = delete;
 	void operator=(const GameEngineConstantBuffer&) = delete;
 	void operator=(GameEngineConstantBuffer&&) noexcept = delete;
 
-	static std::shared_ptr<GameEngineConstantBuffer> CreateAndFind(int _Byte, std::string_view _Name, int _Slot = 0)
+	static std::shared_ptr<GameEngineConstantBuffer> CreateAndFind(int _Byte, std::string_view _Name, D3D11_SHADER_BUFFER_DESC _BufferDesc)
 	{
 		if (ConstantBuffers.find(_Byte) == ConstantBuffers.end())
 		{
@@ -28,6 +28,7 @@ public:
 
 		auto Res = CreateRes();
 		Res->SetName(Name);
+		Res->BufferDesc = _BufferDesc;
 		ConstantBuffers[_Byte][Name] = Res;
 		Res->ResCreate(_Byte);
 		return Res;
@@ -39,10 +40,13 @@ public:
 		ChangeData(&_Data, sizeof(DataType));
 	}
 	void ChangeData(const void* _Data, UINT _Size);
-	void Setting(UINT _Slot);
-private:
-	static std::map<int, std::map<std::string, std::shared_ptr<GameEngineConstantBuffer>>> ConstantBuffers;
 
+	void VSSetting(UINT _Slot);
+	void PSSetting(UINT _Slot);
+private:
 	void ResCreate(int _ByteSize);
+
+	static std::map<int, std::map<std::string, std::shared_ptr<GameEngineConstantBuffer>>> ConstantBuffers;
+	D3D11_SHADER_BUFFER_DESC BufferDesc;
 };
 

@@ -3,15 +3,18 @@
 
 #include "GameEngineLevel.h"
 #include "GameEngineRenderer.h"
+#include "GameEngineRenderTarget.h"
 
 void GameEngineCamera::Start()
 {
 	GameEngineActor::Start();
 	GameEngineLevel* Level = GetLevel();
 
+	ZoomValue = 1.0f;
+
 	if (!Level)
 	{
-		MsgBoxAssert(__FUNCTION__);
+		assert(false);
 		return;
 	}
 }
@@ -27,6 +30,7 @@ void GameEngineCamera::Update(float _Delta)
 	Transform.View(Position, Forward, Up);
 
 	float4 WndScale = GameEngineWindow::GetInst().GetScale();
+	WndScale *= ZoomValue;
 
 	switch (ProjectionType)
 	{
@@ -47,6 +51,8 @@ void GameEngineCamera::Render(float _Delta)
 	{
 		return;
 	}
+
+	GameEngineCore::GetBackBufferRenderTarget()->Setting();
 
 	for (auto& Pair : Renderers)
 	{
@@ -95,7 +101,7 @@ void GameEngineCamera::SetCameraOrder(int _Order)
 
 	if (!Level)
 	{
-		MsgBoxAssert(__FUNCTION__);
+		assert(false);
 		return;
 	}
 

@@ -95,6 +95,7 @@ struct TransformData
 		PositionMatrix.Translation(Position);
 
 		LocalWorldMatrix = ScaleMatrix * RotationMatrix * PositionMatrix * RevolutionMatrix;
+		WorldMatrix = LocalWorldMatrix;
 	}
 
 	void WorldViewProjectionCalculation()

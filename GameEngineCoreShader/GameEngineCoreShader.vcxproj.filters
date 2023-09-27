@@ -3,6 +3,8 @@
   <ItemGroup>
     <FxCompile Include="ColorShader.fx" />
     <FxCompile Include="TextureShader.fx" />
+    <FxCompile Include="RenderBase.fx" />
+    <FxCompile Include="DebugColorShader.fx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Transform.fx" />

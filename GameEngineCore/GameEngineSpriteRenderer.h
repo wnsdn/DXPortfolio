@@ -37,46 +37,27 @@ public:
 	std::vector<float> Inter;
 };
 
-enum class SamplerOption
-{
-	LINEAR,
-	POINT,
-};
-
 enum class PivotType
 {
 	Center,
+	Top,
 	Bottom,
 	Left,
 	LeftTop,
+};
+
+struct SpriteRendererInfo
+{
+	int FlipLeft = 0;
+	int FlipUp = 0;
+	float Temp1;
+	float Temp2;
 };
 
 class GameEngineSampler;
 class GameEngineSpriteRenderer : public GameEngineRenderer
 {
 	friend GameEngineFrameAnimation;
-private:
-	std::map<std::string, std::shared_ptr<GameEngineFrameAnimation>> FrameAnimations;
-	std::shared_ptr<GameEngineFrameAnimation> CurFrameAnimations;
-
-	std::shared_ptr<GameEngineSampler> Sampler;
-
-	std::shared_ptr<GameEngineSprite> Sprite;
-	SpriteData CurSprite;
-
-	bool IsImageSize = false;
-	float4 AutoScaleRatio{ 1.0f, 1.0f, 1.0f };
-	bool IsPause = false;
-
-	float4 Pivot{ 0.5f, 0.5f };
-	float4 Alpha{ 0.0f, 0.0f, 0.0f, 1.0f };
-	GameEngineTransform ImageTransform;
-protected:
-	int Index = 0;
-
-	void Start() override;
-	void Update(float _Delta) override;
-	void Render(GameEngineCamera* _Camera, float _Delta) override;
 public:
 	GameEngineSpriteRenderer();
 	~GameEngineSpriteRenderer();
@@ -109,14 +90,20 @@ public:
 	}
 	void RightFlip()
 	{
-		AutoScaleRatio.X = abs(AutoScaleRatio.X);
+		SpriteRendererInfoValue.FlipLeft = 0;
 	}
 	void LeftFlip()
 	{
-		AutoScaleRatio.X = -abs(AutoScaleRatio.X);
+		SpriteRendererInfoValue.FlipLeft = 1;
 	}
-
-	void SetSamplerState(SamplerOption _Option);
+	void UpFlip()
+	{
+		SpriteRendererInfoValue.FlipUp = 1;
+	}
+	void DownFlip()
+	{
+		SpriteRendererInfoValue.FlipUp = 0;
+	}
 
 	bool IsCurAnimationEnd() const
 	{
@@ -172,6 +159,11 @@ public:
 		return CurSprite;
 	}
 
+	GameEngineTransform& GetImageTransform()
+	{
+		return ImageTransform;
+	}
+
 	void SetAlpha(float _Value)
 	{
 		if (Alpha.A == _Value)
@@ -206,5 +198,28 @@ public:
 	{
 		return Alpha.A;
 	}
+protected:
+	void Start() override;
+	void Update(float _Delta) override;
+	void Render(GameEngineCamera* _Camera, float _Delta) override;
+
+	int Index = 0;
+private:
+	std::map<std::string, std::shared_ptr<GameEngineFrameAnimation>> FrameAnimations;
+	std::shared_ptr<GameEngineFrameAnimation> CurFrameAnimations;
+
+	std::shared_ptr<GameEngineSampler> Sampler;
+
+	std::shared_ptr<GameEngineSprite> Sprite;
+	SpriteData CurSprite;
+	SpriteRendererInfo SpriteRendererInfoValue;
+
+	bool IsImageSize = false;
+	float4 AutoScaleRatio{ 1.0f, 1.0f, 1.0f };
+	bool IsPause = false;
+
+	float4 Pivot{ 0.5f, 0.5f };
+	float4 Alpha{ 0.0f, 0.0f, 0.0f, 1.0f };
+	GameEngineTransform ImageTransform;
 };
 

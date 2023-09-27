@@ -3,11 +3,7 @@
 
 GameEngineVertexShader::~GameEngineVertexShader()
 {
-	if (ShaderPtr)
-	{
-		ShaderPtr->Release();
-		ShaderPtr = nullptr;
-	}
+	SafeRelease(ShaderPtr);
 }
 
 void GameEngineVertexShader::ShaderLoad(std::string_view _Path, std::string_view _EntryPoint, UINT _VersionHigh, UINT _VersionLow)
@@ -17,26 +13,15 @@ void GameEngineVertexShader::ShaderLoad(std::string_view _Path, std::string_view
 	EntryName = _EntryPoint;
 
 #ifdef _DEBUG
-	int iFlag = D3DCOMPILE_DEBUG;
+	int iFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
 #else
-	int iFlag = 0;
+	int iFlag = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
 #endif
 
-	iFlag |= D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
-
-	ID3DBlob* Error = nullptr;
-
-	Check(D3DCompileFromFile(UniPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryName.c_str(), Version.c_str(), iFlag, 0, &BinaryCode, &Error));
-	if (Error)
-	{
-		std::string ErrorString = reinterpret_cast<char*>(Error->GetBufferPointer());
-		MsgBoxAssert(ErrorString);
-		return;
-	}
-
+	Check(D3DCompileFromFile(UniPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryName.c_str(), Version.c_str(), iFlag, 0, &BinaryCode, nullptr));
 	Check(GameEngineCore::GetDevice()->CreateVertexShader(BinaryCode->GetBufferPointer(), BinaryCode->GetBufferSize(), nullptr, &ShaderPtr));
 
-	ResHelper.ShaderResCheck(EntryName, BinaryCode);
+	ShaderResCheck();
 }
 
 void GameEngineVertexShader::Setting()

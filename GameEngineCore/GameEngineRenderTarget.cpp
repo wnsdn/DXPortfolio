@@ -5,8 +5,7 @@ void GameEngineRenderTarget::Clear()
 {
 	for (int i = 0; i < RTV.size(); ++i)
 	{
-		GameEngineCore::GetContext()->ClearRenderTargetView(
-			RTV[i], ClearColor[i]);
+		GameEngineCore::GetContext()->ClearRenderTargetView(RTV[i], ClearColor[i]);
 	}
 }
 
@@ -14,7 +13,7 @@ void GameEngineRenderTarget::Setting()
 {
 	if (RTV.size() <= 0)
 	{
-		MsgBoxAssert(__FUNCTION__);
+		assert(false);
 		return;
 	}
 

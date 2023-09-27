@@ -14,7 +14,7 @@ public:
 			{
 				Right = [](const CollisionParameter& _Data)
 					{
-						MsgBoxAssert("아직 처리되지 않은 함수입니다.");
+						assert(false);
 						return false;
 					};
 			}
@@ -121,7 +121,6 @@ void GameEngineTransform::CalculationViewAndProjection(const float4x4& _View, co
 void GameEngineTransform::TransformUpdate()
 {
 	TransData.LocalCalculation();
-	TransData.WorldMatrix = TransData.LocalWorldMatrix;
 
 	if (Parent && ParentCalc)
 	{

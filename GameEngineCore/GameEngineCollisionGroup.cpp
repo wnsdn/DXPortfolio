@@ -30,6 +30,11 @@ void GameEngineCollisionGroup::AllReleaseCheck()
 
 bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _Col)
 {
+	if (!_Col->IsUpdate())
+	{
+		return false;
+	}
+
 	for (auto& Col : Collisions)
 	{
 		if (Col == _Col)
@@ -37,11 +42,12 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 			continue;
 		}
 
-		if (GameEngineTransform::Collision({
-			_Col->Transform.ColData,
-			Col->Transform.ColData,
-			_Col->GetCollisionType(),
-			Col->GetCollisionType() }))
+		if (!Col->IsUpdate())
+		{
+			continue;
+		}
+
+		if (GameEngineTransform::Collision({ _Col->Transform.ColData, Col->Transform.ColData, _Col->GetCollisionType(), Col->GetCollisionType() }))
 		{
 			return true;
 		}
@@ -52,6 +58,11 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 
 bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _Col, const float4& _NextPos)
 {
+	if (!_Col->IsUpdate())
+	{
+		return false;
+	}
+
 	auto Data = _Col->Transform.ColData;
 	Data.OBB.Center.x += _NextPos.X;
 	Data.OBB.Center.y += _NextPos.Y;
@@ -64,11 +75,12 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 			continue;
 		}
 
-		if (GameEngineTransform::Collision({
-			Data,
-			Col->Transform.ColData,
-			_Col->GetCollisionType(),
-			Col->GetCollisionType() }))
+		if (!Col->IsUpdate())
+		{
+			continue;
+		}
+
+		if (GameEngineTransform::Collision({ Data, Col->Transform.ColData, _Col->GetCollisionType(), Col->GetCollisionType() }))
 		{
 			return true;
 		}
@@ -79,6 +91,11 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 
 bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _Col, std::function<void(std::vector<std::shared_ptr<GameEngineCollision>>& _Col)> _Function)
 {
+	if (!_Col->IsUpdate())
+	{
+		return false;
+	}
+
 	static std::vector<std::shared_ptr<GameEngineCollision>> ResultCollision;
 	ResultCollision.clear();
 
@@ -89,11 +106,12 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 			continue;
 		}
 
-		if (GameEngineTransform::Collision({
-			_Col->Transform.ColData,
-			Col->Transform.ColData,
-			_Col->GetCollisionType(),
-			Col->GetCollisionType() }))
+		if (!Col->IsUpdate())
+		{
+			continue;
+		}
+
+		if (GameEngineTransform::Collision({ _Col->Transform.ColData, Col->Transform.ColData, _Col->GetCollisionType(), Col->GetCollisionType() }))
 		{
 			ResultCollision.push_back(Col);
 		}
@@ -109,6 +127,11 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 
 bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _Col, const float4& _NextPos, std::function<void(std::vector<std::shared_ptr<GameEngineCollision>>& _Col)> _Function)
 {
+	if (!_Col->IsUpdate())
+	{
+		return false;
+	}
+
 	static std::vector<std::shared_ptr<GameEngineCollision>> ResultCollision;
 	ResultCollision.clear();
 
@@ -124,11 +147,12 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 			continue;
 		}
 
-		if (GameEngineTransform::Collision({
-			Data,
-			Col->Transform.ColData,
-			_Col->GetCollisionType(),
-			Col->GetCollisionType() }))
+		if (!Col->IsUpdate())
+		{
+			continue;
+		}
+
+		if (GameEngineTransform::Collision({ Data, Col->Transform.ColData, _Col->GetCollisionType(), Col->GetCollisionType() }))
 		{
 			ResultCollision.push_back(Col);
 		}
@@ -144,6 +168,11 @@ bool GameEngineCollisionGroup::Collision(std::shared_ptr<GameEngineCollision> _C
 
 bool GameEngineCollisionGroup::CollisionEvent(std::shared_ptr<GameEngineCollision> _Col, const EventParameter& _Event)
 {
+	if (!_Col->IsUpdate())
+	{
+		return false;
+	}
+
 	static std::vector<std::shared_ptr<GameEngineCollision>> ResultCollision;
 	ResultCollision.clear();
 
@@ -154,11 +183,12 @@ bool GameEngineCollisionGroup::CollisionEvent(std::shared_ptr<GameEngineCollisio
 			continue;
 		}
 
-		if (GameEngineTransform::Collision({
-			_Col->Transform.ColData,
-			Col->Transform.ColData,
-			_Col->GetCollisionType(),
-			Col->GetCollisionType() }))
+		if (!Col->IsUpdate())
+		{
+			continue;
+		}
+
+		if (GameEngineTransform::Collision({ _Col->Transform.ColData, Col->Transform.ColData, _Col->GetCollisionType(), Col->GetCollisionType() }))
 		{
 			ResultCollision.push_back(Col);
 			continue;
@@ -170,6 +200,8 @@ bool GameEngineCollisionGroup::CollisionEvent(std::shared_ptr<GameEngineCollisio
 			{
 				_Event.Exit(_Col.get(), Col.get());
 			}
+
+			_Col->Others.erase(Col);
 		}
 	}
 
@@ -183,12 +215,14 @@ bool GameEngineCollisionGroup::CollisionEvent(std::shared_ptr<GameEngineCollisio
 				{
 					_Event.Enter(_Col.get(), Other.get());
 				}
-				else
+
+				_Col->Others.insert(Other);
+			}
+			else
+			{
+				if (_Event.Stay)
 				{
-					if (_Event.Stay)
-					{
-						_Event.Stay(_Col.get(), Other.get());
-					}
+					_Event.Stay(_Col.get(), Other.get());
 				}
 			}
 		}
@@ -201,7 +235,7 @@ void GameEngineCollisionGroup::PushCollision(std::shared_ptr<class GameEngineCol
 {
 	if (!_Col)
 	{
-		MsgBoxAssert("존재하지 않는 콜리전을 사용하려고 했습니다.");
+		assert(false);
 		return;
 	}
 

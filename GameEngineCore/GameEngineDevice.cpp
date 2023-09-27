@@ -16,12 +16,7 @@ GameEngineDevice::~GameEngineDevice()
 
 void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 {
-	auto HR = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-	if (FAILED(HR))
-	{
-		MsgBoxAssert("COINIT Failed");
-		return;
-	}
+	Check(CoInitializeEx(nullptr, COINIT_MULTITHREADED));
 
 #ifdef _DEBUG
 	UINT iFlag = D3D11_CREATE_DEVICE_DEBUG;
@@ -45,19 +40,7 @@ void GameEngineDevice::Initialize(const GameEngineWindow& _Window)
 	Desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	Desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	D3D11CreateDeviceAndSwapChain(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		iFlag,
-		nullptr,
-		0,
-		D3D11_SDK_VERSION,
-		&Desc,
-		&SwapChain,
-		&Device,
-		nullptr,
-		&Context);
+	D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, iFlag, nullptr, 0, D3D11_SDK_VERSION, &Desc, &SwapChain, &Device, nullptr, &Context);
 
 	ID3D11Texture2D* DXBackBufferTexture = nullptr;
 	SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&DXBackBufferTexture));
@@ -89,7 +72,7 @@ void GameEngineDevice::RenderEnd()
 	auto HR = SwapChain->Present(0, 0);
 	if (HR == DXGI_ERROR_DEVICE_REMOVED || HR == DXGI_ERROR_DEVICE_RESET)
 	{
-		MsgBoxAssert(__FUNCTION__);
+		assert(false);
 		return;
 	}
 }

@@ -18,6 +18,38 @@ void GameEngineCollision::Start()
 	GetActor()->GetLevel()->PushCollision(GetDynamic_Cast_This<GameEngineCollision>());
 }
 
+void GameEngineCollision::Update(float _Delta)
+{
+	if (GameEngineLevel::IsDebug)
+	{
+		switch (CollisionType)
+		{
+		case ColType::SPHERE2D:
+			GameEngineDebug::DrawBox2D(Transform);
+			break;
+		case ColType::AABBBOX2D:
+			GameEngineDebug::DrawBox2D(Transform);
+			break;
+		case ColType::OBBBOX2D:
+			GameEngineDebug::DrawBox2D(Transform);
+			break;
+		case ColType::SPHERE3D:
+			GameEngineDebug::DrawBox2D(Transform);
+			break;
+		case ColType::AABBBOX3D:
+			GameEngineDebug::DrawBox2D(Transform);
+			break;
+		case ColType::OBBBOX3D:
+			GameEngineDebug::DrawBox2D(Transform);
+			break;
+		case ColType::MAX:
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 bool GameEngineCollision::Collision(int _Order)
 {
 	if (!GetLevel()->Collisions.contains(_Order))

@@ -10,6 +10,17 @@ struct GameEngineVertex2D
 	float4 TEXCOORD;
 };
 
+struct GameEngine3DRain
+{
+	static GameEngineInputLayoutInfo VertexInfo;
+
+	float4 pos;
+	float4 seed;
+	float4 speed;
+	float  random;
+	unsigned int Type;
+};
+
 struct GameEngineVertex3D
 {
 	static GameEngineInputLayoutInfo VertexInfo;
